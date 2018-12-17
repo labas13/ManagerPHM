@@ -5,15 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ManagerPHM"
         mc:Ignorable="d"
-        Title="ManagerPHM" Height="350" Width="525" WindowState="Maximized">
-    <Grid>
+        Title="Manažer PHM" WindowState="Maximized" >
+    <!--Hlavní mříž(3 řádky a bez sloupcu)-->
+    <Grid Background="Aqua">
         <Grid.RowDefinitions>
-            <RowDefinition Height="22*"/>
-            <RowDefinition Height="276*"/>
-            <RowDefinition Height="21*"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
-        <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="19,0,0,0" Grid.Row="2" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="button1" Content="Button" HorizontalAlignment="Left" Margin="118,0,0,0" Grid.Row="2" VerticalAlignment="Top" Width="75"/>
+        <!--hlavni panel nabidek (Menu bar)-->
+        <Menu x:Name="hlavniMenu" Background="#FFF0F0F0" VerticalAlignment="Center" FontSize="18">
+            <MenuItem Name="menuEvidence" Header="_Evidence" HorizontalAlignment="Center" />
+            <MenuItem Name="menuPHM" Header="_PHM" />
+            <MenuItem Name="menuTechnika" Header="_Technika" >
+                
+            </MenuItem>
+            <MenuItem Name="menuNapoveda" Header="_Nápověda" >
+                
+            </MenuItem>
+        </Menu>
+        <DockPanel Name="dockPanelSpodniLista" Background="#FFF0F0F0" Grid.Row="2">
+            
+        </DockPanel>
 
     </Grid>
 </Window>
