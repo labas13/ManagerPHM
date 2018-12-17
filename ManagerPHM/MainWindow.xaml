@@ -13,6 +13,7 @@
             <RowDefinition Height="21*"/>
         </Grid.RowDefinitions>
         <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="19,0,0,0" Grid.Row="2" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="button1" Content="Button" HorizontalAlignment="Left" Margin="118,0,0,0" Grid.Row="2" VerticalAlignment="Top" Width="75"/>
 
     </Grid>
 </Window>
