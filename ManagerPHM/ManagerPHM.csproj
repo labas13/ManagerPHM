@@ -96,7 +96,59 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Icon\" />
+    <Resource Include="Icon\Evidence.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\Kanystr.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\Car.ico" />
+    <Resource Include="Icon\Sklad1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\Sklad2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\Sklad3.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\Komodity.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\Komodity2.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\PV.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\Objednavka.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\Objednavka2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\Objednavka3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\Obj1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\Obj2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\Technika1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\Technika2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\Technika3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\Technika4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\Technika5.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

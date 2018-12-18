@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ManagerPHM"
         mc:Ignorable="d"
-        Title="Manažer PHM" WindowState="Maximized" >
+        Title="Manažer PHM" WindowState="Maximized" Icon="Icon/Kanystr.ico">
     <!--Hlavní mříž(3 řádky a bez sloupcu)-->
     <Grid Background="Aqua">
         <Grid.RowDefinitions>
@@ -14,12 +14,67 @@
             <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
         <!--hlavni panel nabidek (Menu bar)-->
-        <Menu x:Name="hlavniMenu" Background="#FFF0F0F0" VerticalAlignment="Center" FontSize="18">
-            <MenuItem Name="menuEvidence" Header="_Evidence" HorizontalAlignment="Center" />
-            <MenuItem Name="menuPHM" Header="_PHM" />
-            <MenuItem Name="menuTechnika" Header="_Technika" >
-                
+        <Menu x:Name="hlavniMenu" Background="#FFF0F0F0" VerticalAlignment="Top" FontSize="18" Height="29">
+            <!--menu Evidence-->
+            <MenuItem Name="menuEvidence" Header="_Evidence" HorizontalAlignment="Center">
+                <MenuItem Name="menuEvidenceFirmy" Header="_Firmy" InputGestureText="Ctrl+F"
+                          ToolTip="Evidence firem">
+                </MenuItem>
+                <Separator/>
+                <MenuItem Name="menuEvidenceStrediska" Header="_Střediska" InputGestureText="Ctrl+S"
+                          ToolTip="Evidence středisek">
+                </MenuItem>
+                <Separator/>
+                <MenuItem Name="menuEvidenceZamestnanci" Header="_Zaměstnanci" InputGestureText="Ctrl+Z"
+                          ToolTip="Evidence zaměstnanců">
+                </MenuItem>
+                <Separator/>
+                <MenuItem Name="menuEvidenceUzivatele" Header="_Uživatelé" InputGestureText="Ctrl+U"
+                          ToolTip="Evidence uživatelů">
+                </MenuItem>
             </MenuItem>
+            <Separator Width="15"/>
+            <!--menu Sklad-->
+            <MenuItem Name="menuSklad" Header="_Sklad">
+                
+                <MenuItem Name="menuSkladKomodity" Header="_Komodity" InputGestureText="Ctrl+K"
+                          ToolTip="Přehled komodit">
+                    <MenuItem.Icon>
+                        <Image Source="Icon/Komodity2.ico"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Name="menuSkladPohyby" Header="_Pohyby" InputGestureText="Ctrl+P"
+                          ToolTip="Přehled pohybů">
+                    <MenuItem.Icon>
+                        <Image Source="Icon/PV.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Name="menuSkladObjednavka" Header="_Objednávky" InputGestureText="Ctrl+O"
+                          ToolTip="Přehled objednávek">
+                    <MenuItem.Icon>
+                        <Image Source="Icon/Obj2.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <Separator/>
+            <!--menu Provoz-->
+            <MenuItem Name="menuProvoz" Header="_Provoz" >                
+                <MenuItem Name="menuTechnikaTechnika" Header="_Technika" InputGestureText="Ctrl+T"
+                          ToolTip="Přehled techniky">
+                </MenuItem>
+                <Separator/>
+                <MenuItem Name="menuTechnikaNova" Header="_Nová technika" InputGestureText="Ctrl+N+T"
+                          ToolTip="Zavedení nové techniky">
+                </MenuItem>
+                <Separator/>
+                <MenuItem Name="menuTechnikaTechnickaUdrzba" Header="_Technická údržba" InputGestureText="Ctrl+T+U"
+                          ToolTip="Přehled technických údržeb">
+                </MenuItem>
+            </MenuItem>
+            <Separator/>
+            <!--menu Nápověda-->
             <MenuItem Name="menuNapoveda" Header="_Nápověda" >
                 
             </MenuItem>
