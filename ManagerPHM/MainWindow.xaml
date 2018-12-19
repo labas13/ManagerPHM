@@ -5,54 +5,68 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ManagerPHM"
         mc:Ignorable="d"
-        Title="Manažer PHM" WindowState="Maximized" Icon="Icon/Kanystr.ico">
+        Title="Manažer PHM" WindowState="Maximized" Icon="Icon/Kanystr.ico" Background="Bisque">
     <!--Hlavní mříž(3 řádky a bez sloupcu)-->
-    <Grid Background="Aqua">
+    <Grid Name="hlavniMriz">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
         <!--hlavni panel nabidek (Menu bar)-->
-        <Menu x:Name="hlavniMenu" Background="#FFF0F0F0" VerticalAlignment="Top" FontSize="18" Height="29">
+        <Menu x:Name="hlavniMenu" Background="#135A95" FontSize="18" Height="30" 
+              Foreground="White"  >
             <!--menu Evidence-->
-            <MenuItem Name="menuEvidence" Header="_Evidence" HorizontalAlignment="Center">
+            <MenuItem Name="menuEvidence" Header="_Evidence" HorizontalAlignment="Center" Click="menuEvidence_Click" 
+                      Margin="0" FontSize="18" BorderThickness="1" Height="30" Checked="menuEvidence_Click" >
                 <MenuItem Name="menuEvidenceFirmy" Header="_Firmy" InputGestureText="Ctrl+F"
-                          ToolTip="Evidence firem">
+                          ToolTip="Evidence firem" Foreground="Black" Click="menuEvidenceFirmy_Click" >
+                    <MenuItem.Icon>
+                        <Image Source="Icon/Firma.ico"/>
+                    </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
                 <MenuItem Name="menuEvidenceStrediska" Header="_Střediska" InputGestureText="Ctrl+S"
-                          ToolTip="Evidence středisek">
+                          ToolTip="Evidence středisek" Foreground="Black">
+                    <MenuItem.Icon>
+                        <Image Source="Icon/Stredisko.ico"/>
+                    </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
                 <MenuItem Name="menuEvidenceZamestnanci" Header="_Zaměstnanci" InputGestureText="Ctrl+Z"
-                          ToolTip="Evidence zaměstnanců">
+                          ToolTip="Evidence zaměstnanců" Foreground="Black">
+                    <MenuItem.Icon>
+                        <Image Source="Icon/Zamestnanci.ico"/>
+                    </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
                 <MenuItem Name="menuEvidenceUzivatele" Header="_Uživatelé" InputGestureText="Ctrl+U"
-                          ToolTip="Evidence uživatelů">
+                          ToolTip="Evidence uživatelů" Foreground="Black">
+                    <MenuItem.Icon>
+                        <Image Source="Icon/Uzivatel.ico"/>
+                    </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
             <Separator Width="15"/>
             <!--menu Sklad-->
             <MenuItem Name="menuSklad" Header="_Sklad">
-                
+
                 <MenuItem Name="menuSkladKomodity" Header="_Komodity" InputGestureText="Ctrl+K"
-                          ToolTip="Přehled komodit">
+                          ToolTip="Přehled komodit" Click="menuSkladKomodity_Click" Foreground="Black">
                     <MenuItem.Icon>
                         <Image Source="Icon/Komodity2.ico"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
                 <MenuItem Name="menuSkladPohyby" Header="_Pohyby" InputGestureText="Ctrl+P"
-                          ToolTip="Přehled pohybů">
+                          ToolTip="Přehled pohybů" Foreground="Black">
                     <MenuItem.Icon>
-                        <Image Source="Icon/PV.png"/>
+                        <Image Source="Icon/PV2.ico"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
                 <MenuItem Name="menuSkladObjednavka" Header="_Objednávky" InputGestureText="Ctrl+O"
-                          ToolTip="Přehled objednávek">
+                          ToolTip="Přehled objednávek" Foreground="Black">
                     <MenuItem.Icon>
                         <Image Source="Icon/Obj2.png"/>
                     </MenuItem.Icon>
@@ -60,27 +74,40 @@
             </MenuItem>
             <Separator/>
             <!--menu Provoz-->
-            <MenuItem Name="menuProvoz" Header="_Provoz" >                
+            <MenuItem Name="menuProvoz" Header="_Provoz" >
                 <MenuItem Name="menuTechnikaTechnika" Header="_Technika" InputGestureText="Ctrl+T"
-                          ToolTip="Přehled techniky">
+                          ToolTip="Přehled techniky" Foreground="Black">
+                    <MenuItem.Icon>
+                        <Image Source="Icon/Technika1.ico"/>
+                    </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
                 <MenuItem Name="menuTechnikaNova" Header="_Nová technika" InputGestureText="Ctrl+N+T"
-                          ToolTip="Zavedení nové techniky">
+                          ToolTip="Zavedení nové techniky" Foreground="Black">
+                    <MenuItem.Icon>
+                        <Image Source="Icon/New3.ico"/>
+                    </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
                 <MenuItem Name="menuTechnikaTechnickaUdrzba" Header="_Technická údržba" InputGestureText="Ctrl+T+U"
-                          ToolTip="Přehled technických údržeb">
+                          ToolTip="Přehled technických údržeb" Foreground="Black">
+                    <MenuItem.Icon>
+                        <Image Source="Icon/TU4.ico"/>
+                    </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
             <Separator/>
             <!--menu Nápověda-->
             <MenuItem Name="menuNapoveda" Header="_Nápověda" >
-                
+
             </MenuItem>
         </Menu>
-        <DockPanel Name="dockPanelSpodniLista" Background="#FFF0F0F0" Grid.Row="2">
-            
+        <Grid Name="druheOkno" Grid.Row="1">
+
+        </Grid>
+        <DockPanel Name="dockPanelSpodniLista" Background="#99b4d1ff" Grid.Row="2">
+            <Label x:Name="label" Content="Label" Height="25" VerticalAlignment="Top" Background="#13A7FF"/>
+
         </DockPanel>
 
     </Grid>

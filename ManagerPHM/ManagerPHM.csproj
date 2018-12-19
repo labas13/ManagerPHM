@@ -37,6 +37,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -55,6 +57,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="KomoditaWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -63,12 +69,22 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="KomoditaWindow.xaml.cs">
+      <DependentUpon>KomoditaWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="oknoKomodit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="oknoKomodit.xaml.cs">
+      <DependentUpon>oknoKomodit.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -149,6 +165,36 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icon\Technika5.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\Tech3.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\New.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\New2.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\New3.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\PV2.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\TU4.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\Firma.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\Stredisko.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\Zamestnanci.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\Uzivatel.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
