@@ -5,28 +5,237 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ManagerPHM"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid Name="hlavniGridOknaKomodit"  Background="#d7e4f2ff">
+             d:DesignHeight="300" d:DesignWidth="300" Loaded="UserControl_Loaded">
+
+    <Grid Name="hlavniGridOknaKomodit"  Background="#d7e4f2ff" Margin="0,0,0,0">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="25"/>
             <RowDefinition Height="25"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
         <Label Name="nazevOkna" Content="Přehled komodit" FontWeight="Bold" 
-                FontSize="18" Background="#d7e4f2ff" Foreground="#135A95"/>
-        <Menu Name="menuKomodit" Grid.Row="1" Background="#d7e4f2ff">
-            <Label Name="label" Content="Komodita: "/>
-            <ComboBox Name="komoditaCB" >
+                FontSize="18" Background="#d7e4f2ff" Foreground="#135A95" Grid.ColumnSpan="2" Grid.Row="0" 
+               Margin="0,0,0,0.4" Grid.RowSpan="2"/>
+        <!-- grid pro ovladaci prvky-->
+        <Grid Grid.Row="1">
+            <ToolBar Margin="0,0,0,3">
+                <TextBlock Text="zruš filtry "/>
+                <Button Width="30" Click="Button_Click">
+                    <Image Source="Icon/filter.png"/>
+                </Button>
+                <CheckBox x:Name="CBseskupit" Content="Seskupit" Checked="CBseskupit_Checked" Unchecked="CBseskupit_Unchecked" 
+                          FlowDirection="RightToLeft" HorizontalAlignment="Left"/>
+            </ToolBar>
+        </Grid>
+        <!-- grid pro tlacitka s názvy zahlavý sloupcu-->
+        <Grid Name="panelShlavickama" Grid.Row="2" HorizontalAlignment="Left" IsEnabled="False">
+            <DockPanel Name="panelNazvySloupcu" Margin="0,0,0,0">
+                <TextBox Width="115" Text="KČM" VerticalContentAlignment="Center" FontWeight="Bold" BorderThickness="1,1,0,1" Padding="5,0,0,0"/>
+                <TextBox Width="155" Text="Název ISL" VerticalContentAlignment="Center" FontWeight="Bold" BorderThickness="1,1,0,1" Padding="5,0,0,0"/>
+                <TextBox Width="155" Text="Obchodní název" VerticalContentAlignment="Center" FontWeight="Bold" BorderThickness="1,1,0,1" Padding="5,0,0,0"/>
+                <TextBox Width="95" Text="Šarže" VerticalContentAlignment="Center" FontWeight="Bold" BorderThickness="1,1,0,1" Padding="5,0,0,0"/>
+            </DockPanel>            
+        </Grid>
+        <!-- grid pro panel s filtry  -->
+        <Grid Name="panelSfiltry" Background="#FFABADB3" Grid.Row="3" Margin="0" >
+            <DockPanel Name="filtrPanel" Background="#d7e4f2ff" Grid.ColumnSpan="2"  Margin="1,0" >
+                <TextBox x:Name="filtrKcm" TextWrapping="Wrap" Width="93" TextChanged="filtry_TextChanged" Padding="0" Margin="0" 
+                         BorderThickness="0" VerticalContentAlignment="Center"/>
+                <Button Background="White" BorderThickness="0,0,1,0" Padding="0" Margin="0,0,0,0" Width="22" BorderBrush="Black" IsEnabled="False">
+                    <Image Name="obrazekKCM" Source="Icon/hledat.png" Margin="3"/>
+                </Button>
+                <TextBox x:Name="filtrNazevISL" TextWrapping="Wrap" Width="133" TextChanged="filtry_TextChanged" Padding="0" Margin="0" 
+                         BorderThickness="0" VerticalContentAlignment="Center"/>
+                <Button Background="White" BorderThickness="0" Padding="0" Margin="0,0,0,0" Width="22" IsEnabled="False">
+                    <Image Name="obrazekNazevISL" Source="Icon/hledat.png" Margin="3"/>
+                </Button>
+                <TextBox x:Name="filtrObchodniNazev" TextWrapping="Wrap" Width="133" TextChanged="filtry_TextChanged" Padding="0" Margin="0" 
+                         BorderThickness="0" VerticalContentAlignment="Center"/>
+                <Button Background="White" BorderThickness="0" Padding="0" Margin="0,0,0,0" Width="22" IsEnabled="False">
+                    <Image Name="obrazekObchodniNazev" Source="Icon/hledat.png" Margin="3"/>
+                </Button>
+                <TextBox x:Name="filtrSarze" TextWrapping="Wrap" Width="73" TextChanged="filtry_TextChanged" Padding="0" Margin="0" 
+                         BorderThickness="0" VerticalContentAlignment="Center"/>
+                <Button Background="White" BorderThickness="0" Padding="0" Margin="0,0,0,0" Width="22" IsEnabled="False" HorizontalAlignment="Left">
+                    <Image Name="obrazekSarze" Source="Icon/hledat.png" Margin="3"/>
+                </Button>
+                
 
-            </ComboBox>
 
-        </Menu>
-        <DataGrid Name="DGkomodity" Grid.Row="2">
-            
+            </DockPanel>
+        </Grid>
+
+        <!-- DG Kkomodity-->
+        <DataGrid Name="DGkomodity" Grid.Row="4" Grid.Column="0" CanUserAddRows="False" 
+                  CanUserResizeRows="False" CanUserResizeColumns="False" 
+                  AutoGenerateColumns="False"  
+                   Margin="0" SelectionChanged="DGkomodity_SelectionChanged" HeadersVisibility="None" BorderBrush="#FFABADB3" >
+
+
+            <!--Style for skupinu řádků-->
+            <DataGrid.GroupStyle>
+                <!-- Style for groups at top level. -->
+                <GroupStyle>
+                    <GroupStyle.ContainerStyle>
+                        <Style TargetType="{x:Type GroupItem}">
+                            <Setter Property="Margin" Value="0,0,0,5"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                                        <Expander IsExpanded="True" Background="#FF112255" BorderBrush="#FF002255" Foreground="#FFEEEEEE" BorderThickness="15,1,1,5">
+                                            <!--tady nastav okraj modré-->
+                                            <Expander.Header>
+                                                <DockPanel>
+                                                    <TextBlock FontWeight="Bold" Text="KČM: " />
+                                                    <TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Margin="5,0,0,0" Width="100"/>
+
+                                                </DockPanel>
+                                            </Expander.Header>
+                                            <Expander.Content>
+                                                <ItemsPresenter />
+                                            </Expander.Content>
+                                        </Expander>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+                <!-- Style for groups under the top level. -->
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <DockPanel Background="LightBlue" Margin="5,0,1,0">
+                                <TextBlock Text="{Binding Path=Name}" Foreground="Blue" Margin="200,0,0,0" Width="100" HorizontalAlignment="Left"/>
+
+                            </DockPanel>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </DataGrid.GroupStyle>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="Foreground" Value="Black" />
+                    <Setter Property="Background" Value="White" />
+                </Style>
+            </DataGrid.RowStyle>
+            <!-- pokus o vystředení tetu heaer loupcu-->
+
+            <!--zarovnání column header dle groups 
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Margin" Value="10,0,-10,0"/>
+                </Style>
+            </DataGrid.ColumnHeaderStyle> -->
+
+            <!-- definice Header pro Column v DG-->
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="IdKomodita" IsReadOnly="True" CanUserReorder="False" Visibility="Hidden">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding IdKomodita}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="KČM" IsReadOnly="True" Width="115">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding KcmCislo}" Padding="5,0,0,0" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Název ISL" IsReadOnly="True" Width="155">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding NazevISL}" Padding="5,0,0,0" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Obchodní Název" IsReadOnly="True" Width="155">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding ObchodniNazev}" Padding="5,0,0,0" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Šarže" IsReadOnly="True" Width="95">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Sarze}" HorizontalAlignment="Right"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Množ. disp." IsReadOnly="True" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding MnozstviDisponabilni}" HorizontalAlignment="Right"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Množ. blok." IsReadOnly="True" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding MnozstviBlokovane}" HorizontalAlignment="Right"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Množ. sklad" IsReadOnly="True" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding MnozstviSklad}" HorizontalAlignment="Right"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Expirace" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Expirace, StringFormat=dd.MM.yyyy}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
         </DataGrid>
-        <DockPanel Name="dokPanelStavApp" Background="#d7e4f2ff" Grid.Row="3">
-            
+        <!-- DG detail -->
+        <Grid Name="detail" Grid.Row="4" Grid.Column="1" Margin="1,1,1,2" UseLayoutRounding="False">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="7*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="2"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="82*"/>
+            </Grid.RowDefinitions>
+
+
+            <TextBlock x:Name="TBdetail"  TextWrapping="Wrap" Text="Detail" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" FontWeight="Bold" Grid.Column="1" Margin="10,3" />
+            <Separator Grid.Row="1" Grid.ColumnSpan="3" Margin="0,0,0,0"/>
+            <TextBlock x:Name="TBLkcm" Text="KČM: " Grid.Row="2" VerticalAlignment="Center" Margin="0,5,0,4" Padding="5,0,0,0"/>
+            <TextBox x:Name="TBXkcm" Grid.Row="2" Grid.Column="1" Margin="0,4,0,3" IsEnabled="False" Text="---" VerticalAlignment="Center" />
+            <TextBlock x:Name="TBLnazevIsl" Text="Název ISL: " Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0,5,0,4" Padding="5,0,0,0"/>
+            <TextBox x:Name="TBXnazevIsl" Grid.Row="3" Grid.Column="1" Margin="0,4,0,3" IsEnabled="False" Text="---" VerticalAlignment="Center" />
+            <TextBlock x:Name="TBLobchodniNazev" Text="Obchodní název: " Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0,5,0,4" Padding="5,0,0,0"/>
+            <TextBox x:Name="TBXobchodniNazev" Grid.Row="4" Grid.Column="1" Margin="0,4,0,3" IsEnabled="False" Text="---" VerticalAlignment="Center" />
+
+        </Grid>
+        <!-- Dok panel-->
+        <DockPanel Name="dokPanelStavApp" Background="#d7e4f2ff" Grid.Row="5" Grid.ColumnSpan="2" 
+                   Margin="0,219.8,0,-195" >
+
         </DockPanel>
     </Grid>
 </UserControl>

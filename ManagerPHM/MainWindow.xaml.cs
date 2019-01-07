@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,16 +21,55 @@ namespace ManagerPHM
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        //připravím si
+        DB db;
+        SpravceKomoditySklad sprKomSklad;
+
+        //to to možná NE!!!------------------------------------------------------------------------------------
+        // vytvařím dataSet a adaptéry všech tabulek v DB
+        LokalniSada DS = new LokalniSada();
+        LokalniSadaTableAdapters.KomoditySkladTableAdapter DAKomoditySklad = new LokalniSadaTableAdapters.KomoditySkladTableAdapter();
+        LokalniSadaTableAdapters.AdresaTableAdapter DAadresa = new LokalniSadaTableAdapters.AdresaTableAdapter();
+        LokalniSadaTableAdapters.celkemTableAdapter DAcelkem = new LokalniSadaTableAdapters.celkemTableAdapter();
+        LokalniSadaTableAdapters.FirmaTableAdapter DAfirma = new LokalniSadaTableAdapters.FirmaTableAdapter();
+        LokalniSadaTableAdapters.HodnostTableAdapter DAhodnost = new LokalniSadaTableAdapters.HodnostTableAdapter();
+        LokalniSadaTableAdapters.JakostakTableAdapter DAjakost = new LokalniSadaTableAdapters.JakostakTableAdapter();
+        LokalniSadaTableAdapters.KategorieTechnikaTableAdapter DAkategorieTechnika = new LokalniSadaTableAdapters.KategorieTechnikaTableAdapter();
+        LokalniSadaTableAdapters.KategorieZamestnanecTableAdapter DAkategorieZamestnanec = new LokalniSadaTableAdapters.KategorieZamestnanecTableAdapter();
+        LokalniSadaTableAdapters.KcmTableAdapter DAkcm = new LokalniSadaTableAdapters.KcmTableAdapter();
+        LokalniSadaTableAdapters.KomoditaTableAdapter DAkomodita = new LokalniSadaTableAdapters.KomoditaTableAdapter();
+        LokalniSadaTableAdapters.KvalifikacniListTableAdapter DAkvalifikacniList = new LokalniSadaTableAdapters.KvalifikacniListTableAdapter();
+        //.....---------------------------------------------------------------------------------------------------------
+        // ještě dodělat adaptéry ...
+
         public MainWindow()
         {
             InitializeComponent();
-            
+
+            //vytvořím připojovací řetězec
+            SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder();
+            csb.DataSource = @"LABAS-PC-LENOVO\SQLLABAS";
+            csb.InitialCatalog = "DatabazeSklad";
+            csb.IntegratedSecurity = true;
+            string pripojovaciRetezec = csb.ConnectionString;
+
+            //vytvořím instanci třídy "DB" a předám ji připojovací Řetěz
+            db = new DB(pripojovaciRetezec);
+
         }
+        
 
         private void menuSkladKomodity_Click(object sender, RoutedEventArgs e)
         {
-            oknoKomodit oKomodit = new oknoKomodit();
+            //sprKomSklad = new SpravceKomoditySklad();
+            //sprKomSklad.nactiVse(db);
+
+
+            oknoKomodit oKomodit = new oknoKomodit(db);
             druheOkno.Children.Add(oKomodit);
+            //oKomodit.DGkomodity.ItemsSource = sprKomSklad.dtKomoditySklad.DefaultView;
+            //oKomodit.DGkomodity.ItemsSource = DS.KomoditySklad.DefaultView;
         }
 
         //----------pokus-------//
@@ -47,5 +87,18 @@ namespace ManagerPHM
         {
             druheOkno.Children.Clear();
         }
+
+        private void MainWindow_Load(object sender, RoutedEventArgs e)
+        {
+            //DAkomodita.Fill(DS.Komodita);
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            //DAkomodita.Fill(DS.Komodita);
+            //DAKomoditySklad.Fill(DS.KomoditySklad);
+        }
+
+        
     }
 }

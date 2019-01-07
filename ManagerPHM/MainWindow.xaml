@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ManagerPHM"
         mc:Ignorable="d"
-        Title="Manažer PHM" WindowState="Maximized" Icon="Icon/Kanystr.ico" Background="Bisque">
+        Title="Manažer PHM" WindowState="Maximized" Icon="Icon/Kanystr.ico" Background="Bisque" Loaded="Window_Loaded">
     <!--Hlavní mříž(3 řádky a bez sloupcu)-->
     <Grid Name="hlavniMriz">
         <Grid.RowDefinitions>
@@ -102,9 +102,11 @@
 
             </MenuItem>
         </Menu>
+        <!--podokno-->
         <Grid Name="druheOkno" Grid.Row="1">
 
         </Grid>
+        <!--dock panel pro tlač. atd... -->
         <DockPanel Name="dockPanelSpodniLista" Background="#99b4d1ff" Grid.Row="2">
             <Label x:Name="label" Content="Label" Height="25" VerticalAlignment="Top" Background="#13A7FF"/>
 
