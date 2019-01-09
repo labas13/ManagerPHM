@@ -51,6 +51,30 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.DataGrid, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -120,6 +144,7 @@
     <None Include="LokalniSada.xss">
       <DependentUpon>LokalniSada.xsd</DependentUpon>
     </None>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -222,6 +247,42 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icon\filterBarevny.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\filterKonec.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\filterKonec2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\filterKonec3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\filterKonec5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\filterKonec6.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\filterKonec7.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\filterKonec8.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\filterKonec9.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\vetsi.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\mensi.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\mensi2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\vetsi2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

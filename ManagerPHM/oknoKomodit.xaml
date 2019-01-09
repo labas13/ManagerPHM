@@ -4,13 +4,72 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ManagerPHM"
+             xmlns:wpfTool="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" Loaded="UserControl_Loaded">
 
+    <!--stylování menu pro výběr menší větší roven -->
+    <UserControl.Resources>
+        <ControlTemplate x:Key="MenuItemControlTemplate" TargetType="{x:Type MenuItem}">
+            <Border x:Name="templateRoot" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                <Grid VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <ContentPresenter x:Name="Icon" Content="{TemplateBinding Icon}" ContentSource="Icon" HorizontalAlignment="Center" Height="16" Margin="3" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center" Width="16"/>
+                    <Path x:Name="GlyphPanel" Data="F1M10,1.2L4.7,9.1 4.5,9.1 0,5.2 1.3,3.5 4.3,6.1 8.3,0 10,1.2z" Fill="{TemplateBinding Foreground}" FlowDirection="LeftToRight" Margin="3" Visibility="Collapsed" VerticalAlignment="Center"/>
+                    <ContentPresenter ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" Grid.Column="1" ContentStringFormat="{TemplateBinding HeaderStringFormat}" ContentSource="Header" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                    <Popup x:Name="PART_Popup" AllowsTransparency="True" Focusable="False" IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}" PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}" Placement="Bottom">
+                        <Border x:Name="SubMenuBorder" BorderBrush="#FF999999" BorderThickness="1" Background="#FFF0F0F0" Padding="2">
+                            <ScrollViewer x:Name="SubMenuScrollViewer" Style="{DynamicResource {ComponentResourceKey ResourceId=MenuScrollViewer, TypeInTargetAssembly={x:Type FrameworkElement}}}">
+                                <Grid RenderOptions.ClearTypeHint="Enabled">
+                                    <Canvas HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
+                                        <Rectangle x:Name="OpaqueRect" Fill="{Binding Background, ElementName=SubMenuBorder}" Height="{Binding ActualHeight, ElementName=SubMenuBorder}" Width="{Binding ActualWidth, ElementName=SubMenuBorder}"/>
+                                    </Canvas>
+                                    <Rectangle Fill="#FFD7D7D7" HorizontalAlignment="Left" Margin="29,2,0,2" Width="1"/>
+                                    <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Cycle" Grid.IsSharedSizeScope="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" KeyboardNavigation.TabNavigation="Cycle"/>
+                                </Grid>
+                            </ScrollViewer>
+                        </Border>
+                    </Popup>
+                </Grid>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsSuspendingPopupAnimation" Value="True">
+                    <Setter Property="PopupAnimation" TargetName="PART_Popup" Value="None"/>
+                </Trigger>
+                <Trigger Property="Icon" Value="{x:Null}">
+                    <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
+                </Trigger>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Visibility" TargetName="GlyphPanel" Value="Visible"/>
+                    <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
+                </Trigger>
+                <Trigger Property="IsHighlighted" Value="True">
+                    <Setter Property="Background" TargetName="templateRoot" Value="#4C26A0DA"/>
+                    <!-- barva pozadí vybraného hlavniho menu-->
+                    <Setter Property="BorderBrush" TargetName="templateRoot" Value="#FF26A0DA"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="#FF707070"/>
+                    <Setter Property="Fill" TargetName="GlyphPanel" Value="#FF707070"/>
+                </Trigger>
+                <Trigger Property="CanContentScroll" SourceName="SubMenuScrollViewer" Value="False">
+                    <Setter Property="Canvas.Top" TargetName="OpaqueRect" Value="{Binding VerticalOffset, ElementName=SubMenuScrollViewer}"/>
+                    <Setter Property="Canvas.Left" TargetName="OpaqueRect" Value="{Binding HorizontalOffset, ElementName=SubMenuScrollViewer}"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True" >
+                    <Setter Property="IsOpen" TargetName="PART_Popup" Value="True"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </UserControl.Resources>
     <Grid Name="hlavniGridOknaKomodit"  Background="#d7e4f2ff" Margin="0,0,0,0">
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="1010"/>
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -26,10 +85,10 @@
                Margin="0,0,0,0.4" Grid.RowSpan="2"/>
         <!-- grid pro ovladaci prvky-->
         <Grid Grid.Row="1">
-            <ToolBar Margin="0,0,0,3">
+            <ToolBar Margin="0">
                 <TextBlock Text="zruš filtry "/>
-                <Button Width="30" Click="Button_Click">
-                    <Image Source="Icon/filter.png"/>
+                <Button Width="30" Click="Button_Click" Padding="0">
+                    <Image Source="Icon/filterKonec5.png"/>
                 </Button>
                 <CheckBox x:Name="CBseskupit" Content="Seskupit" Checked="CBseskupit_Checked" Unchecked="CBseskupit_Unchecked" 
                           FlowDirection="RightToLeft" HorizontalAlignment="Left"/>
@@ -38,37 +97,114 @@
         <!-- grid pro tlacitka s názvy zahlavý sloupcu-->
         <Grid Name="panelShlavickama" Grid.Row="2" HorizontalAlignment="Left" IsEnabled="False">
             <DockPanel Name="panelNazvySloupcu" Margin="0,0,0,0">
-                <TextBox Width="115" Text="KČM" VerticalContentAlignment="Center" FontWeight="Bold" BorderThickness="1,1,0,1" Padding="5,0,0,0"/>
-                <TextBox Width="155" Text="Název ISL" VerticalContentAlignment="Center" FontWeight="Bold" BorderThickness="1,1,0,1" Padding="5,0,0,0"/>
-                <TextBox Width="155" Text="Obchodní název" VerticalContentAlignment="Center" FontWeight="Bold" BorderThickness="1,1,0,1" Padding="5,0,0,0"/>
-                <TextBox Width="95" Text="Šarže" VerticalContentAlignment="Center" FontWeight="Bold" BorderThickness="1,1,0,1" Padding="5,0,0,0"/>
-            </DockPanel>            
+                <TextBox Width="137" Text="KČM" VerticalContentAlignment="Center" FontWeight="Bold" BorderThickness="1,1,0,1" Padding="5,0,0,0"/>
+                <TextBox Width="137" Text="Název ISL" VerticalContentAlignment="Center" FontWeight="Bold" BorderThickness="1,1,0,1" Padding="5,0,0,0"/>
+                <TextBox Width="137" Text="Obchodní název" VerticalContentAlignment="Center" FontWeight="Bold" BorderThickness="1,1,0,1" Padding="5,0,0,0"/>
+                <TextBox Width="114" Text="Šarže" VerticalContentAlignment="Center" FontWeight="Bold" BorderThickness="1,1,0,1" Padding="5,0,0,0"/>
+                <TextBox Width="92" Text="Balení" VerticalContentAlignment="Center" FontWeight="Bold" BorderThickness="1,1,0,1" Padding="5,0,0,0"/>
+                <TextBox Width="92" Text="Množ. dispon." VerticalContentAlignment="Center" FontWeight="Bold" BorderThickness="1,1,0,1" Padding="5,0,0,0" HorizontalContentAlignment="Center"/>
+                <TextBox Width="92" Text="Množ. blok." VerticalContentAlignment="Center" FontWeight="Bold" BorderThickness="1,1,0,1" Padding="5,0,0,0" HorizontalContentAlignment="Center"/>
+                <TextBox Width="92" Text="Množ. sklad" VerticalContentAlignment="Center" FontWeight="Bold" BorderThickness="1,1,0,1" Padding="5,0,0,0" HorizontalContentAlignment="Center"/>
+                <TextBox Width="117" Text="Expirace do:" VerticalContentAlignment="Center" FontWeight="Bold" BorderThickness="1" Padding="5,0,0,0"/>
+            </DockPanel>
         </Grid>
         <!-- grid pro panel s filtry  -->
         <Grid Name="panelSfiltry" Background="#FFABADB3" Grid.Row="3" Margin="0" >
             <DockPanel Name="filtrPanel" Background="#d7e4f2ff" Grid.ColumnSpan="2"  Margin="1,0" >
-                <TextBox x:Name="filtrKcm" TextWrapping="Wrap" Width="93" TextChanged="filtry_TextChanged" Padding="0" Margin="0" 
-                         BorderThickness="0" VerticalContentAlignment="Center"/>
-                <Button Background="White" BorderThickness="0,0,1,0" Padding="0" Margin="0,0,0,0" Width="22" BorderBrush="Black" IsEnabled="False">
+                <Button Background="White" BorderThickness="0" Padding="0" Margin="0,0,0,0" Width="22" BorderBrush="Black" IsEnabled="False">
                     <Image Name="obrazekKCM" Source="Icon/hledat.png" Margin="3"/>
                 </Button>
-                <TextBox x:Name="filtrNazevISL" TextWrapping="Wrap" Width="133" TextChanged="filtry_TextChanged" Padding="0" Margin="0" 
-                         BorderThickness="0" VerticalContentAlignment="Center"/>
-                <Button Background="White" BorderThickness="0" Padding="0" Margin="0,0,0,0" Width="22" IsEnabled="False">
+                <TextBox x:Name="filtrKcm" TextWrapping="Wrap" Width="115" TextChanged="filtry_TextChanged" Padding="0" Margin="0" 
+                         BorderThickness="0,0,1,0" VerticalContentAlignment="Center" MaxLength="13"/>
+                <Button Background="White" BorderThickness="0" Padding="0" Margin="0,0,0,0" Width="22" BorderBrush="Black" IsEnabled="False">
                     <Image Name="obrazekNazevISL" Source="Icon/hledat.png" Margin="3"/>
                 </Button>
-                <TextBox x:Name="filtrObchodniNazev" TextWrapping="Wrap" Width="133" TextChanged="filtry_TextChanged" Padding="0" Margin="0" 
-                         BorderThickness="0" VerticalContentAlignment="Center"/>
-                <Button Background="White" BorderThickness="0" Padding="0" Margin="0,0,0,0" Width="22" IsEnabled="False">
+                <TextBox x:Name="filtrNazevISL" Width="115" TextChanged="filtry_TextChanged" Padding="0" Margin="0" 
+                         BorderThickness="0,0,1,0" VerticalContentAlignment="Center" MaxLength="13" />
+                <Button Background="White" BorderThickness="0" Padding="0" Margin="0,0,0,0" Width="22" IsEnabled="False" Foreground="#FF838383">
                     <Image Name="obrazekObchodniNazev" Source="Icon/hledat.png" Margin="3"/>
                 </Button>
-                <TextBox x:Name="filtrSarze" TextWrapping="Wrap" Width="73" TextChanged="filtry_TextChanged" Padding="0" Margin="0" 
-                         BorderThickness="0" VerticalContentAlignment="Center"/>
-                <Button Background="White" BorderThickness="0" Padding="0" Margin="0,0,0,0" Width="22" IsEnabled="False" HorizontalAlignment="Left">
+                <TextBox x:Name="filtrObchodniNazev" TextWrapping="Wrap" Width="115" TextChanged="filtry_TextChanged" Padding="0" Margin="0" 
+                         BorderThickness="0,0,1,0" VerticalContentAlignment="Center"/>
+                <Button Background="White" BorderThickness="0" Padding="0" Margin="0,0,0,0" Width="22" IsEnabled="False">
                     <Image Name="obrazekSarze" Source="Icon/hledat.png" Margin="3"/>
                 </Button>
-                
+                <TextBox x:Name="filtrSarze" TextWrapping="Wrap" Width="92" TextChanged="filtry_TextChanged" Padding="0" Margin="0" 
+                         BorderThickness="0,0,1,0" VerticalContentAlignment="Center"/>
+                <Button Background="White" BorderThickness="0" Padding="0" Margin="0,0,0,0" Width="22" IsEnabled="False" HorizontalAlignment="Left">
+                    <Image Name="obrazekBaleni" Source="Icon/hledat.png" Margin="3"/>
+                </Button>
+                <TextBox x:Name="filtrBaleni" TextWrapping="Wrap" TextChanged="filtry_TextChanged" Padding="0" Margin="0" 
+                         BorderThickness="0,0,1,0" VerticalContentAlignment="Center" Width="70"/>
+                <Menu Background="White" HorizontalContentAlignment="Center">
+                    <MenuItem Name="menuMnozDisp"  Template="{DynamicResource MenuItemControlTemplate}" Background="#1E838383" BorderThickness="0" Padding="0" Height="25">
+                        <MenuItem.Icon>
+                            <Image Name="obrazekMenudisp" Source="Icon/hledat.png"></Image>
+                        </MenuItem.Icon>
+                        <MenuItem Name="menuDispMensi" Header="menší" Click="menuMnozstvi_Click">
+                            <MenuItem.Icon>
+                                <Image Source="Icon/mensi2.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Name="menuDispVetsi" Header="větší" Click="menuMnozstvi_Click">
+                            <MenuItem.Icon>
+                                <Image Source="Icon/vetsi2.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Name="menuDispHledat" Header="rovná se" Click="menuMnozstvi_Click">
+                            <MenuItem.Icon>
+                                <Image Source="Icon/hledat.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuItem>
+                </Menu>
+                <wpfTool:IntegerUpDown Name="numUPdisp" Width="69" BorderThickness="0" Minimum="0" ValueChanged="numUPdisp_ValueChanged"/>
+                <Menu Background="White" HorizontalContentAlignment="Center">
+                    <MenuItem Name="menuMnozBlok"  Template="{DynamicResource MenuItemControlTemplate}" Background="#1E838383" BorderThickness="0" Padding="0" Height="25">
+                        <MenuItem.Icon>
+                            <Image Name="obrazekMenuBlok" Source="Icon/hledat.png"></Image>
+                        </MenuItem.Icon>
+                        <MenuItem Name="menuBlokMensi" Header="menší" Click="menuMnozstvi_Click">
+                            <MenuItem.Icon>
+                                <Image Source="Icon/mensi2.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Name="menuBlokVetsi" Header="větší" Click="menuMnozstvi_Click">
+                            <MenuItem.Icon>
+                                <Image Source="Icon/vetsi2.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Name="menuBlokHledat" Header="rovná se" Click="menuMnozstvi_Click">
+                            <MenuItem.Icon>
+                                <Image Source="Icon/hledat.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuItem>
+                </Menu>
+                <TextBox x:Name="filtrMnozBlok" TextWrapping="Wrap" TextChanged="filtry_TextChanged" Padding="0" Margin="0" 
+                         BorderThickness="0" VerticalContentAlignment="Center" Width="70" IsReadOnly="True"/>
+                <Button Background="White" BorderThickness="0,0,1,0" Padding="0" Margin="0,0,0,0" Width="22" IsEnabled="False" HorizontalAlignment="Left">
+                    <Image Name="obrazekMnozBlok"  Margin="3"/>
+                </Button>
+                <Menu  Height="25" UseLayoutRounding="False">
+                    <MenuItem  Name="tl1" Header=">"  Width="21" Background="White" Height="25" FontWeight="Bold">
+                        
+                        <MenuItem Name="tl2" Header="rovnáse">
+                            <MenuItem.Icon>
+                                <Image Source="Icon/vetsi2.png"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Name="tl3" Header="větší"/>
+                    </MenuItem>
+                </Menu>
 
+                
+                <Button Background="White" BorderThickness="0,0,1,0" Padding="0" Margin="0,0,0,0" Width="22" IsEnabled="False" HorizontalAlignment="Left">
+                    <Image Name="obrazekMnozSklad"  Margin="3" Source="Icon/hledat.png"/>
+                </Button>
+                <TextBox x:Name="filtrExpirace" TextWrapping="Wrap" TextChanged="filtry_TextChanged" Padding="0" Margin="0" 
+                         BorderThickness="0" VerticalContentAlignment="Center" Width="87" HorizontalContentAlignment="Center" IsReadOnly="True"/>
+                <DatePicker  Name="TlacitkoVyberDatum" Background="White" BorderBrush="#FF707070" Width="28" Padding="0" VerticalContentAlignment="Center" HorizontalAlignment="Left" BorderThickness="0" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
 
             </DockPanel>
         </Grid>
@@ -127,6 +263,8 @@
                     <Setter Property="Background" Value="White" />
                 </Style>
             </DataGrid.RowStyle>
+            <!-- .................................................................... -->
+            
             <!-- pokus o vystředení tetu heaer loupcu-->
 
             <!--zarovnání column header dle groups 
@@ -145,59 +283,66 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="KČM" IsReadOnly="True" Width="115">
+                <DataGridTemplateColumn Header="KČM" IsReadOnly="True" Width="137">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding KcmCislo}" Padding="5,0,0,0" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Název ISL" IsReadOnly="True" Width="155">
+                <DataGridTemplateColumn Header="Název ISL" IsReadOnly="True" Width="137">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding NazevISL}" Padding="5,0,0,0" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Obchodní Název" IsReadOnly="True" Width="155">
+                <DataGridTemplateColumn Header="Obchodní Název" IsReadOnly="True" Width="137">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding ObchodniNazev}" Padding="5,0,0,0" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Šarže" IsReadOnly="True" Width="95">
+                <DataGridTemplateColumn Header="Šarže" IsReadOnly="True" Width="114">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Sarze}" HorizontalAlignment="Right"/>
+                            <TextBlock Text="{Binding Sarze}" Padding="5,0,0,0"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Množ. disp." IsReadOnly="True" Width="*">
+                <DataGridTemplateColumn Header="Balení" IsReadOnly="True" Width="92">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding MnozstviDisponabilni}" HorizontalAlignment="Right"/>
+                            <TextBlock Text="{Binding Baleni}" Padding="5,0,0,0"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Množ. blok." IsReadOnly="True" Width="*">
+                <DataGridTemplateColumn Header="Množ. disp." IsReadOnly="True" Width="92">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding MnozstviBlokovane}" HorizontalAlignment="Right"/>
+                            <TextBlock Text="{Binding MnozstviDisponabilni}" Padding="0,0,5,0" HorizontalAlignment="Right"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Množ. sklad" IsReadOnly="True" Width="*">
+                <DataGridTemplateColumn Header="Množ. blok." IsReadOnly="True" Width="92">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding MnozstviSklad}" HorizontalAlignment="Right"/>
+                            <TextBlock Text="{Binding MnozstviBlokovane}" Padding="0,0,5,0" HorizontalAlignment="Right"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Expirace" IsReadOnly="True">
+                <DataGridTemplateColumn Header="Množ. sklad" IsReadOnly="True" Width="92">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Expirace, StringFormat=dd.MM.yyyy}"/>
+                            <TextBlock Text="{Binding MnozstviSklad}" Padding="0,0,5,0" HorizontalAlignment="Right"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Expirace" IsReadOnly="True" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Expirace, StringFormat=dd.MM.yyyy}" Padding="0,0,5,0" HorizontalAlignment="Right"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
