@@ -87,7 +87,7 @@
         <Grid Grid.Row="1">
             <ToolBar Margin="0">
                 <TextBlock Text="zruš filtry "/>
-                <Button Width="30" Click="Button_Click" Padding="0">
+                <Button Name="TlacitkoZrusFiltry" Width="30" Click="TlacitkoZrusFiltry_Click" Padding="0">
                     <Image Source="Icon/filterKonec5.png"/>
                 </Button>
                 <CheckBox x:Name="CBseskupit" Content="Seskupit" Checked="CBseskupit_Checked" Unchecked="CBseskupit_Unchecked" 
@@ -111,100 +111,112 @@
         <!-- grid pro panel s filtry  -->
         <Grid Name="panelSfiltry" Background="#FFABADB3" Grid.Row="3" Margin="0" >
             <DockPanel Name="filtrPanel" Background="#d7e4f2ff" Grid.ColumnSpan="2"  Margin="1,0" >
+                <!-- filtr KCM -->
                 <Button Background="White" BorderThickness="0" Padding="0" Margin="0,0,0,0" Width="22" BorderBrush="Black" IsEnabled="False">
                     <Image Name="obrazekKCM" Source="Icon/hledat.png" Margin="3"/>
                 </Button>
                 <TextBox x:Name="filtrKcm" TextWrapping="Wrap" Width="115" TextChanged="filtry_TextChanged" Padding="0" Margin="0" 
                          BorderThickness="0,0,1,0" VerticalContentAlignment="Center" MaxLength="13"/>
+                <!--filtr Nazev ISL -->
                 <Button Background="White" BorderThickness="0" Padding="0" Margin="0,0,0,0" Width="22" BorderBrush="Black" IsEnabled="False">
                     <Image Name="obrazekNazevISL" Source="Icon/hledat.png" Margin="3"/>
                 </Button>
                 <TextBox x:Name="filtrNazevISL" Width="115" TextChanged="filtry_TextChanged" Padding="0" Margin="0" 
                          BorderThickness="0,0,1,0" VerticalContentAlignment="Center" MaxLength="13" />
+                <!-- filtr Obchod. název-->
                 <Button Background="White" BorderThickness="0" Padding="0" Margin="0,0,0,0" Width="22" IsEnabled="False" Foreground="#FF838383">
                     <Image Name="obrazekObchodniNazev" Source="Icon/hledat.png" Margin="3"/>
                 </Button>
                 <TextBox x:Name="filtrObchodniNazev" TextWrapping="Wrap" Width="115" TextChanged="filtry_TextChanged" Padding="0" Margin="0" 
                          BorderThickness="0,0,1,0" VerticalContentAlignment="Center"/>
+                <!-- filtr Sarze-->
                 <Button Background="White" BorderThickness="0" Padding="0" Margin="0,0,0,0" Width="22" IsEnabled="False">
                     <Image Name="obrazekSarze" Source="Icon/hledat.png" Margin="3"/>
                 </Button>
                 <TextBox x:Name="filtrSarze" TextWrapping="Wrap" Width="92" TextChanged="filtry_TextChanged" Padding="0" Margin="0" 
                          BorderThickness="0,0,1,0" VerticalContentAlignment="Center"/>
+                <!-- filtr balení-->
                 <Button Background="White" BorderThickness="0" Padding="0" Margin="0,0,0,0" Width="22" IsEnabled="False" HorizontalAlignment="Left">
                     <Image Name="obrazekBaleni" Source="Icon/hledat.png" Margin="3"/>
                 </Button>
                 <TextBox x:Name="filtrBaleni" TextWrapping="Wrap" TextChanged="filtry_TextChanged" Padding="0" Margin="0" 
                          BorderThickness="0,0,1,0" VerticalContentAlignment="Center" Width="70"/>
+                <!-- filtr mnoz.disp.-->
                 <Menu Background="White" HorizontalContentAlignment="Center">
                     <MenuItem Name="menuMnozDisp"  Template="{DynamicResource MenuItemControlTemplate}" Background="#1E838383" BorderThickness="0" Padding="0" Height="25">
                         <MenuItem.Icon>
                             <Image Name="obrazekMenudisp" Source="Icon/hledat.png"></Image>
                         </MenuItem.Icon>
-                        <MenuItem Name="menuDispMensi" Header="menší" Click="menuMnozstvi_Click">
+                        <MenuItem Name="menuDispMensi" Header="menší" Click="menuMnoz_Click">
                             <MenuItem.Icon>
                                 <Image Source="Icon/mensi2.png"></Image>
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Name="menuDispVetsi" Header="větší" Click="menuMnozstvi_Click">
+                        <MenuItem Name="menuDispVetsi" Header="větší" Click="menuMnoz_Click">
                             <MenuItem.Icon>
                                 <Image Source="Icon/vetsi2.png"></Image>
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Name="menuDispHledat" Header="rovná se" Click="menuMnozstvi_Click">
+                        <MenuItem Name="menuDispHledat" Header="rovná se" Click="menuMnoz_Click">
                             <MenuItem.Icon>
                                 <Image Source="Icon/hledat.png"></Image>
                             </MenuItem.Icon>
                         </MenuItem>
                     </MenuItem>
                 </Menu>
-                <wpfTool:IntegerUpDown Name="numUPdisp" Width="69" BorderThickness="0" Minimum="0" ValueChanged="numUPdisp_ValueChanged"/>
-                <Menu Background="White" HorizontalContentAlignment="Center">
+                <wpfTool:IntegerUpDown Name="numUPdisp" Width="69" BorderThickness="0" Minimum="0" ValueChanged="numUP_ValueChanged"/>
+                <!-- filtr mnoz.blok.-->
+                <Menu Background="White" HorizontalContentAlignment="Center" BorderThickness="1,0,0,0" BorderBrush="#FFABADB3">
                     <MenuItem Name="menuMnozBlok"  Template="{DynamicResource MenuItemControlTemplate}" Background="#1E838383" BorderThickness="0" Padding="0" Height="25">
                         <MenuItem.Icon>
                             <Image Name="obrazekMenuBlok" Source="Icon/hledat.png"></Image>
                         </MenuItem.Icon>
-                        <MenuItem Name="menuBlokMensi" Header="menší" Click="menuMnozstvi_Click">
+                        <MenuItem Name="menuBlokMensi" Header="menší" Click="menuMnoz_Click">
                             <MenuItem.Icon>
                                 <Image Source="Icon/mensi2.png"></Image>
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Name="menuBlokVetsi" Header="větší" Click="menuMnozstvi_Click">
+                        <MenuItem Name="menuBlokVetsi" Header="větší" Click="menuMnoz_Click">
                             <MenuItem.Icon>
                                 <Image Source="Icon/vetsi2.png"></Image>
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Name="menuBlokHledat" Header="rovná se" Click="menuMnozstvi_Click">
+                        <MenuItem Name="menuBlokHledat" Header="rovná se" Click="menuMnoz_Click">
                             <MenuItem.Icon>
                                 <Image Source="Icon/hledat.png"></Image>
                             </MenuItem.Icon>
                         </MenuItem>
                     </MenuItem>
                 </Menu>
-                <TextBox x:Name="filtrMnozBlok" TextWrapping="Wrap" TextChanged="filtry_TextChanged" Padding="0" Margin="0" 
-                         BorderThickness="0" VerticalContentAlignment="Center" Width="70" IsReadOnly="True"/>
-                <Button Background="White" BorderThickness="0,0,1,0" Padding="0" Margin="0,0,0,0" Width="22" IsEnabled="False" HorizontalAlignment="Left">
-                    <Image Name="obrazekMnozBlok"  Margin="3"/>
-                </Button>
-                <Menu  Height="25" UseLayoutRounding="False">
-                    <MenuItem  Name="tl1" Header=">"  Width="21" Background="White" Height="25" FontWeight="Bold">
-                        
-                        <MenuItem Name="tl2" Header="rovnáse">
+                <wpfTool:IntegerUpDown Name="numUPblok" Width="69" BorderThickness="0" Minimum="0" ValueChanged="numUP_ValueChanged"/>
+                <!-- filtr mnoz.sklad-->
+                <Menu Background="White" HorizontalContentAlignment="Center" BorderThickness="1,0,0,0" BorderBrush="#FFABADB3">
+                    <MenuItem Name="menuMnozSklad"  Template="{DynamicResource MenuItemControlTemplate}" Background="#1E838383" BorderThickness="0" Padding="0" Height="25">
+                        <MenuItem.Icon>
+                            <Image Name="obrazekMenuSklad" Source="Icon/hledat.png"></Image>
+                        </MenuItem.Icon>
+                        <MenuItem Name="menuSkladMensi" Header="menší" Click="menuMnoz_Click">
                             <MenuItem.Icon>
-                                <Image Source="Icon/vetsi2.png"/>
+                                <Image Source="Icon/mensi2.png"></Image>
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Name="tl3" Header="větší"/>
+                        <MenuItem Name="menuSkladVetsi" Header="větší" Click="menuMnoz_Click">
+                            <MenuItem.Icon>
+                                <Image Source="Icon/vetsi2.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Name="menuSkladHledat" Header="rovná se" Click="menuMnoz_Click">
+                            <MenuItem.Icon>
+                                <Image Source="Icon/hledat.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </MenuItem>
                 </Menu>
-
-                
-                <Button Background="White" BorderThickness="0,0,1,0" Padding="0" Margin="0,0,0,0" Width="22" IsEnabled="False" HorizontalAlignment="Left">
-                    <Image Name="obrazekMnozSklad"  Margin="3" Source="Icon/hledat.png"/>
-                </Button>
-                <TextBox x:Name="filtrExpirace" TextWrapping="Wrap" TextChanged="filtry_TextChanged" Padding="0" Margin="0" 
-                         BorderThickness="0" VerticalContentAlignment="Center" Width="87" HorizontalContentAlignment="Center" IsReadOnly="True"/>
-                <DatePicker  Name="TlacitkoVyberDatum" Background="White" BorderBrush="#FF707070" Width="28" Padding="0" VerticalContentAlignment="Center" HorizontalAlignment="Left" BorderThickness="0" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+                <wpfTool:IntegerUpDown Name="numUPSklad" Width="69" BorderThickness="0" Minimum="0" ValueChanged="numUP_ValueChanged"/>
+                <!-- filtr Expirace-->               
+                <TextBox x:Name="filtrExpirace" TextWrapping="Wrap" Padding="0" Margin="0" 
+                         BorderThickness="1,0,0,0" VerticalContentAlignment="Center" Width="89" HorizontalContentAlignment="Center" KeyDown="filtrExpirace_KeyDown" LostFocus="filtrExpirace_LostFocus"/>
+                <DatePicker  Name="TlacitkoVyberDatum" Background="#FFF0F0F0" BorderBrush="#FF707070" Width="27" Padding="1,0,0,0" VerticalContentAlignment="Center" HorizontalAlignment="Left" BorderThickness="0" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
 
             </DockPanel>
         </Grid>
