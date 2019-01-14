@@ -81,8 +81,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Login.xaml.cs">
+      <DependentUpon>Login.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LokalniSada.cs">
+      <DependentUpon>LokalniSada.xsd</DependentUpon>
+    </Compile>
     <Compile Include="SpravceKomoditySklad.cs" />
+    <Compile Include="SpravceUcet.cs" />
     <Page Include="KomoditaWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Login.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

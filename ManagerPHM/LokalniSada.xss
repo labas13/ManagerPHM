@@ -38,14 +38,14 @@
     <Shape ID="DesignTable:Zakazka" ZOrder="47" X="336" Y="3154" Height="210" Width="192" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="159" />
     <Shape ID="DesignTable:Zamestnanec" ZOrder="46" X="605" Y="2746" Height="229" Width="221" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="178" />
     <Shape ID="DesignTable:Příjem" ZOrder="45" X="1798" Y="70" Height="115" Width="182" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="64" />
-    <Shape ID="DesignTable:celkem" ZOrder="44" X="2050" Y="70" Height="134" Width="185" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="83" />
-    <Shape ID="DesignTable:Výdej" ZOrder="43" X="2305" Y="70" Height="115" Width="177" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="64" />
-    <Shape ID="DesignTable:Blokace" ZOrder="3" X="1847" Y="486" Height="115" Width="189" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="64" />
-    <Shape ID="DesignTable:Expirace" ZOrder="2" X="1770" Y="212" Height="204" Width="226" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="145" />
-    <Shape ID="DesignTable:CelkovyPohledKomodit" ZOrder="1" X="2134" Y="277" Height="319" Width="300" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="260" />
+    <Shape ID="DesignTable:celkem" ZOrder="44" X="2050" Y="70" Height="134" Width="185" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="75" />
+    <Shape ID="DesignTable:Výdej" ZOrder="1" X="2305" Y="70" Height="115" Width="177" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="64" />
+    <Shape ID="DesignTable:Blokace" ZOrder="4" X="1847" Y="486" Height="115" Width="189" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="64" />
+    <Shape ID="DesignTable:Expirace" ZOrder="3" X="1770" Y="212" Height="204" Width="226" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="145" />
+    <Shape ID="DesignTable:KomoditySklad" ZOrder="2" X="0" Y="0" Height="90" Width="158" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="0" />
   </Shapes>
   <Connectors>
-    <Connector ID="DesignRelation:FK_Firma_Adresa" ZOrder="42" LineWidth="11">
+    <Connector ID="DesignRelation:FK_Firma_Adresa" ZOrder="43" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>852</X>
@@ -61,7 +61,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_Firma_Stredisko" ZOrder="41" LineWidth="11">
+    <Connector ID="DesignRelation:FK_Firma_Stredisko" ZOrder="42" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>535</X>
@@ -73,7 +73,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_Firma_TypSubektu" ZOrder="40" LineWidth="11">
+    <Connector ID="DesignRelation:FK_Firma_TypSubektu" ZOrder="41" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>852</X>
@@ -89,7 +89,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_Jakostak_Komodita" ZOrder="39" LineWidth="11">
+    <Connector ID="DesignRelation:FK_Jakostak_Komodita" ZOrder="40" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>752</X>
@@ -105,7 +105,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_Kcm_Mj" ZOrder="38" LineWidth="11">
+    <Connector ID="DesignRelation:FK_Kcm_Mj" ZOrder="39" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>576</X>
@@ -121,7 +121,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_Komodita_Kcm" ZOrder="37" LineWidth="11">
+    <Connector ID="DesignRelation:FK_Komodita_Kcm" ZOrder="38" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>506</X>
@@ -133,7 +133,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_Komodita_TypKomodita" ZOrder="36" LineWidth="11">
+    <Connector ID="DesignRelation:FK_Komodita_TypKomodita" ZOrder="37" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>847</X>
@@ -149,7 +149,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_KvalifikacniList_Komodita" ZOrder="35" LineWidth="11">
+    <Connector ID="DesignRelation:FK_KvalifikacniList_Komodita" ZOrder="36" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>777</X>
@@ -161,7 +161,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_KvalifikacniList_VJS" ZOrder="34" LineWidth="11">
+    <Connector ID="DesignRelation:FK_KvalifikacniList_VJS" ZOrder="35" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>1002</X>
@@ -173,7 +173,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_MazaciMisto_MazaciSkupina" ZOrder="33" LineWidth="11">
+    <Connector ID="DesignRelation:FK_MazaciMisto_MazaciSkupina" ZOrder="34" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>624</X>
@@ -185,7 +185,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_MazaciMisto_Technika" ZOrder="32" LineWidth="11">
+    <Connector ID="DesignRelation:FK_MazaciMisto_Technika" ZOrder="33" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>266</X>
@@ -197,7 +197,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_MazaciSkupina_KategorieTechnika" ZOrder="31" LineWidth="11">
+    <Connector ID="DesignRelation:FK_MazaciSkupina_KategorieTechnika" ZOrder="32" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>572</X>
@@ -213,7 +213,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_MazaciSkupina_VJS" ZOrder="30" LineWidth="11">
+    <Connector ID="DesignRelation:FK_MazaciSkupina_VJS" ZOrder="31" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>925</X>
@@ -225,7 +225,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_Norma_NormaTyp" ZOrder="29" LineWidth="11">
+    <Connector ID="DesignRelation:FK_Norma_NormaTyp" ZOrder="30" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>1522</X>
@@ -237,7 +237,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_NormyKomodit_Komodita" ZOrder="28" LineWidth="11">
+    <Connector ID="DesignRelation:FK_NormyKomodit_Komodita" ZOrder="29" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>760</X>
@@ -253,7 +253,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_NormyKomodit_Norma" ZOrder="27" LineWidth="11">
+    <Connector ID="DesignRelation:FK_NormyKomodit_Norma" ZOrder="28" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>1284</X>
@@ -269,7 +269,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_NormyMazaciSkupina_MazaciSkupina" ZOrder="26" LineWidth="11">
+    <Connector ID="DesignRelation:FK_NormyMazaciSkupina_MazaciSkupina" ZOrder="27" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>855</X>
@@ -281,7 +281,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_NormyMazaciSkupina_Norma" ZOrder="25" LineWidth="11">
+    <Connector ID="DesignRelation:FK_NormyMazaciSkupina_Norma" ZOrder="26" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>1267</X>
@@ -293,7 +293,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_NormyVJS_Norma" ZOrder="24" LineWidth="11">
+    <Connector ID="DesignRelation:FK_NormyVJS_Norma" ZOrder="25" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>1316</X>
@@ -305,7 +305,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_NormyVJS_VJS" ZOrder="23" LineWidth="11">
+    <Connector ID="DesignRelation:FK_NormyVJS_VJS" ZOrder="24" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>1090</X>
@@ -317,7 +317,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_Pohyb_Firma" ZOrder="22" LineWidth="11">
+    <Connector ID="DesignRelation:FK_Pohyb_Firma" ZOrder="23" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>782</X>
@@ -329,7 +329,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_Pohyb_Firma1" ZOrder="21" LineWidth="11">
+    <Connector ID="DesignRelation:FK_Pohyb_Firma1" ZOrder="22" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>782</X>
@@ -341,7 +341,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_Pohyb_TypPohybu" ZOrder="20" LineWidth="11">
+    <Connector ID="DesignRelation:FK_Pohyb_TypPohybu" ZOrder="21" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>1103</X>
@@ -353,7 +353,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_Pohyb_Zamestnanec" ZOrder="19" LineWidth="11">
+    <Connector ID="DesignRelation:FK_Pohyb_Zamestnanec" ZOrder="20" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>809</X>
@@ -369,7 +369,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_PolozkaPohybu_Komodita" ZOrder="18" LineWidth="11">
+    <Connector ID="DesignRelation:FK_PolozkaPohybu_Komodita" ZOrder="19" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>736</X>
@@ -385,7 +385,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_PolozkaPohybu_Pohyb" ZOrder="17" LineWidth="11">
+    <Connector ID="DesignRelation:FK_PolozkaPohybu_Pohyb" ZOrder="18" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>942</X>
@@ -397,7 +397,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_PoplozkaZakazka_MazaciSkupina" ZOrder="16" LineWidth="11">
+    <Connector ID="DesignRelation:FK_PoplozkaZakazka_MazaciSkupina" ZOrder="17" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>712</X>
@@ -409,7 +409,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_PoplozkaZakazka_TypPolozkaZakazka" ZOrder="15" LineWidth="11">
+    <Connector ID="DesignRelation:FK_PoplozkaZakazka_TypPolozkaZakazka" ZOrder="16" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>913</X>
@@ -421,7 +421,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_PoplozkaZakazka_Zakazka" ZOrder="14" LineWidth="11">
+    <Connector ID="DesignRelation:FK_PoplozkaZakazka_Zakazka" ZOrder="15" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>528</X>
@@ -433,7 +433,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_Technika_KategorieTechnika" ZOrder="13" LineWidth="11">
+    <Connector ID="DesignRelation:FK_Technika_KategorieTechnika" ZOrder="14" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>336</X>
@@ -449,7 +449,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_Technika_Kcm" ZOrder="12" LineWidth="11">
+    <Connector ID="DesignRelation:FK_Technika_Kcm" ZOrder="13" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>336</X>
@@ -465,7 +465,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_Technika_Stredisko" ZOrder="11" LineWidth="11">
+    <Connector ID="DesignRelation:FK_Technika_Stredisko" ZOrder="12" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>336</X>
@@ -481,7 +481,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_Technika_TechStav" ZOrder="10" LineWidth="11">
+    <Connector ID="DesignRelation:FK_Technika_TechStav" ZOrder="11" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>336</X>
@@ -497,7 +497,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_Zakazka_Technika" ZOrder="9" LineWidth="11">
+    <Connector ID="DesignRelation:FK_Zakazka_Technika" ZOrder="10" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>220</X>
@@ -513,7 +513,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_Zakazka_TypZakazka" ZOrder="8" LineWidth="11">
+    <Connector ID="DesignRelation:FK_Zakazka_TypZakazka" ZOrder="9" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>598</X>
@@ -529,7 +529,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_Zakazka_Zamestnanec" ZOrder="7" LineWidth="11">
+    <Connector ID="DesignRelation:FK_Zakazka_Zamestnanec" ZOrder="8" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>622</X>
@@ -545,7 +545,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_Zamestnanec_Hodnost" ZOrder="6" LineWidth="11">
+    <Connector ID="DesignRelation:FK_Zamestnanec_Hodnost" ZOrder="7" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>896</X>
@@ -557,7 +557,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_Zamestnanec_KategorieZamestnanec" ZOrder="5" LineWidth="11">
+    <Connector ID="DesignRelation:FK_Zamestnanec_KategorieZamestnanec" ZOrder="6" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>896</X>
@@ -569,7 +569,7 @@
         </Point>
       </RoutePoints>
     </Connector>
-    <Connector ID="DesignRelation:FK_Zamestnanec_Stredisko" ZOrder="4" LineWidth="11">
+    <Connector ID="DesignRelation:FK_Zamestnanec_Stredisko" ZOrder="5" LineWidth="11">
       <RoutePoints>
         <Point>
           <X>518</X>

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
+using System.Windows;
 
 namespace ManagerPHM
 {
@@ -41,7 +42,38 @@ namespace ManagerPHM
                 return dt;
             }
         }
-        
+        //-- Metoda pro ověření UŽIVATELE
+        public int overUzivatele(string sqlDotaz, DataTable dt, string jmeno, string heslo)
+        {
+            SqlConnection spojeni = new SqlConnection(pripojovaciRetez);
+            try
+                {
+                    if (spojeni.State == ConnectionState.Closed)
+                        spojeni.Open();
+                    SqlCommand prikaz = new SqlCommand(sqlDotaz, spojeni);
+                    prikaz.CommandType = CommandType.Text;
+                    prikaz.Parameters.AddWithValue("@Jmeno", jmeno);
+                    prikaz.Parameters.AddWithValue("@Heslo", heslo);
+                    int pocet = Convert.ToInt32(prikaz.ExecuteScalar());
+                    if (pocet == 1)
+                    {
+                        spojeni.Close();
+                        return 0;
+                    }
+
+                    else
+                    {
+                        spojeni.Close();
+                        return 1;
+                    }
+                                            
+                }
+            catch (Exception)
+                {
+                    spojeni.Close();
+                    return 2;
+                }            
+        }
         //-- DOPLNÍM METODY --> NA MAZÁNÍ, VKLÁDÁNÍ ...       
     }
 }

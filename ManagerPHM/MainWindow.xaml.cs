@@ -24,27 +24,28 @@ namespace ManagerPHM
 
         //připravím si
         DB db;
-        SpravceKomoditySklad sprKomSklad;
+        //SpravceKomoditySklad sprKomSklad;
 
         //to to možná NE!!!------------------------------------------------------------------------------------
         // vytvařím dataSet a adaptéry všech tabulek v DB
-        LokalniSada DS = new LokalniSada();
-        LokalniSadaTableAdapters.KomoditySkladTableAdapter DAKomoditySklad = new LokalniSadaTableAdapters.KomoditySkladTableAdapter();
-        LokalniSadaTableAdapters.AdresaTableAdapter DAadresa = new LokalniSadaTableAdapters.AdresaTableAdapter();
-        LokalniSadaTableAdapters.celkemTableAdapter DAcelkem = new LokalniSadaTableAdapters.celkemTableAdapter();
-        LokalniSadaTableAdapters.FirmaTableAdapter DAfirma = new LokalniSadaTableAdapters.FirmaTableAdapter();
-        LokalniSadaTableAdapters.HodnostTableAdapter DAhodnost = new LokalniSadaTableAdapters.HodnostTableAdapter();
-        LokalniSadaTableAdapters.JakostakTableAdapter DAjakost = new LokalniSadaTableAdapters.JakostakTableAdapter();
-        LokalniSadaTableAdapters.KategorieTechnikaTableAdapter DAkategorieTechnika = new LokalniSadaTableAdapters.KategorieTechnikaTableAdapter();
-        LokalniSadaTableAdapters.KategorieZamestnanecTableAdapter DAkategorieZamestnanec = new LokalniSadaTableAdapters.KategorieZamestnanecTableAdapter();
-        LokalniSadaTableAdapters.KcmTableAdapter DAkcm = new LokalniSadaTableAdapters.KcmTableAdapter();
-        LokalniSadaTableAdapters.KomoditaTableAdapter DAkomodita = new LokalniSadaTableAdapters.KomoditaTableAdapter();
-        LokalniSadaTableAdapters.KvalifikacniListTableAdapter DAkvalifikacniList = new LokalniSadaTableAdapters.KvalifikacniListTableAdapter();
+        //LokalniSada DS = new LokalniSada();
+        //LokalniSadaTableAdapters.KomoditySkladTableAdapter DAKomoditySklad = new LokalniSadaTableAdapters.KomoditySkladTableAdapter();
+       // LokalniSadaTableAdapters.AdresaTableAdapter DAadresa = new LokalniSadaTableAdapters.AdresaTableAdapter();
+       // LokalniSadaTableAdapters.celkemTableAdapter DAcelkem = new LokalniSadaTableAdapters.celkemTableAdapter();
+       // LokalniSadaTableAdapters.FirmaTableAdapter DAfirma = new LokalniSadaTableAdapters.FirmaTableAdapter();
+       // LokalniSadaTableAdapters.HodnostTableAdapter DAhodnost = new LokalniSadaTableAdapters.HodnostTableAdapter();
+       // LokalniSadaTableAdapters.JakostakTableAdapter DAjakost = new LokalniSadaTableAdapters.JakostakTableAdapter();
+       // LokalniSadaTableAdapters.KategorieTechnikaTableAdapter DAkategorieTechnika = new LokalniSadaTableAdapters.KategorieTechnikaTableAdapter();
+       // LokalniSadaTableAdapters.KategorieZamestnanecTableAdapter DAkategorieZamestnanec = new LokalniSadaTableAdapters.KategorieZamestnanecTableAdapter();
+       // LokalniSadaTableAdapters.KcmTableAdapter DAkcm = new LokalniSadaTableAdapters.KcmTableAdapter();
+       // LokalniSadaTableAdapters.KomoditaTableAdapter DAkomodita = new LokalniSadaTableAdapters.KomoditaTableAdapter();
+       // LokalniSadaTableAdapters.KvalifikacniListTableAdapter DAkvalifikacniList = new LokalniSadaTableAdapters.KvalifikacniListTableAdapter();
         //.....---------------------------------------------------------------------------------------------------------
         // ještě dodělat adaptéry ...
 
-        public MainWindow()
+        public MainWindow(string jmenoUzivatele)
         {
+          
             InitializeComponent();
 
             //vytvořím připojovací řetězec
@@ -57,6 +58,9 @@ namespace ManagerPHM
             //vytvořím instanci třídy "DB" a předám ji připojovací Řetěz
             db = new DB(pripojovaciRetezec);
 
+
+           // Login oknoLogin = new Login(db);
+           // oknoLogin.ShowDialog();
         }
         
 
