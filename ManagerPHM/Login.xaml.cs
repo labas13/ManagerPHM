@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,7 @@ namespace ManagerPHM
     {
         private DB db;
         SpravceUcet sprUcet;
+        DataTable dtUzivatel;
 
         public Login()
         {
@@ -84,26 +86,25 @@ namespace ManagerPHM
         // -- pomocná metoda OverUzivatel
         private void overUzivatele()
         {
+            string jmenoUzivatel;
             string jmeno = TBjmeno.Text;
             string heslo = TBheslo.Password;
-            int odpoved = sprUcet.overUzivatele(db, jmeno, heslo);
-            switch (odpoved)
+            sprUcet.overUzivatele(db, jmeno, heslo);
+            dtUzivatel = sprUcet.dtUzivatel;
+
+            if( dtUzivatel.Rows.Count > 0)
             {
-                case 0:
-                    string jmenoUzivatel = "sem doplním jmeno s odpoved"; // potřeba dopsat nějak způsob jak to načíst z databáze předávání z metody "overUzivatele"
-                    MainWindow mojeOkno = new MainWindow(jmenoUzivatel);
-                    mojeOkno.Show();
-                    this.Close();
-                    break;
-                case 1:
-                    TBjmeno.Text = "";
-                    TBheslo.Password = "";
-                    TBjmeno.Focus();
-                    MessageBox.Show("Nesprávně zadané Jméno nebo Heslo !");
-                    break;
-                case 2:
-                    MessageBox.Show("Spojení s databází se nezdařilo, skontroluj prvky připojení k databází");
-                    break;
+                jmenoUzivatel = (string)dtUzivatel.Rows[0]["Jmeno"];
+                MainWindow mojeOkno = new MainWindow(dtUzivatel);
+                mojeOkno.Show();
+                this.Close();
+            }
+            else
+            {
+                TBjmeno.Text = "";
+                TBheslo.Password = "";
+                TBjmeno.Focus();
+                MessageBox.Show("Nesprávně zadané Jméno nebo Heslo !");
             }
         }
     }

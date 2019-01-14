@@ -9,18 +9,17 @@ namespace ManagerPHM
 {
     class SpravceUcet
     {
-        public DataTable dtUcet { get; set; }
+        public DataTable dtUzivatel{ get; set; }
         public int odpoved { get; set; }
          
         public SpravceUcet()
         {
-            dtUcet = new DataTable();
+            dtUzivatel = new DataTable();
         }
 
-        public int overUzivatele(DB nazevDB, string jmeno, string heslo)
+        public void overUzivatele(DB nazevDB, string jmeno, string heslo)
         {
-            odpoved = nazevDB.overUzivatele("SELECT COUNT(1) FROM Ucet WHERE Jmeno=@Jmeno AND Heslo=@Heslo", dtUcet, jmeno, heslo);
-            return odpoved;
+            dtUzivatel = nazevDB.overUzivatele("SELECT * FROM Ucet WHERE Jmeno=@Jmeno AND Heslo=@Heslo", dtUzivatel, jmeno, heslo);            
         }
     }
 }

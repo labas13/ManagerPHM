@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -24,6 +25,7 @@ namespace ManagerPHM
 
         //připravím si
         DB db;
+        DataTable dtPrihlasenyUzivatel;
         //SpravceKomoditySklad sprKomSklad;
 
         //to to možná NE!!!------------------------------------------------------------------------------------
@@ -43,9 +45,9 @@ namespace ManagerPHM
         //.....---------------------------------------------------------------------------------------------------------
         // ještě dodělat adaptéry ...
 
-        public MainWindow(string jmenoUzivatele)
+        public MainWindow(DataTable dtUzivatel)
         {
-          
+            dtPrihlasenyUzivatel = dtUzivatel;
             InitializeComponent();
 
             //vytvořím připojovací řetězec
@@ -58,9 +60,8 @@ namespace ManagerPHM
             //vytvořím instanci třídy "DB" a předám ji připojovací Řetěz
             db = new DB(pripojovaciRetezec);
 
-
-           // Login oknoLogin = new Login(db);
-           // oknoLogin.ShowDialog();
+            TBlokjmenoPrihlasenehoUzivatele.Text += (string)dtUzivatel.Rows[0]["Jmeno"];
+           
         }
         
 

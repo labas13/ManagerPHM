@@ -13,7 +13,7 @@ namespace ManagerPHM
     {
         //--privátní proměnná 
         private string pripojovaciRetez;
-        
+
         //--konstruktor
         public DB(string pripojRetez)
         {
@@ -43,37 +43,24 @@ namespace ManagerPHM
             }
         }
         //-- Metoda pro ověření UŽIVATELE
-        public int overUzivatele(string sqlDotaz, DataTable dt, string jmeno, string heslo)
+        public DataTable overUzivatele(string sqlDotaz, DataTable dt, string jmeno, string heslo)
         {
-            SqlConnection spojeni = new SqlConnection(pripojovaciRetez);
-            try
-                {
-                    if (spojeni.State == ConnectionState.Closed)
-                        spojeni.Open();
-                    SqlCommand prikaz = new SqlCommand(sqlDotaz, spojeni);
-                    prikaz.CommandType = CommandType.Text;
-                    prikaz.Parameters.AddWithValue("@Jmeno", jmeno);
-                    prikaz.Parameters.AddWithValue("@Heslo", heslo);
-                    int pocet = Convert.ToInt32(prikaz.ExecuteScalar());
-                    if (pocet == 1)
-                    {
-                        spojeni.Close();
-                        return 0;
-                    }
+            using (SqlConnection spojeni = new SqlConnection(pripojovaciRetez))
+            {
+                SqlCommand prikaz = new SqlCommand(sqlDotaz, spojeni);
+                prikaz.CommandType = CommandType.Text;
+                prikaz.Parameters.AddWithValue("@Jmeno", jmeno);
+                prikaz.Parameters.AddWithValue("@Heslo", heslo);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.SelectCommand = prikaz;
+                dt.Clear();
+                da.Fill(dt);
+                return dt;
 
-                    else
-                    {
-                        spojeni.Close();
-                        return 1;
-                    }
-                                            
-                }
-            catch (Exception)
-                {
-                    spojeni.Close();
-                    return 2;
-                }            
+            }
+                   
         }
-        //-- DOPLNÍM METODY --> NA MAZÁNÍ, VKLÁDÁNÍ ...       
+
+        //-- DOPLNÍM METODY --> NA MAZÁNÍ, VKLÁDÁNÍ ...
     }
 }
