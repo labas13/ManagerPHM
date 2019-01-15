@@ -9,17 +9,74 @@ namespace ManagerPHM
 {
     class SpravceUcet
     {
-        public DataTable dtUzivatel{ get; set; }
+        public DataTable dtPrihlasenyUzivatel{ get; set; }
         public int odpoved { get; set; }
          
         public SpravceUcet()
         {
-            dtUzivatel = new DataTable();
+            dtPrihlasenyUzivatel = new DataTable();
         }
 
-        public void overUzivatele(DB nazevDB, string jmeno, string heslo)
+        public bool overUzivatele(DB nazevDB, string jmeno, string zadaneHeslo)
         {
-            dtUzivatel = nazevDB.overUzivatele("SELECT * FROM Ucet WHERE Jmeno=@Jmeno AND Heslo=@Heslo", dtUzivatel, jmeno, heslo);            
+            dtPrihlasenyUzivatel = nazevDB.overUzivatele("SELECT * FROM Ucet WHERE Jmeno=@Jmeno", dtPrihlasenyUzivatel, jmeno);
+            //dtUzivatel = nazevDB.overUzivatele("SELECT * FROM Ucet WHERE Jmeno=@Jmeno AND Heslo=@Heslo", dtUzivatel, jmeno, heslo);
+            if (dtPrihlasenyUzivatel.Rows.Count > 0)
+            {
+                string ulozeneHeslo = dtPrihlasenyUzivatel.Rows[0]["Heslo"].ToString();
+                string ulozenaSul = dtPrihlasenyUzivatel.Rows[0]["Sul"].ToString();
+                string hashZadanehoHesla = vytvorHash(zadaneHeslo, ulozenaSul);
+                if (hashZadanehoHesla == ulozeneHeslo)
+                {
+                    return true;
+                }
+                else
+                    return false;
+            }
+            else
+                return false;
+
+            
+                        
         }
+
+
+        // ---------------------------------------------
+        // -------     HASH     ------------------------
+        // ---------------------------------------------
+
+        // ------------
+        // 2. pokus
+        public string vytvorHash(string zadaneHeslo, string sul)
+        {
+            //string sul = vytvorSul(10); // při kontrole nevytvářím tuto sůl jen si ji načtu z DB
+            string heshHesla = vytvorSHA256Hash(zadaneHeslo, sul);
+            return heshHesla;
+        }
+        // při kontrole nevytvářím tuto sůl jen si ji načtu z DB
+        public string vytvorSul(int velikost)
+        {
+            var rng = new System.Security.Cryptography.RNGCryptoServiceProvider();
+            var buff = new byte[velikost];
+            rng.GetBytes(buff);
+            return Convert.ToBase64String(buff);
+        }
+        public string vytvorSHA256Hash(string heslo, string sul)
+        {
+            byte[] bytes = System.Text.Encoding.UTF8.GetBytes(heslo + sul);
+            System.Security.Cryptography.SHA256Managed sha256hashstring =
+                new System.Security.Cryptography.SHA256Managed();
+            byte[] hash = sha256hashstring.ComputeHash(bytes);
+            return byteArrayToHexString(hash);
+        }
+
+        public string byteArrayToHexString(Byte[] hash)
+        {
+            string sss = BitConverter.ToString(hash);
+            sss = BitConverter.ToString(hash).Replace("-", "");
+            return sss;
+        }
+
+
     }
 }

@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Security.Cryptography;
 
 namespace ManagerPHM
 {
@@ -23,7 +24,7 @@ namespace ManagerPHM
     {
         private DB db;
         SpravceUcet sprUcet;
-        DataTable dtUzivatel;
+        DataTable dtPrihlasenyUzivatel;
 
         public Login()
         {
@@ -40,8 +41,10 @@ namespace ManagerPHM
             db = new DB(pripojovaciRetezec);
             //vytvořím správceUcet
             sprUcet = new SpravceUcet();
-           
-            
+            // vytvořim odkaz na dtPrihlasenyUzivatel ve správciUzivatelů
+            dtPrihlasenyUzivatel = sprUcet.dtPrihlasenyUzivatel;
+
+
         }
 
         private void konec_Click(object sender, RoutedEventArgs e)
@@ -86,16 +89,13 @@ namespace ManagerPHM
         // -- pomocná metoda OverUzivatel
         private void overUzivatele()
         {
-            string jmenoUzivatel;
+            // načtu zadání
             string jmeno = TBjmeno.Text;
             string heslo = TBheslo.Password;
-            sprUcet.overUzivatele(db, jmeno, heslo);
-            dtUzivatel = sprUcet.dtUzivatel;
-
-            if( dtUzivatel.Rows.Count > 0)
+            
+            if (sprUcet.overUzivatele(db, jmeno, heslo))
             {
-                jmenoUzivatel = (string)dtUzivatel.Rows[0]["Jmeno"];
-                MainWindow mojeOkno = new MainWindow(dtUzivatel);
+                MainWindow mojeOkno = new MainWindow(dtPrihlasenyUzivatel);
                 mojeOkno.Show();
                 this.Close();
             }
@@ -107,5 +107,20 @@ namespace ManagerPHM
                 MessageBox.Show("Nesprávně zadané Jméno nebo Heslo !");
             }
         }
+        
+        /*
+        // z netu --->
+        byte[] vals = { 0x01, 0xAA, 0xB1, 0xDC, 0x10, 0xDD };
+
+        string str = BitConverter.ToString(vals);
+        Console.WriteLine(str);
+
+str = BitConverter.ToString(vals).Replace("-", "");
+        Console.WriteLine(str);
+        */
+/*Output:
+  01-AA-B1-DC-10-DD
+  01AAB1DC10DD
+ */
     }
 }
