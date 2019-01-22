@@ -84,8 +84,13 @@
     <Compile Include="Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
-    <Compile Include="LokalniSada.cs">
+    <Compile Include="LokalniSada.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
       <DependentUpon>LokalniSada.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="oknoEvidenceUzivatelu.xaml.cs">
+      <DependentUpon>oknoEvidenceUzivatelu.xaml</DependentUpon>
     </Compile>
     <Compile Include="SpravceKomoditySklad.cs" />
     <Compile Include="SpravceUcet.cs" />
@@ -109,15 +114,14 @@
     <Compile Include="KomoditaWindow.xaml.cs">
       <DependentUpon>KomoditaWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="LokalniSada.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>LokalniSada.xsd</DependentUpon>
-    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="oknoEvidenceUzivatelu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="oknoKomodit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

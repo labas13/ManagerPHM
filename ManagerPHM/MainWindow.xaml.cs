@@ -28,7 +28,7 @@ namespace ManagerPHM
         DataTable dtPrihlasenyUzivatel;
         //SpravceKomoditySklad sprKomSklad;
 
-        //to to možná NE!!!------------------------------------------------------------------------------------
+        
         // vytvařím dataSet a adaptéry všech tabulek v DB
         //LokalniSada DS = new LokalniSada();
         //LokalniSadaTableAdapters.KomoditySkladTableAdapter DAKomoditySklad = new LokalniSadaTableAdapters.KomoditySkladTableAdapter();

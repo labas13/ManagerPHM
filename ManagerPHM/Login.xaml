@@ -18,7 +18,7 @@
             <ColumnDefinition Width="4*"/>
             <ColumnDefinition Width="4*"/>
         </Grid.ColumnDefinitions>
-        <Label Name="jmeno" Content="Jméno :  " VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="10,0,0,0" Foreground="White"  />
+        <Label Name="jmeno" Content="Jméno :  " VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="10,0,0,0" Foreground="White" Loaded="jmeno_Loaded"  />
             <Label Name="heslo" Grid.Row="1" Content="Heslo :  " Grid.ColumnSpan="2"  VerticalAlignment="Center" Margin="10,0,0,0" Foreground="White"/>
         <TextBox Name="TBjmeno" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="20,0" Background="#FF545D6A" Foreground="White" KeyDown="TBjmeno_KeyDown"/>
         <PasswordBox Name="TBheslo" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="20,0" Background="#FF545D6A"  Foreground="White" KeyDown="TBheslo_KeyDown"/>

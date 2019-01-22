@@ -22,6 +22,10 @@ namespace ManagerPHM
     /// </summary>
     public partial class Login : Window
     {
+        LokalniSada DS = new LokalniSada();
+        LokalniSadaTableAdapters.UcetTableAdapter DAucet = new LokalniSadaTableAdapters.UcetTableAdapter();
+        
+
         private DB db;
         SpravceUcet sprUcet;
         DataTable dtPrihlasenyUzivatel;
@@ -107,7 +111,15 @@ namespace ManagerPHM
                 MessageBox.Show("Nesprávně zadané Jméno nebo Heslo !");
             }
         }
-        
+
+        private void jmeno_Loaded(object sender, RoutedEventArgs e)
+        {
+            if(DAucet.Fill(DS.Ucet) != 1)
+            {
+                MessageBox.Show("Databáze nenalezena ! ");
+            }
+        }
+
         /*
         // z netu --->
         byte[] vals = { 0x01, 0xAA, 0xB1, 0xDC, 0x10, 0xDD };
@@ -118,9 +130,9 @@ namespace ManagerPHM
 str = BitConverter.ToString(vals).Replace("-", "");
         Console.WriteLine(str);
         */
-/*Output:
-  01-AA-B1-DC-10-DD
-  01AAB1DC10DD
- */
+        /*Output:
+          01-AA-B1-DC-10-DD
+          01AAB1DC10DD
+         */
     }
 }
