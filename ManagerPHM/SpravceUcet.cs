@@ -17,9 +17,9 @@ namespace ManagerPHM
             dtPrihlasenyUzivatel = new DataTable();
         }
 
-        public bool overUzivatele(DB nazevDB, string jmeno, string zadaneHeslo)
+        public bool overUzivatele(DB nazevDB, string login, string zadaneHeslo)
         {
-            dtPrihlasenyUzivatel = nazevDB.overUzivatele("SELECT * FROM Ucet WHERE Jmeno=@Jmeno", dtPrihlasenyUzivatel, jmeno);
+            dtPrihlasenyUzivatel = nazevDB.overUzivatele("SELECT * FROM Ucet WHERE Login=@Login", dtPrihlasenyUzivatel, login);
             //dtUzivatel = nazevDB.overUzivatele("SELECT * FROM Ucet WHERE Jmeno=@Jmeno AND Heslo=@Heslo", dtUzivatel, jmeno, heslo);
             if (dtPrihlasenyUzivatel.Rows.Count > 0)
             {

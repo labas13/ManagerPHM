@@ -90,10 +90,10 @@ namespace ManagerPHM
         private void overUzivatele()
         {
             // načtu zadání
-            string jmeno = TBjmeno.Text;
+            string login = TBjmeno.Text;
             string heslo = TBheslo.Password;
             
-            if (sprUcet.overUzivatele(db, jmeno, heslo))
+            if (sprUcet.overUzivatele(db, login, heslo))
             {
                 MainWindow mojeOkno = new MainWindow(dtPrihlasenyUzivatel);
                 mojeOkno.Show();

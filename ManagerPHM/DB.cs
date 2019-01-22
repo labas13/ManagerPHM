@@ -43,13 +43,13 @@ namespace ManagerPHM
             }
         }
         //-- Metoda pro ověření UŽIVATELE
-        public DataTable overUzivatele(string sqlDotaz, DataTable dt, string jmeno)
+        public DataTable overUzivatele(string sqlDotaz, DataTable dt, string login)
         {
             using (SqlConnection spojeni = new SqlConnection(pripojovaciRetez))
             {
                 SqlCommand prikaz = new SqlCommand(sqlDotaz, spojeni);
                 prikaz.CommandType = CommandType.Text;
-                prikaz.Parameters.AddWithValue("@Jmeno", jmeno);
+                prikaz.Parameters.AddWithValue("@Login", login);
                 //prikaz.Parameters.AddWithValue("@Heslo", heslo);
                 SqlDataAdapter da = new SqlDataAdapter();
                 da.SelectCommand = prikaz;
