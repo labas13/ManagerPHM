@@ -66,6 +66,7 @@
             </ControlTemplate.Triggers>
         </ControlTemplate>
     </UserControl.Resources>
+    <!-- hlavní GRID-->
     <Grid Name="hlavniGridOknaKomodit"  Background="#d7e4f2ff" Margin="0,0,0,0">
 
         <Grid.ColumnDefinitions>
@@ -84,7 +85,7 @@
                 FontSize="18" Background="#d7e4f2ff" Foreground="#135A95" Grid.ColumnSpan="2" Grid.Row="0" 
                Margin="0,0,0,0.4" Grid.RowSpan="2"/>
         <!-- grid pro ovladaci prvky-->
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" Grid.ColumnSpan="2">
             <ToolBar Margin="0">
                 <TextBlock Text="zruš filtry "/>
                 <Button Name="TlacitkoZrusFiltry" Width="30" Click="TlacitkoZrusFiltry_Click" Padding="0">
@@ -216,7 +217,7 @@
                 <!-- filtr Expirace-->               
                 <TextBox x:Name="filtrExpirace" TextWrapping="Wrap" Padding="0" Margin="0" 
                          BorderThickness="1,0,0,0" VerticalContentAlignment="Center" Width="89" HorizontalContentAlignment="Center" KeyDown="filtrExpirace_KeyDown" LostFocus="filtrExpirace_LostFocus"/>
-                <DatePicker  Name="TlacitkoVyberDatum" Background="#FFF0F0F0" BorderBrush="#FF707070" Width="27" Padding="1,0,0,0" VerticalContentAlignment="Center" HorizontalAlignment="Left" BorderThickness="0" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+                <DatePicker  Name="TlacitkoVyberDatum" Background="#FFF0F0F0" BorderBrush="#FF707070" Width="27" Padding="1,0,0,0" VerticalContentAlignment="Center" HorizontalAlignment="Left" BorderThickness="0" SelectedDateChanged="DatePicker_SelectedDateChanged" MouseEnter="TlacitkoVyberDatum_MouseEnter" MouseLeave="TlacitkoVyberDatum_MouseLeave"/>
 
             </DockPanel>
         </Grid>
@@ -361,32 +362,100 @@
             </DataGrid.Columns>
         </DataGrid>
         <!-- DG detail -->
-        <Grid Name="detail" Grid.Row="4" Grid.Column="1" Margin="1,1,1,2" UseLayoutRounding="False">
+        <Grid Name="detail" Grid.Row="2" Grid.RowSpan="3" Grid.Column="1" Margin="1,1,1,2" UseLayoutRounding="False">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="7*"/>
+                <ColumnDefinition Width="4*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
-                <RowDefinition Height="2"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
+                <!-- 5. je volnej-->
+                <RowDefinition Height="25"/>
+                
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>                
+                <RowDefinition Height="25"/>
+                
+                <!-- 9. je volnej-->
+                <RowDefinition Height="25"/>
+                
                 <RowDefinition Height="25"/>
                 <RowDefinition Height="25"/>
                 <RowDefinition Height="25"/>
                 <RowDefinition Height="25"/>
-                <RowDefinition Height="82*"/>
+                
+                <!-- mezera-->
+                <RowDefinition Height="25"/>
+                
+                <!-- pro množství  row 15, 16, 17 -->
+                <RowDefinition Height="25"/>   
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
+                
+                <RowDefinition Height="25*"/>
+                
+                
             </Grid.RowDefinitions>
 
 
             <TextBlock x:Name="TBdetail"  TextWrapping="Wrap" Text="Detail" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" FontWeight="Bold" Grid.Column="1" Margin="10,3" />
             <Separator Grid.Row="1" Grid.ColumnSpan="3" Margin="0,0,0,0"/>
-            <TextBlock x:Name="TBLkcm" Text="KČM: " Grid.Row="2" VerticalAlignment="Center" Margin="0,5,0,4" Padding="5,0,0,0"/>
-            <TextBox x:Name="TBXkcm" Grid.Row="2" Grid.Column="1" Margin="0,4,0,3" IsEnabled="False" Text="---" VerticalAlignment="Center" />
-            <TextBlock x:Name="TBLnazevIsl" Text="Název ISL: " Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0,5,0,4" Padding="5,0,0,0"/>
-            <TextBox x:Name="TBXnazevIsl" Grid.Row="3" Grid.Column="1" Margin="0,4,0,3" IsEnabled="False" Text="---" VerticalAlignment="Center" />
-            <TextBlock x:Name="TBLobchodniNazev" Text="Obchodní název: " Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0,5,0,4" Padding="5,0,0,0"/>
-            <TextBox x:Name="TBXobchodniNazev" Grid.Row="4" Grid.Column="1" Margin="0,4,0,3" IsEnabled="False" Text="---" VerticalAlignment="Center" />
+            <TextBlock x:Name="TBLkcm" Text="KČM: " Grid.Row="2" VerticalAlignment="Center" Margin="10,5,0,4" Padding="5,0,0,0"/>
+            <TextBox x:Name="TBXkcm" Grid.Row="2" Grid.Column="1" Margin="1,4,0,3" IsEnabled="False" Text="---" VerticalAlignment="Center" />
+            <TextBlock x:Name="TBLnazevIsl" Text="Název ISL: " Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="10,5,0,4" Padding="5,0,0,0"/>
+            <TextBox x:Name="TBXnazevIsl" Grid.Row="3" Grid.Column="1" Margin="1,4,0,3" IsEnabled="False" Text="---" VerticalAlignment="Center" />
+            <TextBlock x:Name="TBLMJ" Text="MJ: " Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="10,5,0,4" Padding="5,0,0,0"/>
+            <TextBox x:Name="TBXmj" Grid.Row="4" Grid.Column="1" Margin="1,4,0,3" IsEnabled="False" Text="---" VerticalAlignment="Center" />
+          
+            <TextBlock x:Name="TBLobchodniNazev" Text="Obchodní název: " Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Margin="10,5,0,4" Padding="5,0,0,0"/>
+            <TextBox x:Name="TBXobchodniNazev" Grid.Row="6" Grid.Column="1" Margin="1,4,0,3" IsEnabled="False" Text="---" VerticalAlignment="Center" />
+            <TextBlock x:Name="TBLsarze" Text="Šarže: " Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Margin="10,5,0,4" Padding="5,0,0,0"/>
+            <TextBox x:Name="TBXsarze" Grid.Row="7" Grid.Column="1" Margin="1,4,0,3" IsEnabled="False" Text="---" VerticalAlignment="Center" />
+            <TextBlock x:Name="TBLexpirace" Text="Expirace: " Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Margin="10,5,0,4" Padding="5,0,0,0"/>
+            <TextBox x:Name="TBXexpirace" Grid.Row="8" Grid.Column="1" Margin="1,4,0,3" IsEnabled="False" Text="---" VerticalAlignment="Center" />
+            <TextBlock x:Name="TBLrokVyroby" Text="Rok výroby: " Grid.Row="10" Grid.Column="0" VerticalAlignment="Center" Margin="10,5,0,4" Padding="5,0,0,0"/>
+            <TextBox x:Name="TBXrokVyroby" Grid.Row="10" Grid.Column="1" Margin="1,4,0,3" IsEnabled="False" Text="---" VerticalAlignment="Center" />
+            <TextBlock x:Name="TBLdatumPrijmu" Text="Datum příjmu: " Grid.Row="11" Grid.Column="0" VerticalAlignment="Center" Margin="10,5,0,4" Padding="5,0,0,0"/>
+            <TextBox x:Name="TBXdatumPrijmu" Grid.Row="11" Grid.Column="1" Margin="1,4,0,3" IsEnabled="False" Text="---" VerticalAlignment="Center" />
+            <TextBlock x:Name="TBLjakostakCislo" Text="Jakosťák č.: " Grid.Row="12" Grid.Column="0" VerticalAlignment="Center" Margin="10,5,0,4" Padding="5,0,0,0"/>
+            <TextBox x:Name="TBXjakostakCislo" Grid.Row="12" Grid.Column="1" Margin="1,4,0,3" IsEnabled="False" Text="---" VerticalAlignment="Center" />
+            <TextBlock x:Name="TBLjakostakDo" Text="Platnost jakosťáku: " Grid.Row="13" Grid.Column="0" VerticalAlignment="Center" Margin="10,5,0,4" Padding="5,0,0,0"/>
+            <TextBox x:Name="TBXjakostakDo" Grid.Row="13" Grid.Column="1" Margin="1,4,0,3" IsEnabled="False" Text="---" VerticalAlignment="Center" />
+            <TextBlock x:Name="TBLmnozstviDisponabilni" Text="Množství dispon.: " Grid.Row="15" Grid.Column="0" VerticalAlignment="Center" Margin="10,5,0,4" Padding="5,0,0,0"/>
+            <TextBox x:Name="TBXmnozstviDisponabilni" Grid.Row="15" Grid.Column="1" Margin="1,4,0,3" IsEnabled="False" Text="---" VerticalAlignment="Center" />
+            <TextBlock x:Name="TBLmnozstviBlokovane" Text="Množství blok.: " Grid.Row="16" Grid.Column="0" VerticalAlignment="Center" Margin="10,5,0,4" Padding="5,0,0,0"/>
+            <TextBox x:Name="TBXmnozstviBlokovane" Grid.Row="16" Grid.Column="1" Margin="1,4,0,3" IsEnabled="False" Text="---" VerticalAlignment="Center" />
+            <TextBlock x:Name="TBLmnozstviSklad" Text="Množství sklad: " Grid.Row="17" Grid.Column="0" VerticalAlignment="Center" Margin="10,5,0,4" Padding="5,0,0,0"/>
+            <TextBox x:Name="TBXmnozstviSklad" Grid.Row="17" Grid.Column="1" Margin="1,4,0,3" IsEnabled="False" Text="---" VerticalAlignment="Center" />
+            
+            
+            
+
+            <Grid Grid.Row="18"  Grid.Column="0" Grid.ColumnSpan="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Label Name="LBdodavatel" Grid.Row="0" Grid.Column="0" Content="Dodavatel: " Margin="10,0,0,0" Visibility="Hidden"/>
+                <Label Name="LBNormy" Grid.Row="0" Grid.Column="1" Content="Normy:" Margin="10,0,0,0" Visibility="Hidden"/>
+                <TextBox Name="TBXdodavatel" Grid.Row="1" Grid.Column="0" Visibility="Hidden"/>
+                <TextBox Name="TBXNormy" Grid.Row="1" Grid.Column="1" Visibility="Hidden"/>
+                
+            </Grid>
+            
+            
+            
+            
 
         </Grid>
         <!-- Dok panel-->

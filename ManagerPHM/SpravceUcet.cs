@@ -34,10 +34,7 @@ namespace ManagerPHM
                     return false;
             }
             else
-                return false;
-
-            
-                        
+                return false;                       
         }
 
 
@@ -72,9 +69,9 @@ namespace ManagerPHM
 
         public string byteArrayToHexString(Byte[] hash)
         {
-            string sss = BitConverter.ToString(hash);
-            sss = BitConverter.ToString(hash).Replace("-", "");
-            return sss;
+            // tento nepoužívám -->  string hashJakoText = BitConverter.ToString(hash); 
+            string hashJakoTextBez = BitConverter.ToString(hash).Replace("-", "");
+            return hashJakoTextBez;
         }
 
 

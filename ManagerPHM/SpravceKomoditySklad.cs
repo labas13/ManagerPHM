@@ -21,11 +21,17 @@ namespace ManagerPHM
         }
 
 
-        //-- metoda nactení vseho
+        //-- metoda nactení vseho s pohledu "KomoditySklad"
         public void nactiVse(DB nazevDB)
         {
             dtKomoditySklad = nazevDB.nactiJednuTabulku("SELECT * FROM KomoditySklad", dtKomoditySklad);
         }
+       
+        
+        
+        //   --------------------------------
+        //   ---- TOTO ZATÍM NEPOUŽÍVÁM ----
+
         //-- nati po Šarzich
         public void nactiVsePoSarzich(DB nazevDB)
         {
