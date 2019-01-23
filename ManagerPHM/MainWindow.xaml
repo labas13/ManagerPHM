@@ -45,7 +45,7 @@
                 </MenuItem>
                 <Separator/>
                 <MenuItem Name="menuEvidenceUzivatele" Header="_Uživatelé" InputGestureText="Ctrl+U"
-                          ToolTip="Evidence uživatelů" Foreground="Black">
+                          ToolTip="Evidence uživatelů" Foreground="Black" Click="menuEvidenceUzivatele_Click">
                     <MenuItem.Icon>
                         <Image Source="Icon/Uzivatel.ico"/>
                     </MenuItem.Icon>

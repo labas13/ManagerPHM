@@ -10,11 +10,19 @@ namespace ManagerPHM
     public class SpravceUcet
     {
         public DataTable dtPrihlasenyUzivatel{ get; set; }
-       // public int odpoved { get; set; }
+        public DataTable dtVsichniUzivatele { get; set; }
+        
+        // public int odpoved { get; set; }
          
         public SpravceUcet()
         {
             dtPrihlasenyUzivatel = new DataTable();
+            dtVsichniUzivatele = new DataTable();
+        }
+
+        public void nactiVsechnyUzivatele(DB nazevDB)
+        {
+            dtVsichniUzivatele = nazevDB.nactiJednuTabulku("SELECT * FROM Ucet ", dtVsichniUzivatele);
         }
 
         public bool overUzivatele(DB nazevDB, string login, string zadaneHeslo)

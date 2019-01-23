@@ -87,6 +87,9 @@
     <Compile Include="LokalniSada.cs">
       <DependentUpon>LokalniSada.xsd</DependentUpon>
     </Compile>
+    <Compile Include="oknoUzivatele.xaml.cs">
+      <DependentUpon>oknoUzivatele.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SpravceKomoditySklad.cs" />
     <Compile Include="SpravceUcet.cs" />
     <Page Include="KomoditaWindow.xaml">
@@ -119,6 +122,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="oknoKomodit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="oknoUzivatele.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

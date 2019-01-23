@@ -98,6 +98,10 @@ namespace ManagerPHM
             //DAKomoditySklad.Fill(DS.KomoditySklad);
         }
 
-        
+        private void menuEvidenceUzivatele_Click(object sender, RoutedEventArgs e)
+        {
+            oknoUzivatele oknoUzivatele = new oknoUzivatele(db, sprUcet);
+            oknoUzivatele.Show();
+        }
     }
 }
