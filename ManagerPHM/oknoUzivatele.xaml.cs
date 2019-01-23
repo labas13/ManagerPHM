@@ -35,6 +35,7 @@ namespace ManagerPHM
             DGevidenceUzivatel.ItemsSource = null;
             DGevidenceUzivatel.ItemsSource = dv;
 
+            
 
         }
     }
