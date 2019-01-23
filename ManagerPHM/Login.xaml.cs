@@ -25,6 +25,7 @@ namespace ManagerPHM
         private DB db;
         SpravceUcet sprUcet;
         DataTable dtPrihlasenyUzivatel;
+        
 
         public Login()
         {
