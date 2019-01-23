@@ -92,6 +92,7 @@
     <Compile Include="oknoEvidenceUzivatelu.xaml.cs">
       <DependentUpon>oknoEvidenceUzivatelu.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SpravceDB.cs" />
     <Compile Include="SpravceKomoditySklad.cs" />
     <Compile Include="SpravceUcet.cs" />
     <Page Include="KomoditaWindow.xaml">

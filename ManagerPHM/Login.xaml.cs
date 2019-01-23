@@ -22,17 +22,19 @@ namespace ManagerPHM
     /// </summary>
     public partial class Login : Window
     {
-        LokalniSada DS = new LokalniSada();
-        LokalniSadaTableAdapters.UcetTableAdapter DAucet = new LokalniSadaTableAdapters.UcetTableAdapter();
-        
+        //private DB db;
+        //SpravceUcet sprUcet;
+        //DataTable dtPrihlasenyUzivatel;
 
-        private DB db;
-        SpravceUcet sprUcet;
-        DataTable dtPrihlasenyUzivatel;
+        // vytvořím si instanci třídy (SpravceDB)
+        SpravceDB spravceDB = new SpravceDB();
 
         public Login()
         {
             InitializeComponent();
+            // naplním si tabulku (Ucet)
+            spravceDB.DAucet.Fill(spravceDB.DS.Ucet);
+
             TBjmeno.Focus();
             //vytvořím připojovací řetězec
             SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder();
@@ -40,7 +42,7 @@ namespace ManagerPHM
             csb.InitialCatalog = "DatabazeSklad";
             csb.IntegratedSecurity = true;
             string pripojovaciRetezec = csb.ConnectionString;
-
+            
             //vytvořím instanci třídy "DB" a předám ji připojovací Řetěz
             db = new DB(pripojovaciRetezec);
             //vytvořím správceUcet
