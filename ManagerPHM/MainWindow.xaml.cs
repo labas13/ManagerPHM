@@ -26,6 +26,7 @@ namespace ManagerPHM
         //připravím si
         DB db;
         DataTable dtPrihlasenyUzivatel;
+        SpravceUcet sprUcet;
         //SpravceKomoditySklad sprKomSklad;
 
         //to to možná NE!!!------------------------------------------------------------------------------------
@@ -45,23 +46,16 @@ namespace ManagerPHM
         //.....---------------------------------------------------------------------------------------------------------
         // ještě dodělat adaptéry ...
 
-        public MainWindow(DataTable dtUzivatel)
+        public MainWindow(DB db,SpravceUcet sprUcet)
         {
-            dtPrihlasenyUzivatel = dtUzivatel;
+            this.db = db;
+            this.sprUcet = sprUcet;
+            dtPrihlasenyUzivatel = sprUcet.dtPrihlasenyUzivatel;
             InitializeComponent();
+            //zapíšu si jméno přihlášeného do hlavního okna
+            TBlokjmenoPrihlasenehoUzivatele.Text += (string)dtPrihlasenyUzivatel.Rows[0]["Jmeno"] + " " + (string)dtPrihlasenyUzivatel.Rows[0]["Prijmeni"];
+            
 
-            //vytvořím připojovací řetězec
-            SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder();
-            csb.DataSource = @"LABAS-PC-LENOVO\SQLLABAS";
-            csb.InitialCatalog = "DatabazeSklad";
-            csb.IntegratedSecurity = true;
-            string pripojovaciRetezec = csb.ConnectionString;
-
-            //vytvořím instanci třídy "DB" a předám ji připojovací Řetěz
-            db = new DB(pripojovaciRetezec);
-
-            TBlokjmenoPrihlasenehoUzivatele.Text += (string)dtUzivatel.Rows[0]["Jmeno"];
-           
         }
         
 

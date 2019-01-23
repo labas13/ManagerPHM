@@ -18,7 +18,6 @@ namespace ManagerPHM
         public DB(string pripojRetez)
         {
             pripojovaciRetez = pripojRetez;
-
         }
 
         //--metoda pro nactení dat z DB do DT
@@ -43,7 +42,7 @@ namespace ManagerPHM
             }
         }
         //-- Metoda pro ověření UŽIVATELE
-        public DataTable overUzivatele(string sqlDotaz, DataTable dt, string login)
+        public DataTable najdiUzivatele(string sqlDotaz, DataTable dt, string login)
         {
             using (SqlConnection spojeni = new SqlConnection(pripojovaciRetez))
             {

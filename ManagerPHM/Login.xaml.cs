@@ -96,7 +96,7 @@ namespace ManagerPHM
             
             if (sprUcet.overUzivatele(db, login, heslo))
             {
-                MainWindow mojeOkno = new MainWindow(dtPrihlasenyUzivatel);
+                MainWindow mojeOkno = new MainWindow(db,sprUcet);
                 mojeOkno.Show();
                 this.Close();
             }

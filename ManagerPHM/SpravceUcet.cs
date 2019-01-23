@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace ManagerPHM
 {
-    class SpravceUcet
+    public class SpravceUcet
     {
         public DataTable dtPrihlasenyUzivatel{ get; set; }
-        public int odpoved { get; set; }
+       // public int odpoved { get; set; }
          
         public SpravceUcet()
         {
@@ -19,7 +19,7 @@ namespace ManagerPHM
 
         public bool overUzivatele(DB nazevDB, string login, string zadaneHeslo)
         {
-            dtPrihlasenyUzivatel = nazevDB.overUzivatele("SELECT * FROM Ucet WHERE Login=@Login", dtPrihlasenyUzivatel, login);
+            dtPrihlasenyUzivatel = nazevDB.najdiUzivatele("SELECT * FROM Ucet WHERE Login=@Login", dtPrihlasenyUzivatel, login);
             //dtUzivatel = nazevDB.overUzivatele("SELECT * FROM Ucet WHERE Jmeno=@Jmeno AND Heslo=@Heslo", dtUzivatel, jmeno, heslo);
             if (dtPrihlasenyUzivatel.Rows.Count > 0)
             {
