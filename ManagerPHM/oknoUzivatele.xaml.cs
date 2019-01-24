@@ -83,36 +83,144 @@ namespace ManagerPHM
             pbxHeslo.IsEnabled = true;
         }
 
-        // pomocná metoda pro zapínaní tlačítek
-        private void zapVypTlacitka(bool BTnovy, bool BTuprav, bool BTblok, bool BTzrus, bool BTuloz, bool BTstorno)
-        {
-            btnUzivatelNovy.IsEnabled = BTnovy;
-            btnUzivatelUpravit.IsEnabled = BTuprav;
-            btnUzivatelBlok.IsEnabled = BTblok;
-            btnUzivatelZrusit.IsEnabled = BTzrus;
-            btnUzivatelUloz.IsEnabled = BTuloz;
-            btnUzivatelStorno.IsEnabled = BTstorno;
-        }
+        
 
-        private void tbxJmeno_TextChanged(object sender, TextChangedEventArgs e)
+        private void tbxProVsechny_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox tbxZadane = (TextBox)sender;
             if (tbxZadane.Text != "")
             {
                 if(tbxZadane.Text.Length > 2)
                 {
-                    lblVystrahaJmeno.Content = "";
+                    switch (tbxZadane.Name)
+                    {
+                        case "tbxJmeno":
+                            lblVystrahaJmeno.Content = "";
+                            break;
+                        case "tbxPrijmeni":
+                            lblVystrahaPrijmeni.Content = "";
+                            break;
+                        case "tbxLogin":
+                            lblVystrahaLogin.Content = "";
+                            break;
+                    }
+                        
                 }
                 else
                 {
-                    lblVystrahaJmeno.Content = "zadej jméno s délkou min. tři znaky !";
+                    switch (tbxZadane.Name)
+                    {
+                        case "tbxJmeno":
+                            lblVystrahaJmeno.Content = "zadej jméno s minimální délkou tři znaky !";
+                            break;
+                        case "tbxPrijmeni":
+                            lblVystrahaPrijmeni.Content = "zadej příjmení s minimální délkou tři znaky !";
+                            break;
+                        case "tbxLogin":
+                            lblVystrahaLogin.Content = "zadej login s minimální délkou tři znaky !";
+                            break;
+                    }
+                    
                 }
             }
             else
             {
-                lblVystrahaJmeno.Content = "";
+                switch (tbxZadane.Name)
+                {
+                    case "tbxJmeno":
+                        lblVystrahaJmeno.Content = "";
+                        break;
+                    case "tbxPrijmeni":
+                        lblVystrahaPrijmeni.Content = "";
+                        break;
+                    case "tbxLogin":
+                        lblVystrahaLogin.Content = "";
+                        break;
+                }
             }
         }
+
+        private void btnUzivatelUloz_Click(object sender, RoutedEventArgs e)
+        {
+            if(tbxJmeno.Text.Length > 2 && tbxPrijmeni.Text.Length > 2 && tbxLogin.Text.Length > 2)
+            {
+                string jmeno = tbxJmeno.Text;
+                string prijmeni = tbxPrijmeni.Text;
+                string login = tbxLogin.Text;
+                // 1. načtu znovu všechny uživatele
+                sprUcet.nactiVsechnyUzivatele(db);
+                // 2. vytvořím si dv
+                dv = new DataView(sprUcet.dtVsichniUzivatele);
+                // vynuluji Row filtry
+                dv.RowFilter = string.Empty;
+                // 3. filtruju dv dle jmena a příjmení
+                dv.RowFilter = string.Format("Jmeno LIKE '{0}' AND Prijmeni LIKE '{1}'", tbxJmeno.Text, tbxPrijmeni.Text);
+                if (dv.Count > 0)
+                    MessageBox.Show("Uživatel s tímto jménem a příjmením již existuje ");
+                else
+                {
+                    // vynuluji Row filtry
+                    dv.RowFilter = string.Empty;
+                    // filtruju dv dle loginu
+                    dv.RowFilter = string.Format("Login LIKE '{0}'", tbxLogin.Text);
+                    if(dv.Count > 0)
+                        MessageBox.Show("Uživatel s loginem již existuje ");
+                    else
+                    {
+                        string sul = sprUcet.vytvorSul(10);
+                        string hash = sprUcet.vytvorHash(pbxHeslo.Password, sul);
+                        // tet uz začnu ukládat do DB .....>
+                        MessageBox.Show(sul );
+                    }
+                }
+                    
+            }
+            else
+            {
+                if (tbxJmeno.Text == "")
+                    lblVystrahaJmeno.Content = "Zadej své jméno !";
+                if (tbxPrijmeni.Text == "")
+                    lblVystrahaPrijmeni.Content = "Zadej své příjmení !";
+                if (tbxLogin.Text == "")
+                    lblVystrahaLogin.Content = "Zadej svůj login !";
+
+            }
+        }
+        
+        private void btnUzivatelStorno_Click(object sender, RoutedEventArgs e)
+        {
+            zapVypTlacitka(true, true, true, true, false, false);
+            DGevidenceUzivatel.IsEnabled = true;
+
+            lblVystrahaJmeno.Content = "";
+            tbxJmeno.Text = "";
+            tbxJmeno.IsEnabled = false;
+            lblHvezda1.Visibility = Visibility.Hidden;
+
+            lblVystrahaPrijmeni.Content = "";
+            tbxPrijmeni.Text = "";
+            tbxPrijmeni.IsEnabled = false;
+            lblHvezda2.Visibility = Visibility.Hidden;
+
+            lblVystrahaLogin.Content = "";
+            tbxLogin.Text = "";
+            tbxLogin.IsEnabled = false;
+            lblHvezda3.Visibility = Visibility.Hidden;
+
+            //heslo_1
+            pbxHeslo.Password = "";
+            pbxHeslo.Visibility = Visibility.Hidden;
+            lblHeslo.Visibility = Visibility.Hidden;
+            lblHvezda4.Visibility = Visibility.Hidden;
+            //heslo_2
+            pbxHesloDva.Password = "";
+            pbxHesloDva.Visibility = Visibility.Hidden;
+            lblHesloDva.Visibility = Visibility.Hidden;
+            lblHvezda5.Visibility = Visibility.Hidden;
+
+        }
+
+
 
         // pokud se změní text v password_1
         private void pbxHesla_PasswordChanged(object sender, RoutedEventArgs e)
@@ -145,6 +253,47 @@ namespace ManagerPHM
                 lblVystrahaTriZnaky.Visibility = Visibility.Hidden;
             }
         }
+
+        private void tbxJmeno_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                tbxPrijmeni.Focus();
+            }
+        }
+
+        private void tbxPrijmeni_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                tbxLogin.Focus();
+            }
+        }
+
+        private void tbxLogin_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                pbxHeslo.Focus();
+            }
+        }
+
+        private void pbxHeslo_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                pbxHesloDva.Focus();
+            }
+        }
+
+        private void pbxHesloDva_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                btnUzivatelUloz.Focus();
+            }
+        }
+
         //pomocná metoda pro kontrolu zadávání hesla hesla
         private void porovnejHesla()
         {
@@ -169,6 +318,16 @@ namespace ManagerPHM
             {
                 lblVystrahaHeslaSeNeshoduji.Visibility = Visibility.Hidden;
             }
+        }
+        // pomocná metoda pro zapínaní tlačítek
+        private void zapVypTlacitka(bool BTnovy, bool BTuprav, bool BTblok, bool BTzrus, bool BTuloz, bool BTstorno)
+        {
+            btnUzivatelNovy.IsEnabled = BTnovy;
+            btnUzivatelUpravit.IsEnabled = BTuprav;
+            btnUzivatelBlok.IsEnabled = BTblok;
+            btnUzivatelZrusit.IsEnabled = BTzrus;
+            btnUzivatelUloz.IsEnabled = BTuloz;
+            btnUzivatelStorno.IsEnabled = BTstorno;
         }
 
     }

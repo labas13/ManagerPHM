@@ -20,8 +20,8 @@
         </Grid.ColumnDefinitions>
         <Label Name="jmeno" Content="Jméno :  " VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="10,0,0,0" Foreground="White"  />
             <Label Name="heslo" Grid.Row="1" Content="Heslo :  " Grid.ColumnSpan="2"  VerticalAlignment="Center" Margin="10,0,0,0" Foreground="White"/>
-        <TextBox Name="TBjmeno" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="20,0" Background="#FF545D6A" Foreground="White" KeyDown="TBjmeno_KeyDown"/>
-        <PasswordBox Name="TBheslo" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="20,0" Background="#FF545D6A"  Foreground="White" KeyDown="TBheslo_KeyDown"/>
+        <TextBox Name="TBjmeno" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="0,0,20,0" Background="#FF545D6A" Foreground="White" KeyDown="TBjmeno_KeyDown"/>
+        <PasswordBox Name="TBheslo" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="0,0,20,0" Background="#FF545D6A"  Foreground="White" KeyDown="TBheslo_KeyDown"/>
         <DockPanel Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Center">
             <Button Name="prihlasit" Content="Přihlásit" Margin="15,20,15,20" Width="80" Foreground="White" Background="#FF545D6A" VerticalContentAlignment="Center" Padding="0" Click="prihlasit_Click"/>
                 <Button Name="konec"  Content="Konec" Margin="15,20,15,20" Click="konec_Click" Width="80" Foreground="White" Background="#FF545D6A" Padding="0"></Button>
