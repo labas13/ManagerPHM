@@ -25,6 +25,17 @@ namespace ManagerPHM
             dtVsichniUzivatele = nazevDB.nactiJednuTabulku("SELECT * FROM Ucet ", dtVsichniUzivatele);
         }
 
+        public bool smazUzivatele(DB nazevDB, string login)
+        {
+            bool odpoved = nazevDB.smazUzivatele("DELETE FROM Ucet WHERE Login = @login", dtVsichniUzivatele, login);
+            return odpoved;
+        }
+
+        public bool ulozUzivatele(DB nazevDB, string jmeno, string prijmeni, string login, string heslo, string sul)
+        {
+            bool odpoved = nazevDB.ulozTabulku("INSERT INTO Ucet (Jmeno, Prijmeni, Login, Heslo, Sul)VALUES(@Jmeno, @Prijmeni, @Login, @Heslo, @Sul)", dtVsichniUzivatele, jmeno, prijmeni, login, heslo, sul);
+            return odpoved;
+        }
         public bool overUzivatele(DB nazevDB, string login, string zadaneHeslo)
         {
             dtPrihlasenyUzivatel = nazevDB.najdiUzivatele("SELECT * FROM Ucet WHERE Login=@Login", dtPrihlasenyUzivatel, login);

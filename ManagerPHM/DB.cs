@@ -20,6 +20,57 @@ namespace ManagerPHM
             pripojovaciRetez = pripojRetez;
         }
 
+        public bool smazUzivatele(string sqlDotaz, DataTable dt, string login)
+        {
+            using (SqlConnection spojeni = new SqlConnection(pripojovaciRetez))
+            {
+                SqlCommand prikaz = new SqlCommand(sqlDotaz, spojeni);
+                prikaz.CommandType = CommandType.Text;
+                prikaz.Parameters.AddWithValue("@Login", login);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.DeleteCommand = prikaz;
+                //-- 3. mažu z DB
+                if (da.Update(dt) > 0)
+                {
+                    //smazání se podařilo
+                    return true;
+                }
+                else
+                {
+                    //smazání se nezdařilo
+                    return false;
+                }
+            }
+        }
+
+        public bool ulozTabulku(string sqlDotaz, DataTable dt, string jmeno, string prijmeni, string login, string heslo, string sul)
+        {
+            using (SqlConnection spojeni = new SqlConnection(pripojovaciRetez))
+            {
+                SqlCommand prikaz = new SqlCommand(sqlDotaz, spojeni);
+                prikaz.CommandType = CommandType.Text;
+                prikaz.Parameters.AddWithValue("@Jmeno", jmeno);
+                prikaz.Parameters.AddWithValue("@Prijmeni", prijmeni);
+                prikaz.Parameters.AddWithValue("@Login", login);
+                prikaz.Parameters.AddWithValue("@Heslo", heslo);
+                prikaz.Parameters.AddWithValue("@Sul", sul);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.InsertCommand = prikaz;
+
+                //-- 3. uložím do DB
+                if (da.Update(dt) > 0)
+                {
+                    //uložení se podařilo
+                    return true;
+                }
+                else
+                {
+                    //uložení se nezdařilo
+                    return false;
+                }
+
+            }
+        }
         //--metoda pro nactení dat z DB do DT
         public DataTable nactiJednuTabulku(string sqlDotaz, DataTable dt)
         {

@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:ManagerPHM"
         mc:Ignorable="d" 
         Title="Přihlášení" Height="300" Width="300" FontSize="14" Icon="Icon/Kanystr.ico" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Closing="Window_Closing" Background="#FF17947F" Foreground="White">
-    <Border Background="#2e3137" CornerRadius="15" Margin="20">
-    <Grid Name="gridPrihlaseni" Margin="0" Height="180" VerticalAlignment="Top">
+    <Border Background="#2e3137" CornerRadius="12" Margin="20">
+    <Grid Name="gridPrihlaseni" Margin="0" Height="200" VerticalAlignment="Top">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="1*"/>
@@ -18,10 +18,15 @@
             <ColumnDefinition Width="4*"/>
             <ColumnDefinition Width="4*"/>
         </Grid.ColumnDefinitions>
-        <Label Name="jmeno" Content="Jméno :  " VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="10,0,0,0" Foreground="White"  />
-            <Label Name="heslo" Grid.Row="1" Content="Heslo :  " Grid.ColumnSpan="2"  VerticalAlignment="Center" Margin="10,0,0,0" Foreground="White"/>
-        <TextBox Name="TBjmeno" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="0,0,20,0" Background="#FF545D6A" Foreground="White" KeyDown="TBjmeno_KeyDown"/>
-        <PasswordBox Name="TBheslo" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="0,0,20,0" Background="#FF545D6A"  Foreground="White" KeyDown="TBheslo_KeyDown"/>
+            <StackPanel Grid.Row="0"  Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Bottom">
+                 <Label Name="jmeno" Content="Uživatelské jméno (Login) :  " VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="20,0,0,0" Foreground="White"  />
+                <TextBox Name="TBjmeno" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="20,0" Background="#FF545D6A" Foreground="White" KeyDown="TBjmeno_KeyDown"/>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Bottom">
+                <Label Name="heslo" Grid.Row="1" Content="Heslo :  " Grid.ColumnSpan="2"  VerticalAlignment="Center" Margin="20,0,0,0" Foreground="White"/>
+                <PasswordBox Name="TBheslo" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="20,0" Background="#FF545D6A"  Foreground="White" KeyDown="TBheslo_KeyDown"/>
+            </StackPanel>       
+        
         <DockPanel Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Center">
             <Button Name="prihlasit" Content="Přihlásit" Margin="15,20,15,20" Width="80" Foreground="White" Background="#FF545D6A" VerticalContentAlignment="Center" Padding="0" Click="prihlasit_Click"/>
                 <Button Name="konec"  Content="Konec" Margin="15,20,15,20" Click="konec_Click" Width="80" Foreground="White" Background="#FF545D6A" Padding="0"></Button>
