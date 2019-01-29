@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,8 +13,10 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace ManagerPHM
 {
@@ -23,13 +27,15 @@ namespace ManagerPHM
     {
         DB db;
         SpravceUcet sprUcet;
-        DataView dv;
+        DataView dv;        
 
-        SolidColorBrush zelena, oranzova, cervena;
+        SolidColorBrush zelena, oranzova, cervena, cerna, bila, lehceOranzova;
+
+        DispatcherTimer DT1;
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-           // sprUcet.nactiVsechnyUzivatele(db);
+            // sprUcet.nactiVsechnyUzivatele(db);
         }
         public oknoUzivatele(DB db, SpravceUcet sprUcet)
         {
@@ -39,17 +45,23 @@ namespace ManagerPHM
             zelena = new SolidColorBrush(Colors.LightGreen);
             oranzova = new SolidColorBrush(Colors.Orange);
             cervena = new SolidColorBrush(Colors.Red);
+            cerna = new SolidColorBrush(Colors.Black);
+            bila = new SolidColorBrush(Colors.White);
+            lehceOranzova = new SolidColorBrush(Colors.LightGoldenrodYellow);
             sprUcet.nactiVsechnyUzivatele(db);
             InitializeComponent();
-            
+
             dv = new DataView(sprUcet.dtVsichniUzivatele);
             dv.Sort = "Prijmeni,Jmeno";
             DGevidenceUzivatel.ItemsSource = null;
             DGevidenceUzivatel.ItemsSource = dv;
 
+            
 
 
         }
+
+        
 
         private void DGevidenceUzivatel_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -61,10 +73,10 @@ namespace ManagerPHM
                 //tbxJmeno.Text = (string)drv.Row["Jmeno"];
                 //tbxPrijmeni.Text = (string)drv.Row["Prijmeni"];
                 //tbxLogin.Text = (string)drv.Row["Login"];
-                
+
                 // -- pokus --  trochu jinak
                 string login = (string)drv.Row["Login"];
-                string filtr = string.Format("Login LIKE '{0}'",login);
+                string filtr = string.Format("Login LIKE '{0}'", login);
                 DataRow[] nalezeneRadky = sprUcet.dtVsichniUzivatele.Select(filtr);
                 DataRow radek = nalezeneRadky[0];
                 if (nalezeneRadky.Length != 1)
@@ -73,9 +85,11 @@ namespace ManagerPHM
                 }
                 else
                 {
+                    tbxLogin.Text = (string)radek["Login"];
                     tbxJmeno.Text = (string)radek["Jmeno"];
                     tbxPrijmeni.Text = (string)radek["Prijmeni"];
-                    tbxLogin.Text = (string)radek["Login"];
+                   
+                    
                     if ((bool)radek["Blokace"] == false)
                         tbxBlokace.Text = "NE";
                     else
@@ -95,7 +109,7 @@ namespace ManagerPHM
                             tbxRole.Text = "Ostatní";
                             break;
                     }
-                        
+
                 }
             }
             else
@@ -125,14 +139,60 @@ namespace ManagerPHM
             tbxJmeno.Focus();
         }
 
-        
+
 
         private void tbxProVsechny_TextChanged(object sender, TextChangedEventArgs e)
         {
-            TextBox tbxZadane = (TextBox)sender;
-            if (tbxZadane.Text != "")
+            if (DGevidenceUzivatel.IsEnabled != true)
             {
-                if(tbxZadane.Text.Length > 2)
+                TextBox tbxZadane = (TextBox)sender;
+                if (tbxZadane.Text != "")
+                {
+                    if (tbxZadane.Text.Length > 2)
+                    {
+                        switch (tbxZadane.Name)
+                        {
+                            case "tbxJmeno":
+                                lblVystrahaJmeno.Content = "";
+                                break;
+                            case "tbxPrijmeni":
+                                lblVystrahaPrijmeni.Content = "";
+                                break;
+                            case "tbxLogin":
+                                {
+                                    if (overExistenciLoginu(tbxZadane.Text))
+                                    {
+                                        lblVystrahaLogin.Content = "Login již existuje !";
+                                        tbxZadane.Foreground = cervena;
+                                    }
+                                    else
+                                    {
+                                        lblVystrahaLogin.Content = "";
+                                        tbxZadane.Foreground = cerna;
+                                    }
+                                }
+                                break;
+                        }
+
+                    }
+                    else
+                    {
+                        switch (tbxZadane.Name)
+                        {
+                            case "tbxJmeno":
+                                lblVystrahaJmeno.Content = "zadej minimálně tři znaky !";
+                                break;
+                            case "tbxPrijmeni":
+                                lblVystrahaPrijmeni.Content = "zadej minimálně tři znaky !";
+                                break;
+                            case "tbxLogin":
+                                lblVystrahaLogin.Content = "zadej minimálně tři znaky !";
+                                break;
+                        }
+
+                    }
+                }
+                else
                 {
                     switch (tbxZadane.Name)
                     {
@@ -146,48 +206,16 @@ namespace ManagerPHM
                             lblVystrahaLogin.Content = "";
                             break;
                     }
-                        
-                }
-                else
-                {
-                    switch (tbxZadane.Name)
-                    {
-                        case "tbxJmeno":
-                            lblVystrahaJmeno.Content = "zadej jméno s minimální délkou tři znaky !";
-                            break;
-                        case "tbxPrijmeni":
-                            lblVystrahaPrijmeni.Content = "zadej příjmení s minimální délkou tři znaky !";
-                            break;
-                        case "tbxLogin":
-                            lblVystrahaLogin.Content = "zadej login s minimální délkou tři znaky !";
-                            break;
-                    }
-                    
-                }
-            }
-            else
-            {
-                switch (tbxZadane.Name)
-                {
-                    case "tbxJmeno":
-                        lblVystrahaJmeno.Content = "";
-                        break;
-                    case "tbxPrijmeni":
-                        lblVystrahaPrijmeni.Content = "";
-                        break;
-                    case "tbxLogin":
-                        lblVystrahaLogin.Content = "";
-                        break;
-                }
+                } 
             }
         }
 
         private void btnUzivatelZrusit_Click(object sender, RoutedEventArgs e)
         {
-            if(DGevidenceUzivatel.SelectedIndex >= 0)
+            if (DGevidenceUzivatel.SelectedIndex >= 0)
             {
-                string uzivatJmeno = tbxLogin.Text;                
-                string zprava = string.Format("Opravdu si přejete smazat uživatele {0} ?",uzivatJmeno);
+                string uzivatJmeno = tbxLogin.Text;
+                string zprava = string.Format("Opravdu si přejete smazat uživatele {0} ?", uzivatJmeno);
                 string nadpis = "Smazání uživatele";
                 MessageBoxButton tlacitka = MessageBoxButton.YesNo;
                 MessageBoxImage ikona = MessageBoxImage.Question;
@@ -224,8 +252,8 @@ namespace ManagerPHM
                         {
                             MessageBox.Show("smazání se nezdařilo !");
                         }
-                        
-                        
+
+
                     }
                 }
                 else
@@ -233,9 +261,9 @@ namespace ManagerPHM
                 {
                     // pokud ne tak:
 
-                    
+
                 }
-                
+
             }
             else
             {
@@ -247,7 +275,9 @@ namespace ManagerPHM
         {
             if (DGevidenceUzivatel.SelectedIndex >= 0)
             {
-                
+                // změním popisek tlačítka (Uložit) na (Ulož změny) od teď neukládá nový ale upravují stávající 
+                btnUzivatelUloz.Content = "Uložit změny";
+                btnUzivatelUloz2.Content = "Uložit změny";
                 // uložím si login vybraného uživatele
                 string uzivatJmeno = tbxLogin.Text;
                 zapVypTlacitka(false, false, false, false, true, true);
@@ -262,48 +292,48 @@ namespace ManagerPHM
                 tbxPrijmeni.IsEnabled = true;
                 tbxLogin.IsEnabled = true;
 
-               
+
+            }
+            else
+            {
+                MessageBox.Show("není vybrán žádný uživatel");
             }
         }
 
         private void btnUzivatelUloz_Click(object sender, RoutedEventArgs e)
         {
-            if(tbxJmeno.Text.Length > 2 && tbxPrijmeni.Text.Length > 2 && tbxLogin.Text.Length > 2)
+            
+
+            if (tbxJmeno.Text.Length > 2 && tbxPrijmeni.Text.Length > 2 && tbxLogin.Text.Length > 2)
             {
-                string jmeno = tbxJmeno.Text;
-                string prijmeni = tbxPrijmeni.Text;
-                string login = tbxLogin.Text;
-                // 1. načtu znovu všechny uživatele
-                sprUcet.nactiVsechnyUzivatele(db);
-                // 2. vytvořím si dv
-                dv = new DataView(sprUcet.dtVsichniUzivatele);
-                // vynuluji Row filtry
-                dv.RowFilter = string.Empty;
-                // 3. filtruju dv dle jmena a příjmení
-                dv.RowFilter = string.Format("Jmeno LIKE '{0}' AND Prijmeni LIKE '{1}'", tbxJmeno.Text, tbxPrijmeni.Text);
-                if (dv.Count > 0)
-                    MessageBox.Show("Uživatel s tímto jménem a příjmením již existuje ");
-                else
+                // -- pokud ukládám nového uživatele tak:
+                if ((string)btnUzivatelUloz.Content == "Uložit")
                 {
-                    // vynuluji Row filtry
-                    dv.RowFilter = string.Empty;
-                    // filtruju dv dle loginu
-                    dv.RowFilter = string.Format("Login LIKE '{0}'", tbxLogin.Text);
-                    if(dv.Count > 0)
-                        MessageBox.Show("Uživatel s loginem již existuje ");
+                    string jmeno = tbxJmeno.Text;
+                    string prijmeni = tbxPrijmeni.Text;
+                    string login = tbxLogin.Text;
+                    
+                    if (overExistenciLoginu(login))
+                    {                        
+                        string zprava = string.Format("Uživatel s loginem {0} již existuje !", login);
+                        string nadpis = "Uložení nového uživatele neproběhlo.";
+                        MessageBoxImage ikona = MessageBoxImage.Error;
+                        MessageBox.Show(zprava, nadpis, MessageBoxButton.OK, ikona);
+                    }
+
                     else
                     {
                         string sul = sprUcet.vytvorSul(10);
                         string hash = sprUcet.vytvorHash(pbxHeslo.Password, sul);
                         // tet uz začnu ukládat do DB .....>
                         DataRow novyUzivatel = sprUcet.dtVsichniUzivatele.NewRow();
-                        novyUzivatel["Jmeno"] = tbxJmeno.Text;
-                        novyUzivatel["Prijmeni"] = tbxPrijmeni.Text;
-                        novyUzivatel["Login"] = tbxLogin.Text;
+                        novyUzivatel["Jmeno"] = jmeno;
+                        novyUzivatel["Prijmeni"] = prijmeni;
+                        novyUzivatel["Login"] = login;
                         novyUzivatel["Heslo"] = hash;
                         novyUzivatel["Sul"] = sul;
                         sprUcet.dtVsichniUzivatele.Rows.Add(novyUzivatel);
-                        bool ulozeniSeZdarilo = sprUcet.ulozUzivatele(db, tbxJmeno.Text, tbxPrijmeni.Text, tbxLogin.Text, hash, sul);
+                        bool ulozeniSeZdarilo = sprUcet.ulozUzivatele(db, jmeno, prijmeni, login, hash, sul);
                         if (ulozeniSeZdarilo)
                         {
                             // vše proběhlo OK
@@ -316,15 +346,28 @@ namespace ManagerPHM
                             MessageBox.Show("Uživatele se nezdařilo uložit !");
                         }
 
-                       
+
                     }
                 }
-                    
+                // -- pokud ukládám jen změny tak toto:
+                else
+                {
+
+                }
+
+
             }
             else
             {
                 if (tbxJmeno.Text == "")
+                {
                     lblVystrahaJmeno.Content = "Zadej své jméno !";
+                    zablikej(lblVystrahaJmeno);
+                    
+                    
+                    
+                }
+                    
                 if (tbxPrijmeni.Text == "")
                     lblVystrahaPrijmeni.Content = "Zadej své příjmení !";
                 if (tbxLogin.Text == "")
@@ -332,7 +375,9 @@ namespace ManagerPHM
 
             }
         }
+
         
+
         private void btnUzivatelStorno_Click(object sender, RoutedEventArgs e)
         {
             zakladniNastavInfUzivatel();
@@ -351,7 +396,7 @@ namespace ManagerPHM
                 int velPis = 0;
                 int malPis = 0;
                 string heslo = pbxHeslo.Password;
-                foreach(char c in heslo)
+                foreach (char c in heslo)
                 {
                     int i = (int)c;
                     if (i >= 48 && i <= 57)
@@ -375,7 +420,7 @@ namespace ManagerPHM
                 else
                 {
                     lblVystrahaHeslo.Visibility = Visibility;
-                    lblVystrahaHeslo.Content = "Heslo musí obsahovat číslici, malé a velké písmeno !";
+                    lblVystrahaHeslo.Content = "Použij číslici, malé a velké písmeno !";
                     pbxHeslo.Foreground = cervena;
                     lblHesloDva.Visibility = Visibility.Hidden;
                     pbxHesloDva.Visibility = Visibility.Hidden;
@@ -384,7 +429,7 @@ namespace ManagerPHM
                     lblHvezda5.Visibility = Visibility.Hidden;
                     lblVystrahaHeslaSeNeshoduji.Visibility = Visibility.Hidden;
                 }
-                
+
             }
             else
             {
@@ -399,7 +444,7 @@ namespace ManagerPHM
                 lblVystrahaHeslaSeNeshoduji.Visibility = Visibility.Hidden;
 
             }
-            if(pbxHeslo.Password.Length < 1)
+            if (pbxHeslo.Password.Length < 1)
             {
                 lblVystrahaHeslo.Visibility = Visibility.Hidden;
             }
@@ -448,12 +493,12 @@ namespace ManagerPHM
         //pomocná metoda pro kontrolu zadávání hesla hesla
         private void porovnejHesla()
         {
-            if(pbxHesloDva.Password != "")
+            if (pbxHesloDva.Password != "")
             {
                 lblVystrahaHeslaSeNeshoduji.Visibility = Visibility;
                 string h1 = pbxHeslo.Password;
                 string h2 = pbxHesloDva.Password;
-                if(h1 == h2)
+                if (h1 == h2)
                 {
                     lblVystrahaHeslaSeNeshoduji.Visibility = Visibility.Hidden;
                     pbxHesloDva.Foreground = zelena;
@@ -471,9 +516,64 @@ namespace ManagerPHM
             }
         }
 
+        private void zablikej(Label lblZadany)
+        {
+            Label lbl = lblZadany;
+            DT1 = new DispatcherTimer();
+            DT1.Interval = TimeSpan.FromSeconds(0.2);
+            DT1.Tick += DT1_Tick1;
+            DT1.Start(); 
+            
+            
+            
+               
+        }
+        private bool schovana = false;
+        private int pocet = 6;
+        private void DT1_Tick1(object sender, EventArgs e)
+        {
+
+            if (pocet != 0)
+            {
+                if (schovana)
+                {
+                    lblVystrahaJmeno.Visibility = Visibility;
+                    schovana = false;
+                    tbxJmeno.Background = lehceOranzova;
+                }
+                else
+                {
+                    lblVystrahaJmeno.Visibility = Visibility.Hidden;
+                    schovana = true;
+                    tbxJmeno.Background = bila;
+                }
+                pocet--;
+            }
+            else
+            {
+                DT1.Stop();
+                pocet = 6;
+            }
+            //throw new NotImplementedException();
+        }
+
+        
+        private void DT1_Tick()
+        {
+            //Label tbxZadane = lblZadany;
+            
+            
+            //throw new NotImplementedException();
+        }
+
+        private void Grid_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         //------------------------------------------------------------------------------        
-        
-        
+
+
 
 
 
@@ -522,6 +622,22 @@ namespace ManagerPHM
             // označím první řádek
             DGevidenceUzivatel.SelectedIndex = 0;
         }
+        private bool overExistenciLoginu(string login)
+        {
+            // 1. načtu znovu všechny uživatele
+            sprUcet.nactiVsechnyUzivatele(db);
+            // nastavím filtr
+            string filtr = string.Format("Login LIKE '{0}'", login);
+            // najdu odpovídající řádek v datatable
+            DataRow[] nalezeneRadky = sprUcet.dtVsichniUzivatele.Select(filtr);
+            if (nalezeneRadky.Length == 1)
+            {
+                return true;
+            }
+            else
+                return false;
+        }
 
+        
     }
 }
