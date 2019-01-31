@@ -31,11 +31,13 @@ namespace ManagerPHM
         bool prihlasenySpravce;
         string prihlasenyLogin;
         // - proměnné pro kontrolu změny
-        private string puvodniJmeno, puvodniPrijmeni, puvodniLogin, puvodniBlokace, puvodniRole;
+        private string puvodniJmeno, puvodniPrijmeni, puvodniLogin;
+        int indexPuvodniBlokace;
+        int indexPuvodniRole;
         
        
 
-        SolidColorBrush zelena, oranzova, cervena, cerna, bila, lehceOranzova;
+        SolidColorBrush zelena, oranzova, cervena, cerna, bila, svetleZluta;
 
         DispatcherTimer DT1;
 
@@ -48,12 +50,12 @@ namespace ManagerPHM
             this.db = db;
             this.sprUcet = sprUcet;
             // připravím si štetce pro pozadí
-            zelena = new SolidColorBrush(Colors.LightGreen);
+            zelena = new SolidColorBrush(Colors.Green);
             oranzova = new SolidColorBrush(Colors.Orange);
             cervena = new SolidColorBrush(Colors.Red);
             cerna = new SolidColorBrush(Colors.Black);
             bila = new SolidColorBrush(Colors.White);
-            lehceOranzova = new SolidColorBrush(Colors.LightGoldenrodYellow);
+            svetleZluta = new SolidColorBrush(Colors.LightGoldenrodYellow);
             sprUcet.nactiVsechnyUzivatele(db);
             InitializeComponent();
 
@@ -151,11 +153,13 @@ namespace ManagerPHM
 
         private void BTuzivatelNovy_Click(object sender, RoutedEventArgs e)
         {
-            nastavZobrazeniNovy();           
-            DGevidenceUzivatel.SelectedIndex = -1; // VYNULUJE texboxi
+            
+            nastavZobrazeniNovy();
 
-            tbxJmeno.Focus();
-            zalozkaOpravneni.IsEnabled = true;
+            
+
+
+
         }
 
 
@@ -169,6 +173,47 @@ namespace ManagerPHM
                 {
                     if (tbxZadane.Text.Length > 2)
                     {
+                        // -- pokud upravuji uživatele
+                        if(btnUzivatelUloz.Content.ToString() == "Uložit změny")
+                        {
+                            switch (tbxZadane.Name)
+                            {
+                                case "tbxJmeno":
+                                    {
+                                       if (tbxJmeno.Text == puvodniJmeno)
+                                        {
+                                            tbxJmeno.Foreground = cerna;
+                                            if (tbxPrijmeni.Foreground != zelena)
+                                            {
+                                                btnUzivatelUloz.IsEnabled = false;
+                                            }                                           
+                                        }
+                                        else
+                                        {
+                                            btnUzivatelUloz.IsEnabled = true;
+                                            tbxJmeno.Foreground = zelena;
+                                        }
+                                    }
+                                    break;
+                                case "tbxPrijmeni":
+                                    {
+                                        if (tbxPrijmeni.Text == puvodniPrijmeni)
+                                        {
+                                            tbxPrijmeni.Foreground = cerna;
+                                            if(tbxJmeno.Foreground != zelena)
+                                                btnUzivatelUloz.IsEnabled = false;                                            
+                                        }
+                                        else
+                                        {
+                                            btnUzivatelUloz.IsEnabled = true;
+                                            tbxPrijmeni.Foreground = zelena;
+                                        }
+                                    }
+                                    break;
+                            }
+                        }
+                        //-----------------------------
+                            
                         switch (tbxZadane.Name)
                         {
                             case "tbxJmeno":
@@ -297,11 +342,9 @@ namespace ManagerPHM
                 //ulžím původní hodnoty
                 puvodniJmeno = tbxJmeno.Text;
                 puvodniPrijmeni = tbxPrijmeni.Text;
-                puvodniLogin = tbxLogin.Text;                
-                ComboBoxItem cbiBlokace = (ComboBoxItem)(cbxBlokace.Items[cbxBlokace.SelectedIndex]);
-                puvodniBlokace = cbiBlokace.Content.ToString();
-                ComboBoxItem cbiRole = (ComboBoxItem)(cbxRole.Items[cbxRole.SelectedIndex]);
-                puvodniRole = cbiRole.Content.ToString();
+                puvodniLogin = tbxLogin.Text;
+                indexPuvodniBlokace = cbxBlokace.SelectedIndex;
+                indexPuvodniRole = cbxRole.SelectedIndex;
                 // nastavím zobrazení pro upravy
                 nastavZobrazeniUpravit();
                 
@@ -315,15 +358,23 @@ namespace ManagerPHM
         private void btnUzivatelUloz_Click(object sender, RoutedEventArgs e)
         {
             
-
             if (tbxJmeno.Text.Length > 2 && tbxPrijmeni.Text.Length > 2 && tbxLogin.Text.Length > 2)
             {
                 // -- pokud ukládám nového uživatele tak:
-                if ((string)btnUzivatelUloz.Content == "Uložit")
+                if ((string)btnUzivatelUloz.Content == "Uložit nový")
                 {
+                    //přepnu se na první záložku
+                    tclZalozky.SelectedIndex = 0;
+
                     string jmeno = tbxJmeno.Text;
                     string prijmeni = tbxPrijmeni.Text;
                     string login = tbxLogin.Text;
+                    int role = cbxRole.SelectedIndex + 1;
+                    bool blokace;
+                    if (cbxBlokace.SelectedIndex == 0)
+                        blokace = false;
+                    else
+                        blokace = true;                    
                     
                     if (overExistenciLoginu(login))
                     {                        
@@ -337,20 +388,23 @@ namespace ManagerPHM
                     {
                         string sul = sprUcet.vytvorSul(10);
                         string hash = sprUcet.vytvorHash(pbxHeslo.Password, sul);
-                        // tet uz začnu ukládat do DB .....>
+                        // tet vytvořím nový řádek do tabulky DG .....>
                         DataRow novyUzivatel = sprUcet.dtVsichniUzivatele.NewRow();
                         novyUzivatel["Jmeno"] = jmeno;
                         novyUzivatel["Prijmeni"] = prijmeni;
                         novyUzivatel["Login"] = login;
+                        novyUzivatel["Role"] = role;
+                        novyUzivatel["Blokace"] = blokace;
                         novyUzivatel["Heslo"] = hash;
                         novyUzivatel["Sul"] = sul;
                         sprUcet.dtVsichniUzivatele.Rows.Add(novyUzivatel);
-                        bool ulozeniSeZdarilo = sprUcet.ulozUzivatele(db, jmeno, prijmeni, login, hash, sul);
+                        // tet se pokusím uložit do DB .....>
+                        bool ulozeniSeZdarilo = sprUcet.ulozUzivatele(db, jmeno, prijmeni, login, role, blokace, hash, sul);
                         if (ulozeniSeZdarilo)
                         {
                             // vše proběhlo OK
-                            nastavZobrazeniStart();
                             sprUcet.nactiVsechnyUzivatele(db);
+                            nastavZobrazeniStart();
                         }
                         else
                         {
@@ -371,13 +425,15 @@ namespace ManagerPHM
             }
             else
             {
+                tclZalozky.SelectedIndex = 0; // přepnu se na první záložku
+                //zablokuji okno a zablikám(upozorním)
+                btnUzivatelStorno.IsEnabled = false;
+                btnUzivatelUloz.IsEnabled = false;
+                zablikejVystrahy(lblVystrahaJmeno);
+
                 if (tbxJmeno.Text == "")
                 {
-                    lblVystrahaJmeno.Content = "Zadej své jméno !";
-                    zablikej(lblVystrahaJmeno);
-                    
-                    
-                    
+                    lblVystrahaJmeno.Content = "Zadej své jméno !";                    
                 }
                     
                 if (tbxPrijmeni.Text == "")
@@ -393,7 +449,7 @@ namespace ManagerPHM
         private void btnUzivatelStorno_Click(object sender, RoutedEventArgs e)
         {
             nastavZobrazeniStart();
-
+           // tbxJmeno.Focus();
         }
 
 
@@ -517,6 +573,9 @@ namespace ManagerPHM
                     lblVystrahaHeslaSeNeshoduji.Visibility = Visibility.Hidden;
                     pbxHesloDva.Foreground = zelena;
                     btnUzivatelUloz.IsEnabled = true;
+                    btnUzivatelUloz2.IsEnabled = true;
+                    if(prihlasenySpravce)
+                        zalozkaOpravneni.IsEnabled = true;
                 }
                 else
                 {
@@ -528,32 +587,108 @@ namespace ManagerPHM
             {
                 lblVystrahaHeslaSeNeshoduji.Visibility = Visibility.Hidden;
             }
-        }
-
-        private void zablikej(Label lblZadany)
-        {
-            Label lbl = lblZadany;
-            DT1 = new DispatcherTimer();
-            DT1.Interval = TimeSpan.FromSeconds(0.2);
-            DT1.Tick += DT1_Tick1;
-            DT1.Start(); 
-            
-            
-            
-               
-        }
+        }       
 
         private void btnZmenitHeslo_Click(object sender, RoutedEventArgs e)
         {
             //lblHeslo.IsEnabled = true;
             lblHeslo.Content = "Nové heslo";
             pbxHeslo.IsEnabled = true;
+            pbxHeslo.Background = svetleZluta;
+            btnZmenitHeslo.IsEnabled = false;
+        }
+        // --- ZABLIKEJ ---
+        private void zablikejVystrahy(Label lblZadany)
+        {
+            //Label lbl = lblZadany;
+            DT1 = new DispatcherTimer();
+            DT1.Interval = TimeSpan.FromSeconds(0.1);
+            DT1.Tick += DT1_Tick1;
+            DT1.Start();
+
         }
 
 
-        private bool schovana = false;
-
         
+
+        private void cbx_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox cmbiZmenen = (ComboBox)sender;
+            // pokud provádím změny
+            if (btnUzivatelUloz.Content.ToString() == "Uložit změny")
+            {
+                
+                if (indexPuvodniRole == cbxRole.SelectedIndex && indexPuvodniBlokace == cbxBlokace.SelectedIndex && puvodniJmeno == tbxJmeno.Text && puvodniPrijmeni == tbxPrijmeni.Text)
+                {
+                    btnUzivatelUloz.IsEnabled = false;
+                    btnUzivatelUloz2.IsEnabled = false;
+                    cbxBlokace.Foreground = cerna;
+                    cbxRole.Foreground = cerna;
+
+                    obarviVnitrniNabitkuCBX();
+
+                }
+                else
+                {
+                    switch (cmbiZmenen.Name)
+                    {
+                        case "cbxBlokace":
+                            {
+                                if (cbxBlokace.SelectedIndex != indexPuvodniBlokace)
+                                {
+                                    cbxBlokace.Foreground = zelena;
+                                    obarviVnitrniNabitkuCBX();
+                                }
+                                else
+                                {
+                                    cbxBlokace.Foreground = cerna;
+                                    obarviVnitrniNabitkuCBX();
+                                }
+}
+                            break;
+                        case "cbxRole":
+                            {
+                                if (cbxRole.SelectedIndex != indexPuvodniRole)
+                                {
+                                    cbxRole.Foreground = zelena;
+                                    obarviVnitrniNabitkuCBX();
+                                }
+                                else
+                                {
+                                    cbxRole.Foreground = cerna;
+                                    obarviVnitrniNabitkuCBX();
+                                }
+                            }
+                            break;
+                    }
+                    btnUzivatelUloz.IsEnabled = true;
+                    btnUzivatelUloz2.IsEnabled = true;
+                }
+            }
+        }
+
+        private void obarviVnitrniNabitkuCBX()
+        {
+            // vybarvým vnitřní nabýdku ROLE
+            for (int i = 0; i < cbxRole.Items.Count; i++)
+            {
+                ComboBoxItem cbi = (ComboBoxItem)cbxRole.Items[i];
+                cbi.Foreground = zelena;
+            }
+            ComboBoxItem cbxiRolePuvodni = (ComboBoxItem)cbxRole.Items[indexPuvodniRole];
+            cbxiRolePuvodni.Foreground = cerna;
+
+            // vybarvým vnitřní nabýdku BLOKACE
+            for (int i = 0; i < cbxBlokace.Items.Count; i++)
+            {
+                ComboBoxItem cbi = (ComboBoxItem)cbxBlokace.Items[i];
+                cbi.Foreground = zelena;
+            }
+            ComboBoxItem cbxiBlokace = (ComboBoxItem)cbxBlokace.Items[indexPuvodniBlokace];
+            cbxiBlokace.Foreground = cerna;
+        }
+
+        private bool schovana = false;
         private int pocet = 6;
         private void DT1_Tick1(object sender, EventArgs e)
         {
@@ -561,22 +696,54 @@ namespace ManagerPHM
             if (pocet != 0)
             {
                 if (schovana)
-                {
-                    lblVystrahaJmeno.Visibility = Visibility;
+                {                    
                     schovana = false;
-                    tbxJmeno.Background = lehceOranzova;
+                    if(lblVystrahaJmeno.Content.ToString() != "")
+                    {
+                        tbxJmeno.Background = svetleZluta;
+                        lblVystrahaJmeno.Visibility = Visibility;
+                    }
+                    if (lblVystrahaPrijmeni.Content.ToString() != "")
+                    {
+                        tbxPrijmeni.Background = svetleZluta;
+                        lblVystrahaPrijmeni.Visibility = Visibility;
+                    }
+                    if (lblVystrahaLogin.Content.ToString() != "")
+                    {
+                        tbxLogin.Background = svetleZluta;
+                        lblVystrahaLogin.Visibility = Visibility;
+                    }
+
                 }
                 else
                 {
-                    lblVystrahaJmeno.Visibility = Visibility.Hidden;
+                    
                     schovana = true;
-                    tbxJmeno.Background = bila;
+                    if (lblVystrahaJmeno.Content.ToString() != "")
+                    {
+                        tbxJmeno.Background = bila;
+                        lblVystrahaJmeno.Visibility = Visibility.Hidden;
+                    }
+                    if (lblVystrahaPrijmeni.Content.ToString() != "")
+                    {
+                        tbxPrijmeni.Background = bila;
+                        lblVystrahaPrijmeni.Visibility = Visibility.Hidden;
+                    }
+                    if (lblVystrahaLogin.Content.ToString() != "")
+                    {
+                        tbxLogin.Background = bila;
+                        lblVystrahaLogin.Visibility = Visibility.Hidden;
+                    }
+
                 }
                 pocet--;
             }
             else
             {
                 DT1.Stop();
+                // odblokuji tlačítka ULOZ/STORNO
+                btnUzivatelUloz.IsEnabled = true;
+                btnUzivatelStorno.IsEnabled = true;
                 pocet = 6;
             }
             //throw new NotImplementedException();
@@ -621,11 +788,13 @@ namespace ManagerPHM
             if (prihlasenySpravce)
             {
                 zapVypTlacitka(true, true, true, true, false, false, false, false);
+                zalozkaOpravneni.IsEnabled = true;
             }                
             else
                 zapVypTlacitka(false, false, false, false, false, false, false, false);
 
-            
+
+            btnUzivatelUloz.Content = "";
             btnUzivatelUloz.Visibility = Visibility.Hidden;
             btnUzivatelUloz2.Visibility = Visibility.Hidden;
             btnUzivatelStorno.Visibility = Visibility.Hidden;
@@ -634,22 +803,25 @@ namespace ManagerPHM
             DGevidenceUzivatel.IsEnabled = true;
 
             lblVystrahaJmeno.Content = "";
-            //tbxJmeno.Text = "";
+            tbxJmeno.Background = bila;
+            tbxJmeno.Foreground = cerna;
             tbxJmeno.IsEnabled = false;
             lblHvezda1.Visibility = Visibility.Hidden;
 
             lblVystrahaPrijmeni.Content = "";
-            //tbxPrijmeni.Text = "";
+            tbxPrijmeni.Background = bila;
+            tbxPrijmeni.Foreground = cerna;
             tbxPrijmeni.IsEnabled = false;
             lblHvezda2.Visibility = Visibility.Hidden;
 
             lblVystrahaLogin.Content = "";
-            //tbxLogin.Text = "";
+            tbxLogin.Background = bila;
             tbxLogin.IsEnabled = false;
             lblHvezda3.Visibility = Visibility.Hidden;
 
             //heslo_1
             pbxHeslo.Password = "";
+            pbxHeslo.Background = bila;
             pbxHeslo.Visibility = Visibility.Hidden;
             pbxHeslo.IsEnabled = false;
             lblHeslo.Content = "Heslo";
@@ -663,20 +835,48 @@ namespace ManagerPHM
             lblHvezda5.Visibility = Visibility.Hidden;
 
             btnZmenitHeslo.Visibility = Visibility.Hidden;
+            btnZmenitHeslo.IsEnabled = true;
 
             cbxBlokace.IsEnabled = false;
+            cbxBlokace.Foreground = cerna;
             cbxRole.IsEnabled = false;
-
+            cbxRole.Foreground = cerna;
+            // vybarvým vnitřní nabýdku ROLE
+            for (int i = 0; i < cbxRole.Items.Count; i++)
+            {
+                ComboBoxItem cbi = (ComboBoxItem)cbxRole.Items[i];
+                cbi.Foreground = cerna;
+            }            
+            // vybarvým vnitřní nabýdku BLOKACE
+            for (int i = 0; i < cbxBlokace.Items.Count; i++)
+            {
+                ComboBoxItem cbi = (ComboBoxItem)cbxBlokace.Items[i];
+                cbi.Foreground = cerna;
+            }
+            
 
             // označím první řádek
+            DGevidenceUzivatel.SelectedIndex = -1;
             DGevidenceUzivatel.SelectedIndex = 0;
+            //Keyboard.Focus(DGevidenceUzivatel);
+            
         }
 
         // pomocná metoda pro nastavení ---NOVÝ ---
         private void nastavZobrazeniNovy()
         {
+            
+            tclZalozky.SelectedIndex = 0; // přepnu se na první záložku
+            zalozkaOpravneni.IsEnabled = false; // zablokuji druhou záložku
+            DGevidenceUzivatel.SelectedIndex = -1; // VYNULUJE texboxi
+            DGevidenceUzivatel.IsEnabled = false; // zablokuji DG
+
+
+           // Keyboard.ClearFocus();
+           // Keyboard.Focus(tclZalozky);
+
             zapVypTlacitka(false, false, false, false, false, false, true, true);
-            DGevidenceUzivatel.IsEnabled = false;
+            
 
             btnUzivatelUloz.Visibility = Visibility;
             btnUzivatelUloz.Content = "Uložit nový";
@@ -688,23 +888,37 @@ namespace ManagerPHM
             btnUzivatelStorno2.Visibility = Visibility;
 
             tbxJmeno.IsEnabled = true;
-            tbxJmeno.Background = lehceOranzova;
+            tbxJmeno.Background = svetleZluta;
             lblHvezda1.Visibility = Visibility;
+            tbxPrijmeni.Focus();
+            
+            //tbxJmeno.Select(0,0);
+            //tbxJmeno.Focus();
+
+            //Keyboard.Focus(tbxJmeno);
+
 
             tbxPrijmeni.IsEnabled = true;
+            tbxPrijmeni.Background = svetleZluta;
             lblHvezda2.Visibility = Visibility;
 
             tbxLogin.IsEnabled = true;
+            tbxLogin.Background = svetleZluta;
             lblHvezda3.Visibility = Visibility;
 
             lblHeslo.Visibility = Visibility;
             pbxHeslo.Visibility = Visibility;
             pbxHeslo.IsEnabled = true;
+            pbxHeslo.Background = svetleZluta;
             lblHvezda4.Visibility = Visibility;
             
 
             cbxBlokace.IsEnabled = true;
+            cbxBlokace.SelectedIndex = 0;
             cbxRole.IsEnabled = true;
+            cbxRole.SelectedIndex = 3;
+            //zalozkaInfoUzivatel.Focus();
+            tbxJmeno.Focus();
         }
 
         // pomocná metoda pro nastavení ---UPRAVIT ---
@@ -725,10 +939,15 @@ namespace ManagerPHM
             if (prihlasenySpravce)
             {
                 tbxJmeno.IsEnabled = true;
+                tbxJmeno.Background = svetleZluta;
                 tbxPrijmeni.IsEnabled = true;
-                tbxLogin.IsEnabled = true;
-                cbxRole.IsEnabled = true;
+                tbxPrijmeni.Background = svetleZluta;
+                
+
+                cbxRole.IsEnabled = true;                
                 cbxBlokace.IsEnabled = true;
+                obarviVnitrniNabitkuCBX();
+
             }
             if (prihlasenyLogin == tbxLogin.Text)
             {

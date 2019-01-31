@@ -43,7 +43,7 @@ namespace ManagerPHM
             }
         }
 
-        public bool ulozTabulku(string sqlDotaz, DataTable dt, string jmeno, string prijmeni, string login, string heslo, string sul)
+        public bool ulozTabulku(string sqlDotaz, DataTable dt, string jmeno, string prijmeni, string login, int role, bool blokace,string heslo, string sul)
         {
             using (SqlConnection spojeni = new SqlConnection(pripojovaciRetez))
             {
@@ -52,6 +52,8 @@ namespace ManagerPHM
                 prikaz.Parameters.AddWithValue("@Jmeno", jmeno);
                 prikaz.Parameters.AddWithValue("@Prijmeni", prijmeni);
                 prikaz.Parameters.AddWithValue("@Login", login);
+                prikaz.Parameters.AddWithValue("@Role", role);
+                prikaz.Parameters.AddWithValue("@Blokace", blokace);
                 prikaz.Parameters.AddWithValue("@Heslo", heslo);
                 prikaz.Parameters.AddWithValue("@Sul", sul);
                 SqlDataAdapter da = new SqlDataAdapter();
