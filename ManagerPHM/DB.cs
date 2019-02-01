@@ -43,7 +43,7 @@ namespace ManagerPHM
             }
         }
 
-        public bool ulozTabulku(string sqlDotaz, DataTable dt, string jmeno, string prijmeni, string login, int role, bool blokace,string heslo, string sul)
+        public bool ulozUzivatele(string sqlDotaz, DataTable dt, string jmeno, string prijmeni, string login, int role, bool blokace,string heslo, string sul)
         {
             using (SqlConnection spojeni = new SqlConnection(pripojovaciRetez))
             {

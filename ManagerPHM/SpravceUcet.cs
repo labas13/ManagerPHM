@@ -35,15 +35,16 @@ namespace ManagerPHM
 
 
         // --- UPRAV vybraného uživatele
-        public bool upravUzivatele(DB nazevDB, string login)
+        public bool upravUzivatele(DB nazevDB, string jmeno, string prijmeni, string login, int role, bool blokace, string heslo, string sul)
         {
-
+            bool odpoved = true;//nazevDB.upravUzivatele("UPDATE Ucet SET
+            return odpoved;
         }
 
         // --- ULOŽ uživatele
         public bool ulozUzivatele(DB nazevDB, string jmeno, string prijmeni, string login, int role, bool blokace, string heslo, string sul)
         {
-            bool odpoved = nazevDB.ulozTabulku("INSERT INTO Ucet (Jmeno, Prijmeni, Login, Role, Blokace, Heslo, Sul)VALUES(@Jmeno, @Prijmeni, @Login, @Role, @Blokace, @Heslo, @Sul)", dtVsichniUzivatele, jmeno, prijmeni, login, role, blokace, heslo, sul);
+            bool odpoved = nazevDB.ulozUzivatele("INSERT INTO Ucet (Jmeno, Prijmeni, Login, Role, Blokace, Heslo, Sul)VALUES(@Jmeno, @Prijmeni, @Login, @Role, @Blokace, @Heslo, @Sul)", dtVsichniUzivatele, jmeno, prijmeni, login, role, blokace, heslo, sul);
             return odpoved;
         }
         public bool overUzivatele(DB nazevDB, string login, string zadaneHeslo)

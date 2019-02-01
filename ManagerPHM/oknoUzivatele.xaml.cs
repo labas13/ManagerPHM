@@ -418,7 +418,19 @@ namespace ManagerPHM
                 // -- pokud ukládám jen změny tak toto:
                 else
                 {
+                    string noveJmeno = tbxJmeno.Text;
+                    string novePrijmeni = tbxPrijmeni.Text;
+                    string novaSul = sprUcet.vytvorSul(10);
+                    string noveHeslo = sprUcet.vytvorHash(pbxHeslo.Password, novaSul);
+                    int novaRole = cbxRole.SelectedIndex + 1;
+                    bool novaBlokace;
+                    if (cbxBlokace.SelectedIndex == 0)
+                        novaBlokace = false;
+                    else
+                        novaBlokace = true;
 
+
+                    sprUcet.upravUzivatele(db, noveJmeno, novePrijmeni, puvodniLogin, novaRole, novaBlokace, noveHeslo, novaSul);
                 }
 
 
@@ -429,6 +441,7 @@ namespace ManagerPHM
                 //zablokuji okno a zablikám(upozorním)
                 btnUzivatelStorno.IsEnabled = false;
                 btnUzivatelUloz.IsEnabled = false;
+                System.Media.SystemSounds.Beep.Play();
                 zablikejVystrahy(lblVystrahaJmeno);
 
                 if (tbxJmeno.Text == "")
@@ -859,6 +872,10 @@ namespace ManagerPHM
             DGevidenceUzivatel.SelectedIndex = -1;
             DGevidenceUzivatel.SelectedIndex = 0;
             //Keyboard.Focus(DGevidenceUzivatel);
+
+            //pokus o obarvení řádků s blokovaným Uživatelem
+           //DataGridRow dg = (DataGridRow)DGevidenceUzivatel.Items[2] ;
+            //dgr.Background = zelena;
             
         }
 
