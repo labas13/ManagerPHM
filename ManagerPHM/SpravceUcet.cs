@@ -56,7 +56,8 @@ namespace ManagerPHM
                 string ulozeneHeslo = dtPrihlasenyUzivatel.Rows[0]["Heslo"].ToString();
                 string ulozenaSul = dtPrihlasenyUzivatel.Rows[0]["Sul"].ToString();
                 string hashZadanehoHesla = vytvorHash(zadaneHeslo, ulozenaSul);
-                if (hashZadanehoHesla == ulozeneHeslo)
+                //kontrola hesla a blokace uživatele
+                if (hashZadanehoHesla == ulozeneHeslo && (bool)dtPrihlasenyUzivatel.Rows[0]["Blokace"] != true) 
                 {
                     return true;
                 }

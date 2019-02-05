@@ -92,12 +92,14 @@ namespace ManagerPHM
         {
             if (DGevidenceUzivatel.SelectedIndex >= 0)
             {
+                // --- nastavím bindig pro grid se záložkama
+                gridProZalozky.DataContext = DGevidenceUzivatel.SelectedItem;
+
                 //najdu označený řádek a uložím si ho jako "DataRowView"
                 DataRowView drv = DGevidenceUzivatel.SelectedItem as DataRowView;
                 //najdu hodnotu ve sloupci se jménem "..." tohoto řádku a uložím do texbox
                 //tbxJmeno.Text = (string)drv.Row["Jmeno"];
-                //tbxPrijmeni.Text = (string)drv.Row["Prijmeni"];
-                //tbxLogin.Text = (string)drv.Row["Login"];
+                
 
                 // zpřístupním tlačítko uprav Uživatele
                 if (prihlasenySpravce || prihlasenyLogin == (string)drv.Row["Login"])
@@ -106,48 +108,52 @@ namespace ManagerPHM
                     btnUzivatelUpravit.IsEnabled = false;
 
                 // -- pokus --  trochu jinak
-                string login = (string)drv.Row["Login"];
-                string filtr = string.Format("Login LIKE '{0}'", login);
-                DataRow[] nalezeneRadky = sprUcet.dtVsichniUzivatele.Select(filtr);
-                DataRow radek = nalezeneRadky[0];
-                if (nalezeneRadky.Length != 1)
-                {
-                    MessageBox.Show("Záznam nenalezen");
-                }
-                else
-                {
-                    tbxLogin.Text = (string)radek["Login"];
-                    tbxJmeno.Text = (string)radek["Jmeno"];
-                    tbxPrijmeni.Text = (string)radek["Prijmeni"];
+             //   string login = (string)drv.Row["Login"];
+             //   string filtr = string.Format("Login LIKE '{0}'", login);
+             //   DataRow[] nalezeneRadky = sprUcet.dtVsichniUzivatele.Select(filtr);
+             //   DataRow radek = nalezeneRadky[0];
+             //   if (nalezeneRadky.Length != 1)
+              //  {
+             //       MessageBox.Show("Záznam nenalezen");
+             //   }
+             //   else
+             //   {
+                    
+                    //tbxLogin.Text = (string)radek["Login"];
+                    //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                    
+                    //tbxJmeno.Text = (string)radek["Jmeno"];
+                   // tbxPrijmeni.Text = (string)radek["Prijmeni"];
                    
                     
-                    if ((bool)radek["Blokace"] == false)
-                        cbxBlokace.SelectedIndex = 0;
-                    else
-                        cbxBlokace.SelectedIndex = 1;
-                    switch ((int)radek["Role"])
-                    {
-                        case 1:
-                            cbxRole.SelectedIndex = 0;
-                            break;
-                        case 2:
-                            cbxRole.SelectedIndex = 1;
-                            break;
-                        case 3:
-                            cbxRole.SelectedIndex = 2;
-                            break;
-                        case 4:
-                            cbxRole.SelectedIndex = 3;
-                            break;
-                    }
+                   // if ((bool)radek["Blokace"] == false)
+                        //cbxBlokace.SelectedIndex = 0;
+                  //  else
+                       // cbxBlokace.SelectedIndex = 1;
+                  //  switch ((int)radek["Role"])
+                  //  {
+                   //     case 1:
+                   //         //cbxRole.SelectedIndex = 0;
+                   //         break;
+                   //     case 2:
+                            //cbxRole.SelectedIndex = 1;
+                   //         break;
+                   //     case 3:
+                            //cbxRole.SelectedIndex = 2;
+                   //         break;
+                  //      case 4:
+                            //cbxRole.SelectedIndex = 3;
+                  //          break;
+                  //  }
 
-                }
+               // }
             }
             else
             {
-                tbxJmeno.Text = "";
-                tbxPrijmeni.Text = "";
-                tbxLogin.Text = "";
+                gridProZalozky.DataContext = null;
+                // tbxJmeno.Text = "";
+                // tbxPrijmeni.Text = "";
+                // tbxLogin.Text = "";
             }
         }
 
@@ -866,17 +872,26 @@ namespace ManagerPHM
                 ComboBoxItem cbi = (ComboBoxItem)cbxBlokace.Items[i];
                 cbi.Foreground = cerna;
             }
-            
+
+
+           // DGevidenceUzivatel.ItemsSource = null;
+           // DGevidenceUzivatel.ItemsSource = dv;
+            gridProZalozky.DataContext = null;
+            gridProZalozky.DataContext = DGevidenceUzivatel.SelectedItem;
 
             // označím první řádek
-            DGevidenceUzivatel.SelectedIndex = -1;
-            DGevidenceUzivatel.SelectedIndex = 0;
-            //Keyboard.Focus(DGevidenceUzivatel);
+            //DGevidenceUzivatel.SelectedIndex = -1;
+            //DGevidenceUzivatel.SelectedIndex = 0;
+            Keyboard.Focus(DGevidenceUzivatel);
 
+           // DGevidenceUzivatel.ItemsSource = null;
+           // DGevidenceUzivatel.ItemsSource = dv;
+            gridProZalozky.DataContext = null;
+            gridProZalozky.DataContext = DGevidenceUzivatel.SelectedItem;
             //pokus o obarvení řádků s blokovaným Uživatelem
-           //DataGridRow dg = (DataGridRow)DGevidenceUzivatel.Items[2] ;
+            //DataGridRow dg = (DataGridRow)DGevidenceUzivatel.Items[2] ;
             //dgr.Background = zelena;
-            
+
         }
 
         // pomocná metoda pro nastavení ---NOVÝ ---
@@ -905,6 +920,7 @@ namespace ManagerPHM
             btnUzivatelStorno2.Visibility = Visibility;
 
             tbxJmeno.IsEnabled = true;
+            
             tbxJmeno.Background = svetleZluta;
             lblHvezda1.Visibility = Visibility;
             tbxPrijmeni.Focus();
@@ -936,6 +952,7 @@ namespace ManagerPHM
             cbxRole.SelectedIndex = 3;
             //zalozkaInfoUzivatel.Focus();
             tbxJmeno.Focus();
+            //zalozkaInfoUzivatel.DataContext = null;
         }
 
         // pomocná metoda pro nastavení ---UPRAVIT ---
