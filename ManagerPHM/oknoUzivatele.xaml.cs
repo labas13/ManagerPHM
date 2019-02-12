@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -41,8 +42,13 @@ namespace ManagerPHM
 
         DispatcherTimer DT1;
 
+        private void Window_Loaded_1(object sender, RoutedEventArgs e)
+        {
+            SelectRowByIndex(DGevidenceUzivatel, 0);
+        }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+           
             // sprUcet.nactiVsechnyUzivatele(db);
         }
         public oknoUzivatele(DB db, SpravceUcet sprUcet)
@@ -81,9 +87,13 @@ namespace ManagerPHM
                 zapVypTlacitka(false, false, false, false, false, false, false,false);
 
             // - uložím si login přihlášeného
-            prihlasenyLogin = sprUcet.dtPrihlasenyUzivatel.Rows[0]["Login"].ToString();        
+            prihlasenyLogin = sprUcet.dtPrihlasenyUzivatel.Rows[0]["Login"].ToString();
 
-
+            // označím první řádek
+            // DGevidenceUzivatel.Focus();
+            //SelectRowByIndex(DGevidenceUzivatel, 0);
+            //nastavZobrazeniStart();
+            
         }
 
         
@@ -467,6 +477,8 @@ namespace ManagerPHM
 
         private void btnUzivatelStorno_Click(object sender, RoutedEventArgs e)
         {
+
+            
             nastavZobrazeniStart();
            // tbxJmeno.Focus();
         }
@@ -777,10 +789,7 @@ namespace ManagerPHM
             //throw new NotImplementedException();
         }
 
-        private void Grid_Loaded(object sender, RoutedEventArgs e)
-        {
-
-        }
+       
 
         //------------------------------------------------------------------------------        
 
@@ -812,6 +821,10 @@ namespace ManagerPHM
             else
                 zapVypTlacitka(false, false, false, false, false, false, false, false);
 
+            DGevidenceUzivatel.IsEnabled = true;
+            if (btnUzivatelUloz.Content.ToString() == "Uložit nový")
+                DGevidenceUzivatel.SelectedIndex = 0;
+            //DGevidenceUzivatel.SelectedIndex = 2;
 
             btnUzivatelUloz.Content = "";
             btnUzivatelUloz.Visibility = Visibility.Hidden;
@@ -819,7 +832,8 @@ namespace ManagerPHM
             btnUzivatelStorno.Visibility = Visibility.Hidden;
             btnUzivatelStorno2.Visibility = Visibility.Hidden;
 
-            DGevidenceUzivatel.IsEnabled = true;
+            
+            
 
             lblVystrahaJmeno.Content = "";
             tbxJmeno.Background = bila;
@@ -872,27 +886,22 @@ namespace ManagerPHM
                 ComboBoxItem cbi = (ComboBoxItem)cbxBlokace.Items[i];
                 cbi.Foreground = cerna;
             }
-
-
-           // DGevidenceUzivatel.ItemsSource = null;
-           // DGevidenceUzivatel.ItemsSource = dv;
+           
             gridProZalozky.DataContext = null;
             gridProZalozky.DataContext = DGevidenceUzivatel.SelectedItem;
 
-            // označím první řádek
-            //DGevidenceUzivatel.SelectedIndex = -1;
-            //DGevidenceUzivatel.SelectedIndex = 0;
-            Keyboard.Focus(DGevidenceUzivatel);
+            SelectRowByIndex(DGevidenceUzivatel, DGevidenceUzivatel.SelectedIndex);
 
-           // DGevidenceUzivatel.ItemsSource = null;
-           // DGevidenceUzivatel.ItemsSource = dv;
-            gridProZalozky.DataContext = null;
-            gridProZalozky.DataContext = DGevidenceUzivatel.SelectedItem;
-            //pokus o obarvení řádků s blokovaným Uživatelem
-            //DataGridRow dg = (DataGridRow)DGevidenceUzivatel.Items[2] ;
-            //dgr.Background = zelena;
+            // DGevidenceUzivatel.ItemsSource = null;
+            // DGevidenceUzivatel.ItemsSource = dv;
+            // gridProZalozky.DataContext = null;
+            // gridProZalozky.DataContext = DGevidenceUzivatel.SelectedItem;          
 
         }
+
+        
+
+
 
         // pomocná metoda pro nastavení ---NOVÝ ---
         private void nastavZobrazeniNovy()
@@ -919,15 +928,14 @@ namespace ManagerPHM
             btnUzivatelStorno.Visibility = Visibility;
             btnUzivatelStorno2.Visibility = Visibility;
 
-            tbxJmeno.IsEnabled = true;
-            
+            tbxJmeno.IsEnabled = true;            
             tbxJmeno.Background = svetleZluta;
             lblHvezda1.Visibility = Visibility;
-            tbxPrijmeni.Focus();
-            
+            // tbxPrijmeni.Focus();
+            Keyboard.Focus((IInputElement)tclZalozky.SelectedItem);
             //tbxJmeno.Select(0,0);
-            //tbxJmeno.Focus();
-
+            //tbxJmeno.Focus();          
+            //Keyboard.ClearFocus();
             //Keyboard.Focus(tbxJmeno);
 
 
@@ -951,7 +959,7 @@ namespace ManagerPHM
             cbxRole.IsEnabled = true;
             cbxRole.SelectedIndex = 3;
             //zalozkaInfoUzivatel.Focus();
-            tbxJmeno.Focus();
+            //tbxJmeno.Focus();
             //zalozkaInfoUzivatel.DataContext = null;
         }
 
@@ -1009,7 +1017,110 @@ namespace ManagerPHM
             else
                 return false;
         }
+        //   ----------------------------------------------------------------------------------------------------------------------------------------------------------
+        //  -----------------------------   POMOCNÉ METODY PRO OZNAČENÍ BUŇKY V DataGridu  ----------------------------------------------------------------------------
+        //  -----------------------------------------------------------------------------------------------------------------------------------------------------------
+        // ------------------------------------
+        // -- vyber řádek s tímto indexem -----
+        // ------------------------------------
+        public static void SelectRowByIndex(DataGrid dataGrid, int rowIndex)
+        {
+            if (!dataGrid.SelectionUnit.Equals(DataGridSelectionUnit.FullRow))
+                throw new ArgumentException("The SelectionUnit of the DataGrid must be set to FullRow.");
 
-        
+            if (rowIndex < 0 || rowIndex > (dataGrid.Items.Count - 1))
+                throw new ArgumentException(string.Format("{0} is an invalid row index.", rowIndex));
+
+            // to to ( dataGrid.SelectedItems.Clear(); ) jsem nahradil tímto ->
+            dataGrid.SelectedItem = null; // pro nastavení   " SelectionMode Single "
+            /* set the SelectedItem property */
+            object item = dataGrid.Items[rowIndex]; // = Product X
+            dataGrid.SelectedItem = item;
+
+            DataGridRow row = dataGrid.ItemContainerGenerator.ContainerFromIndex(rowIndex) as DataGridRow;
+            if (row == null)
+            {
+                /* bring the data item (Product object) into view
+                 * in case it has been virtualized away */
+                dataGrid.ScrollIntoView(item);
+                row = dataGrid.ItemContainerGenerator.ContainerFromIndex(rowIndex) as DataGridRow;
+            }
+            //TODO: Retrieve and focus a DataGridCell object
+            if (row != null)
+            {
+                DataGridCell cell = GetCell(dataGrid, row, 0);
+                if (cell != null)
+                    cell.Focus();
+            }
+        }
+        // --------------------------------------------
+        // -- pomocná metoda pro najití buňky v řádku--
+        // --------------------------------------------
+        public static DataGridCell GetCell(DataGrid dataGrid, DataGridRow rowContainer, int column)
+        {
+            if (rowContainer != null)
+            {
+                DataGridCellsPresenter presenter = FindVisualChild<DataGridCellsPresenter>(rowContainer);
+                if (presenter == null)
+                {
+                    /* if the row has been virtualized away, call its ApplyTemplate() method 
+                     * to build its visual tree in order for the DataGridCellsPresenter
+                     * and the DataGridCells to be created */
+                    rowContainer.ApplyTemplate();
+                    presenter = FindVisualChild<DataGridCellsPresenter>(rowContainer);
+                }
+                if (presenter != null)
+                {
+                    DataGridCell cell = presenter.ItemContainerGenerator.ContainerFromIndex(column) as DataGridCell;
+                    if (cell == null)
+                    {
+                        /* bring the column into view
+                         * in case it has been virtualized away */
+                        dataGrid.ScrollIntoView(rowContainer, dataGrid.Columns[column]);
+                        cell = presenter.ItemContainerGenerator.ContainerFromIndex(column) as DataGridCell;
+                    }
+                    return cell;
+                }
+            }
+            return null;
+        }
+
+        // -----------------------------------------------------------------------
+        // -- přidáno z netu pro (FindVisualChild) tato metoda není součástí WPF--
+        // -----------------------------------------------------------------------
+        public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj)
+        where T : DependencyObject
+        {
+            if (depObj != null)
+            {
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+                {
+                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+                    if (child != null && child is T)
+                    {
+                        yield return (T)child;
+                    }
+
+                    foreach (T childOfChild in FindVisualChildren<T>(child))
+                    {
+                        yield return childOfChild;
+                    }
+                }
+            }
+        }
+        public static childItem FindVisualChild<childItem>(DependencyObject obj)
+            where childItem : DependencyObject
+        {
+            foreach (childItem child in FindVisualChildren<childItem>(obj))
+            {
+                return child;
+            }
+
+            return null;
+        }
+        //  ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+        // -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+        // -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
     }
 }
