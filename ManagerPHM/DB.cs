@@ -20,6 +20,57 @@ namespace ManagerPHM
             pripojovaciRetez = pripojRetez;
         }
 
+        // --- aktualizuj BLOKACI
+        public bool aktualizujBlokaciUzivatele(string sqlDotaz, DataTable dt, bool blokace,string login)
+        {
+            using(SqlConnection spojeni =new SqlConnection(pripojovaciRetez))
+            {
+                SqlCommand prikaz = new SqlCommand(sqlDotaz, spojeni);
+                prikaz.CommandType = CommandType.Text;
+                prikaz.Parameters.AddWithValue("@blokace", blokace);
+                prikaz.Parameters.AddWithValue("@login", login);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.UpdateCommand = prikaz;
+                // -- pokusím se aktualizovat v DB
+                if(da.Update(dt) > 0)
+                {
+                    // aktualizace se podařila
+                    return true;
+                }
+                else
+                {
+                    // aktualizace se nezdařila
+                    return false;
+                }
+            }
+        }
+
+        // --- aktualizuj HESLO
+        public bool aktualizujHesloUzivatele(string sqlDotaz, DataTable dt, string sul, string heslo, string login)
+        {
+            using (SqlConnection spojeni = new SqlConnection(pripojovaciRetez))
+            {
+                SqlCommand prikaz = new SqlCommand(sqlDotaz, spojeni);
+                prikaz.CommandType = CommandType.Text;
+                prikaz.Parameters.AddWithValue("@sul", sul);
+                prikaz.Parameters.AddWithValue("@heslo", heslo);
+                prikaz.Parameters.AddWithValue("@Login", login);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.UpdateCommand = prikaz;
+                // -- pokusím se aktualizovat v DB
+                if (da.Update(dt) > 0)
+                {
+                    // aktualizace se podařila
+                    return true;
+                }
+                else
+                {
+                    // aktualizace se nezdařila
+                    return false;
+                }
+            }
+        }
+
         public bool smazUzivatele(string sqlDotaz, DataTable dt, string login)
         {
             using (SqlConnection spojeni = new SqlConnection(pripojovaciRetez))

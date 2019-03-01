@@ -26,6 +26,19 @@ namespace ManagerPHM
             dtVsichniUzivatele = nazevDB.nactiJednuTabulku("SELECT * FROM Ucet ", dtVsichniUzivatele);
         }
 
+        // --- aktualizuj uživatele "BLOKACI"
+        public bool aktualizujBlokaciUzivatele(DB nazevDB, bool blokace,string login)
+        {
+            bool odpoved = nazevDB.aktualizujBlokaciUzivatele("UPDATE Ucet SET Blokace = @blokace WHERE Login = @login", dtVsichniUzivatele, blokace, login);
+            return odpoved;
+        }
+
+        // --- aktualizuj uživatele "HESLO"
+        public bool aktualizujHesloUzivatele(DB nazevDB, string sul, string heslo, string login)
+        {
+            bool odpoved = nazevDB.aktualizujHesloUzivatele("UPDATE Ucet SET Sul = @sul,Heslo = @heslo WHERE Login = @login", dtVsichniUzivatele, sul, heslo, login);
+            return odpoved;
+        }
         // --- SMAŽ vybraného uživatele
         public bool smazUzivatele(DB nazevDB, string login)
         {
@@ -35,7 +48,7 @@ namespace ManagerPHM
 
 
         // --- UPRAV vybraného uživatele
-        public bool upravUzivatele(DB nazevDB, string jmeno, string prijmeni, string login, int role, bool blokace, string heslo, string sul)
+        public bool upravUzivatele(DB nazevDB, string jmeno, string prijmeni, string login, int role, bool blokace)
         {
             bool odpoved = true;//nazevDB.upravUzivatele("UPDATE Ucet SET
             return odpoved;

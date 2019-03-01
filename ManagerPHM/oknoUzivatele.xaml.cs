@@ -113,9 +113,9 @@ namespace ManagerPHM
 
                 // zpřístupním tlačítko uprav Uživatele
                 if (prihlasenySpravce || prihlasenyLogin == (string)drv.Row["Login"])
-                    btnUzivatelUpravit.IsEnabled = true;
+                    btnUpravitUzivatele.IsEnabled = true;
                 else
-                    btnUzivatelUpravit.IsEnabled = false;
+                    btnUpravitUzivatele.IsEnabled = false;
 
                 // -- pokus --  trochu jinak
              //   string login = (string)drv.Row["Login"];
@@ -167,19 +167,14 @@ namespace ManagerPHM
             }
         }
 
-        private void BTuzivatelNovy_Click(object sender, RoutedEventArgs e)
-        {
-            
+        private void btnNovyUzivatel_Click(object sender, RoutedEventArgs e)
+        {            
             nastavZobrazeniNovy();
-
-            
-
-
-
         }
 
-
-
+        //  ----------------------------------------------------------------------------------------------------------------------------------------------------------
+        //  --   TextChange pro všechny "TEXTBOXI" --------
+        //  -----------------------------------------------
         private void tbxProVsechny_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (DGevidenceUzivatel.IsEnabled != true)
@@ -190,7 +185,7 @@ namespace ManagerPHM
                     if (tbxZadane.Text.Length > 2)
                     {
                         // -- pokud upravuji uživatele
-                        if(btnUzivatelUloz.Content.ToString() == "Uložit změny")
+                        if(btnUloz.Content.ToString() == "Uložit změny")
                         {
                             switch (tbxZadane.Name)
                             {
@@ -201,12 +196,12 @@ namespace ManagerPHM
                                             tbxJmeno.Foreground = cerna;
                                             if (tbxPrijmeni.Foreground != zelena)
                                             {
-                                                btnUzivatelUloz.IsEnabled = false;
+                                                btnUloz.IsEnabled = false;
                                             }                                           
                                         }
                                         else
                                         {
-                                            btnUzivatelUloz.IsEnabled = true;
+                                            btnUloz.IsEnabled = true;
                                             tbxJmeno.Foreground = zelena;
                                         }
                                     }
@@ -217,11 +212,11 @@ namespace ManagerPHM
                                         {
                                             tbxPrijmeni.Foreground = cerna;
                                             if(tbxJmeno.Foreground != zelena)
-                                                btnUzivatelUloz.IsEnabled = false;                                            
+                                                btnUloz.IsEnabled = false;                                            
                                         }
                                         else
                                         {
-                                            btnUzivatelUloz.IsEnabled = true;
+                                            btnUloz.IsEnabled = true;
                                             tbxPrijmeni.Foreground = zelena;
                                         }
                                     }
@@ -290,7 +285,10 @@ namespace ManagerPHM
             }
         }
 
-        private void btnUzivatelZrusit_Click(object sender, RoutedEventArgs e)
+        //  ----------------------------------------------------------------------------------------------------------------------------
+        //  --  Button_Clik SMAZAT UŽIVATELE  -----------
+        //  ---------------------------------------------
+        private void btnSmazatUzivatele_Click(object sender, RoutedEventArgs e)
         {
             if (DGevidenceUzivatel.SelectedIndex >= 0)
             {
@@ -324,9 +322,10 @@ namespace ManagerPHM
                         if (smazano)
                         {
                             // vše proběhlo OK
-                            nastavZobrazeniStart();
                             sprUcet.nactiVsechnyUzivatele(db);
                             DGevidenceUzivatel.SelectedIndex = 0;
+                            nastavZobrazeniStart();
+                            //DGevidenceUzivatel.SelectedIndex = 0;
                         }
                         else
                         {
@@ -340,7 +339,7 @@ namespace ManagerPHM
                     if (result == MessageBoxResult.No)
                 {
                     // pokud ne tak:
-
+                    SelectRowByIndex(DGevidenceUzivatel, DGevidenceUzivatel.SelectedIndex);
 
                 }
 
@@ -351,7 +350,7 @@ namespace ManagerPHM
             }
         }
 
-        private void btnUzivatelUpravit_Click(object sender, RoutedEventArgs e)
+        private void btnUpravitUzivatele_Click(object sender, RoutedEventArgs e)
         {
             if (DGevidenceUzivatel.SelectedIndex >= 0)
             {
@@ -370,38 +369,79 @@ namespace ManagerPHM
                 MessageBox.Show("není vybrán žádný uživatel");
             }
         }
-
-        private void btnUzivatelUloz_Click(object sender, RoutedEventArgs e)
+        //  -------------------------------------------------------------------------------------------------
+        //  --  button ULOŽ _ Clik  ------------
+        //  ------------------------------------
+        private void btnUloz_Click(object sender, RoutedEventArgs e)
         {
-            
-            if (tbxJmeno.Text.Length > 2 && tbxPrijmeni.Text.Length > 2 && tbxLogin.Text.Length > 2)
+            // --- pokud ukládám jen nové heslo
+            if (btnUloz.Content.ToString() == "Ulož heslo")
             {
-                // -- pokud ukládám nového uživatele tak:
-                if ((string)btnUzivatelUloz.Content == "Uložit nový")
+                // -- vytvořím si novou sůl a zahešuji nové Heslo
+                string sul = sprUcet.vytvorSul(10);
+                string hash = sprUcet.vytvorHash(pbxHeslo.Password, sul);
+                // -- uložím si původní index
+                int puvodniIndex = DGevidenceUzivatel.SelectedIndex;
+                // najdu označený řádek a uložím si ho jako "DataRowView"
+                DataRowView drv = DGevidenceUzivatel.SelectedItem as DataRowView;
+                // přečtu si login a uložím
+                string login = (string)drv.Row["Login"];
+                // nastavím filtr
+                string filtr = string.Format("Login LIKE '{0}'", login);
+                // najdu odpovídající řádek v datatable
+                DataRow[] nalezeneRadky = sprUcet.dtVsichniUzivatele.Select(filtr);
+                if (nalezeneRadky.Length != 1)
                 {
-                    //přepnu se na první záložku
-                    tclZalozky.SelectedIndex = 0;
+                    MessageBox.Show("Chyba - nenalezen pozadovany zaznam !");
+                }
+                else
+                {
+                    // odtut nově .....>>>
+                    DataRow radek = nalezeneRadky[0];
+                    radek.BeginEdit();
+                    radek["Sul"] = sul;
+                    radek["Heslo"] = hash;
+                    radek.EndEdit();
 
-                    string jmeno = tbxJmeno.Text;
-                    string prijmeni = tbxPrijmeni.Text;
-                    string login = tbxLogin.Text;
-                    int role = cbxRole.SelectedIndex + 1;
-                    bool blokace;
-                    if (cbxBlokace.SelectedIndex == 0)
-                        blokace = false;
-                    else
-                        blokace = true;                    
-                    
-                    if (overExistenciLoginu(login))
-                    {                        
-                        string zprava = string.Format("Uživatel s loginem {0} již existuje !", login);
-                        string nadpis = "Uložení nového uživatele neproběhlo.";
-                        MessageBoxImage ikona = MessageBoxImage.Error;
-                        MessageBox.Show(zprava, nadpis, MessageBoxButton.OK, ikona);
+                    bool zmeneno = sprUcet.aktualizujHesloUzivatele(db, sul, hash, login);
+                    if (zmeneno)
+                    {
+                        // vše proběhlo OK
+                        nastavZobrazeniStart();
+                        sprUcet.nactiVsechnyUzivatele(db);
+                        DGevidenceUzivatel.SelectedIndex = puvodniIndex;
+                        SelectRowByIndex(DGevidenceUzivatel, DGevidenceUzivatel.SelectedIndex);
+                        MessageBox.Show("heslo bylo změněno");
                     }
-
                     else
                     {
+                        MessageBox.Show("zablokování uživatele se nezdařilo !");
+                    }
+                }
+                
+            }
+            // --- jinak pokud ukládám zmeny nebo nový
+            else
+            {
+                string jmeno = tbxJmeno.Text;
+                string prijmeni = tbxPrijmeni.Text;
+                string login = tbxLogin.Text;
+                int role = cbxRole.SelectedIndex + 1;
+                bool blokace;
+                if (cbxBlokace.SelectedIndex == 0)
+                    blokace = false;
+                else
+                    blokace = true;
+                // -- jestli je vše vyplněno spravně tak -->
+                if (tbxJmeno.Text.Length > 2 && tbxPrijmeni.Text.Length > 2 && tbxLogin.Text.Length > 2 
+                    && lblVystrahaJmeno.Content.ToString() == "" && lblVystrahaPrijmeni.Content.ToString() == ""
+                    && overExistenciLoginu(login) == false)
+                {
+                    // - pokud ukládám nového uživatele tak: -->>
+                    if ((string)btnUloz.Content == "Uložit nový")
+                    {
+                        //přepnu se na první záložku
+                        tclZalozky.SelectedIndex = 0;
                         string sul = sprUcet.vytvorSul(10);
                         string hash = sprUcet.vytvorHash(pbxHeslo.Password, sul);
                         // tet vytvořím nový řádek do tabulky DG .....>
@@ -421,6 +461,16 @@ namespace ManagerPHM
                             // vše proběhlo OK
                             sprUcet.nactiVsechnyUzivatele(db);
                             nastavZobrazeniStart();
+                            //označím nový ucet
+                            foreach (DataRowView drv in DGevidenceUzivatel.Items)
+                                {
+                                    if (drv.Row["Login"].ToString() == login)
+                                    {
+                                        DGevidenceUzivatel.SelectedItem = drv;
+                                        SelectRowByIndex(DGevidenceUzivatel, DGevidenceUzivatel.SelectedIndex);
+
+                                    }
+                                }
                         }
                         else
                         {
@@ -430,62 +480,111 @@ namespace ManagerPHM
 
 
                     }
+                    // -- pokud ukládám jen změny tak toto -->
+                    else
+                    {
+                        if(tbxJmeno.Foreground == zelena)
+                        {
+                            string noveJmeno = tbxJmeno.Text;
+                            //11
+                        }
+
+
+                       // string noveJmeno = tbxJmeno.Text;
+                        string novePrijmeni = tbxPrijmeni.Text;
+                        //string novaSul = sprUcet.vytvorSul(10);
+                        //string noveHeslo = sprUcet.vytvorHash(pbxHeslo.Password, novaSul);
+                        int novaRole = cbxRole.SelectedIndex + 1;
+                        bool novaBlokace;
+                        if (cbxBlokace.SelectedIndex == 0)
+                            novaBlokace = false;
+                        else
+                            novaBlokace = true;
+
+
+                        //sprUcet.upravUzivatele(db, noveJmeno, novePrijmeni, puvodniLogin, novaRole, novaBlokace);
+                    }
+
+
                 }
-                // -- pokud ukládám jen změny tak toto:
+                // -- jinak musím upozornit na nevyplněné (ZABLIKÁM)
                 else
                 {
-                    string noveJmeno = tbxJmeno.Text;
-                    string novePrijmeni = tbxPrijmeni.Text;
-                    string novaSul = sprUcet.vytvorSul(10);
-                    string noveHeslo = sprUcet.vytvorHash(pbxHeslo.Password, novaSul);
-                    int novaRole = cbxRole.SelectedIndex + 1;
-                    bool novaBlokace;
-                    if (cbxBlokace.SelectedIndex == 0)
-                        novaBlokace = false;
-                    else
-                        novaBlokace = true;
+                    tclZalozky.SelectedIndex = 0; // přepnu se na první záložku
+                                                  //zablokuji okno a zablikám(upozorním)
+                    btnStorno.IsEnabled = false;
+                    btnUloz.IsEnabled = false;
+                    
+                    if (tbxJmeno.Text == "")
+                    {
+                        lblVystrahaJmeno.Content = "Zadej své jméno !";
+                    }
 
+                    if (tbxPrijmeni.Text == "")
+                        lblVystrahaPrijmeni.Content = "Zadej své příjmení !";
+                    if (tbxLogin.Text == "")
+                        lblVystrahaLogin.Content = "Zadej svůj login !";
 
-                    sprUcet.upravUzivatele(db, noveJmeno, novePrijmeni, puvodniLogin, novaRole, novaBlokace, noveHeslo, novaSul);
+                    System.Media.SystemSounds.Beep.Play();
+                    zablikejVystrahy();
+
                 }
+            }
+            
+        }
+
+        //  -----------------------------------------------------------------------------------------------------
+        //  --  button STORNO _ Clik  ------------------
+        //  --------------------------------------------
+        private void btnStorno_Click(object sender, RoutedEventArgs e)
+        {
+
+            //  -- pokud jsem se pokoušel měnit heslo --->>>>
+            if (btnUloz.Content.ToString() == "Ulož heslo")
+            {
+                tbxJmeno.IsEnabled = true;
+                tbxPrijmeni.IsEnabled = true;
+                if (prihlasenySpravce)
+                {
+                    zalozkaOpravneni.IsEnabled = true;
+                }
+                btnUloz.Content = "Uložit změny";
 
 
+                //heslo_1
+                pbxHeslo.Password = "";
+                pbxHeslo.Background = bila;
+                pbxHeslo.IsEnabled = false;
+                lblHeslo.Content = "Heslo";
+                
+                //heslo_2
+                pbxHesloDva.Password = "";
+                pbxHesloDva.Visibility = Visibility.Hidden;
+                lblHesloDva.Visibility = Visibility.Hidden;
+                lblHvezda5.Visibility = Visibility.Hidden;
+
+                btnZmenitHeslo.Visibility = Visibility;
+                if (indexPuvodniRole == cbxRole.SelectedIndex && indexPuvodniBlokace == cbxBlokace.SelectedIndex && puvodniJmeno == tbxJmeno.Text && puvodniPrijmeni == tbxPrijmeni.Text)
+                {
+                    btnUloz.IsEnabled = false;
+                }
+                else
+                {
+                    btnUloz.IsEnabled = true;
+                }
             }
             else
             {
-                tclZalozky.SelectedIndex = 0; // přepnu se na první záložku
-                //zablokuji okno a zablikám(upozorním)
-                btnUzivatelStorno.IsEnabled = false;
-                btnUzivatelUloz.IsEnabled = false;
-                System.Media.SystemSounds.Beep.Play();
-                zablikejVystrahy(lblVystrahaJmeno);
-
-                if (tbxJmeno.Text == "")
-                {
-                    lblVystrahaJmeno.Content = "Zadej své jméno !";                    
-                }
-                    
-                if (tbxPrijmeni.Text == "")
-                    lblVystrahaPrijmeni.Content = "Zadej své příjmení !";
-                if (tbxLogin.Text == "")
-                    lblVystrahaLogin.Content = "Zadej svůj login !";
-
+                nastavZobrazeniStart();
+                // tbxJmeno.Focus();
             }
-        }
 
-        
-
-        private void btnUzivatelStorno_Click(object sender, RoutedEventArgs e)
-        {
-
-            
-            nastavZobrazeniStart();
-           // tbxJmeno.Focus();
         }
 
 
-
-        // pokud se změní text v password_1 nebo password_2
+        //  ---------------------------------------------------------------------------------------------------------------------------------------
+        // --  pokud se změní text v password_1 nebo password_2  -------
+        //  ------------------------------------------------------------
         private void pbxHesla_PasswordChanged(object sender, RoutedEventArgs e)
         {
             if (pbxHeslo.Password.Length > 2)
@@ -541,8 +640,8 @@ namespace ManagerPHM
                 pbxHesloDva.Foreground = cervena;
                 lblHvezda5.Visibility = Visibility.Hidden;
                 lblVystrahaHeslaSeNeshoduji.Visibility = Visibility.Hidden;
-                btnUzivatelUloz.IsEnabled = false;
-                btnUzivatelUloz2.IsEnabled = false;
+                btnUloz.IsEnabled = false;
+                btnUloz2.IsEnabled = false;
 
             }
             if (pbxHeslo.Password.Length < 1)
@@ -587,7 +686,7 @@ namespace ManagerPHM
         {
             if (e.Key == Key.Enter)
             {
-                btnUzivatelUloz.Focus();
+                btnUloz.Focus();
             }
         }
 
@@ -603,15 +702,15 @@ namespace ManagerPHM
                 {
                     lblVystrahaHeslaSeNeshoduji.Visibility = Visibility.Hidden;
                     pbxHesloDva.Foreground = zelena;
-                    btnUzivatelUloz.IsEnabled = true;
-                    btnUzivatelUloz2.IsEnabled = true;
-                    if(prihlasenySpravce)
+                    btnUloz.IsEnabled = true;
+                    btnUloz2.IsEnabled = true;
+                    if(prihlasenySpravce && btnUloz.Content.ToString() != "Ulož heslo")
                         zalozkaOpravneni.IsEnabled = true;
                 }
                 else
                 {
                     pbxHesloDva.Foreground = cervena;
-                    btnUzivatelUloz.IsEnabled = false;
+                    btnUloz.IsEnabled = false;
                 }
             }
             else
@@ -619,19 +718,28 @@ namespace ManagerPHM
                 lblVystrahaHeslaSeNeshoduji.Visibility = Visibility.Hidden;
             }
         }       
-
+        //  --------------------------------------------------------------------------------------------------------------------------
+        //  --  button ZMĚNIT HESLO _ Clik  -------------
+        //  ---------------------------------------------
         private void btnZmenitHeslo_Click(object sender, RoutedEventArgs e)
         {
-            //lblHeslo.IsEnabled = true;
+            btnUloz.IsEnabled = false;
             lblHeslo.Content = "Nové heslo";
             pbxHeslo.IsEnabled = true;
             pbxHeslo.Background = svetleZluta;
-            btnZmenitHeslo.IsEnabled = false;
+            pbxHeslo.Focus();
+            btnZmenitHeslo.Visibility = Visibility.Hidden;
+            btnUloz.Content = "Ulož heslo";
+            tbxJmeno.IsEnabled = false;
+            tbxPrijmeni.IsEnabled = false;
+            zalozkaOpravneni.IsEnabled = false;
         }
-        // --- ZABLIKEJ ---
-        private void zablikejVystrahy(Label lblZadany)
+        
+        //  -----------------------------------------------------------------------------------------------------------------------
+        //  --- ZABLIKEJ --------------------------------
+        //  --------------------------------------------
+        private void zablikejVystrahy()
         {
-            //Label lbl = lblZadany;
             DT1 = new DispatcherTimer();
             DT1.Interval = TimeSpan.FromSeconds(0.1);
             DT1.Tick += DT1_Tick1;
@@ -640,24 +748,23 @@ namespace ManagerPHM
         }
 
 
-        
-
+        //  ---------------------------------------------------------------------------------------------------------------------------
+        //  --  SelectionChange pro "COMBOBOX"  ------------
+        //  ------------------------------------------------
         private void cbx_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBox cmbiZmenen = (ComboBox)sender;
-            // pokud provádím změny
-            if (btnUzivatelUloz.Content.ToString() == "Uložit změny")
+            // jen pokud provádím změny
+            if (btnUloz.Content.ToString() == "Uložit změny")
             {
                 
                 if (indexPuvodniRole == cbxRole.SelectedIndex && indexPuvodniBlokace == cbxBlokace.SelectedIndex && puvodniJmeno == tbxJmeno.Text && puvodniPrijmeni == tbxPrijmeni.Text)
                 {
-                    btnUzivatelUloz.IsEnabled = false;
-                    btnUzivatelUloz2.IsEnabled = false;
+                    btnUloz.IsEnabled = false;
+                    btnUloz2.IsEnabled = false;
                     cbxBlokace.Foreground = cerna;
                     cbxRole.Foreground = cerna;
-
                     obarviVnitrniNabitkuCBX();
-
                 }
                 else
                 {
@@ -692,12 +799,15 @@ namespace ManagerPHM
                             }
                             break;
                     }
-                    btnUzivatelUloz.IsEnabled = true;
-                    btnUzivatelUloz2.IsEnabled = true;
+                    btnUloz.IsEnabled = true;
+                    btnUloz2.IsEnabled = true;
                 }
             }
         }
 
+        //  ----------------------------------------------------------------------------------------------------------------------
+        //  --  obarvi vnitřní nabídku Combobox  ---------
+        //  ----------------------------------------------        
         private void obarviVnitrniNabitkuCBX()
         {
             // vybarvým vnitřní nabýdku ROLE
@@ -719,6 +829,9 @@ namespace ManagerPHM
             cbxiBlokace.Foreground = cerna;
         }
 
+        //  ---------------------------------------------------------------------------------------------------------------------
+        //  --  DT1_Tick1  metoda "tik" pro "DispatcherTimer" -------
+        //  ---------------------------------------------------------
         private bool schovana = false;
         private int pocet = 6;
         private void DT1_Tick1(object sender, EventArgs e)
@@ -773,44 +886,31 @@ namespace ManagerPHM
             {
                 DT1.Stop();
                 // odblokuji tlačítka ULOZ/STORNO
-                btnUzivatelUloz.IsEnabled = true;
-                btnUzivatelStorno.IsEnabled = true;
+                btnUloz.IsEnabled = true;
+                btnStorno.IsEnabled = true;
                 pocet = 6;
             }
             //throw new NotImplementedException();
         }
 
-        
-        private void DT1_Tick()
-        {
-            //Label tbxZadane = lblZadany;
-            
-            
-            //throw new NotImplementedException();
-        }
-
-       
-
-        //------------------------------------------------------------------------------        
-
-
-
-
-
-        // pomocná metoda pro zapínaní tlačítek
+        //-------------------------------------------------------------------------------------------------------------------
+        //  --  zapni vypni TLAČÍTKA  --------------------
+        //  ----------------------------------------------
         private void zapVypTlacitka(bool BTnovy, bool BTuprav, bool BTblok, bool BTzrus, bool BTuloz, bool BTuloz2, bool BTstorno, bool BTstorno2)
         {
-            btnUzivatelNovy.IsEnabled = BTnovy;
-            btnUzivatelUpravit.IsEnabled = BTuprav;
-            btnUzivatelBlok.IsEnabled = BTblok;
-            btnUzivatelZrusit.IsEnabled = BTzrus;
-            btnUzivatelUloz.IsEnabled = BTuloz;
-            btnUzivatelUloz2.IsEnabled = BTuloz2;
-            btnUzivatelStorno.IsEnabled = BTstorno;
-            btnUzivatelStorno2.IsEnabled = BTstorno2;
+            btnNovyUzivatel.IsEnabled = BTnovy;
+            btnUpravitUzivatele.IsEnabled = BTuprav;
+            btnBlokovatUzivatele.IsEnabled = BTblok;
+            btnSmazatUzivatele.IsEnabled = BTzrus;
+            btnUloz.IsEnabled = BTuloz;
+            btnUloz2.IsEnabled = BTuloz2;
+            btnStorno.IsEnabled = BTstorno;
+            btnStorno2.IsEnabled = BTstorno2;
         }
 
-        // pomocná metoda pro nastavení ---START ---
+        //  -------------------------------------------------------------------------------------------------------------------
+        //  --  nastav zobrazení  START  ----------------
+        //  ---------------------------------------------
         private void nastavZobrazeniStart()
         {
             if (prihlasenySpravce)
@@ -822,18 +922,15 @@ namespace ManagerPHM
                 zapVypTlacitka(false, false, false, false, false, false, false, false);
 
             DGevidenceUzivatel.IsEnabled = true;
-            if (btnUzivatelUloz.Content.ToString() == "Uložit nový")
+            if (btnUloz.Content.ToString() == "Uložit nový")
                 DGevidenceUzivatel.SelectedIndex = 0;
             //DGevidenceUzivatel.SelectedIndex = 2;
 
-            btnUzivatelUloz.Content = "";
-            btnUzivatelUloz.Visibility = Visibility.Hidden;
-            btnUzivatelUloz2.Visibility = Visibility.Hidden;
-            btnUzivatelStorno.Visibility = Visibility.Hidden;
-            btnUzivatelStorno2.Visibility = Visibility.Hidden;
-
-            
-            
+            btnUloz.Content = "";
+            btnUloz.Visibility = Visibility.Hidden;
+            btnUloz2.Visibility = Visibility.Hidden;
+            btnStorno.Visibility = Visibility.Hidden;
+            btnStorno2.Visibility = Visibility.Hidden;           
 
             lblVystrahaJmeno.Content = "";
             tbxJmeno.Background = bila;
@@ -849,6 +946,7 @@ namespace ManagerPHM
 
             lblVystrahaLogin.Content = "";
             tbxLogin.Background = bila;
+            tbxLogin.Foreground = cerna;
             tbxLogin.IsEnabled = false;
             lblHvezda3.Visibility = Visibility.Hidden;
 
@@ -899,11 +997,146 @@ namespace ManagerPHM
 
         }
 
-        
+        //  -------------------------------------------------------------------------------------------------------------------
+        //  --  button_Clik   BLOKOVAT UŽIVATELE  -----------------
+        //  -------------------------------------------------------
+        private void btnBlokovatUzivatele_Click(object sender, RoutedEventArgs e)
+        {
+            // -- jeli něco vybráno
+            if (DGevidenceUzivatel.SelectedIndex >= 0)
+            {
+                int puvodniIndex = DGevidenceUzivatel.SelectedIndex;
+                // najdu označený řádek a uložím si ho jako "DataRowView"
+                DataRowView drv = DGevidenceUzivatel.SelectedItem as DataRowView;
+                //  najdu jméno uzivatele kterého měním
+                string uzivatJmeno = (string)drv.Row["Jmeno"];
+                //
+                // -- BLOKOVAT -- neníli uzivatel zablokován a je třeba blokovat
+                if ((bool)drv.Row["Blokace"] == false)
+                {
+                    string zprava = string.Format("Opravdu si přejete zablokovat uživatele {0} ?", uzivatJmeno);
+                    string nadpis = "Zablokování uživatele";
+                    MessageBoxButton tlacitka = MessageBoxButton.YesNo;
+                    MessageBoxImage ikona = MessageBoxImage.Question;
+                    MessageBoxResult result = MessageBox.Show(zprava, nadpis, tlacitka, ikona);
+
+                    // pokud souhlasím se zablokováním tak:
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        // přečtu si login a uložím
+                        string login = (string)drv.Row["Login"];
+                        // nastavím filtr
+                        string filtr = string.Format("Login LIKE '{0}'", login);
+                        // najdu odpovídající řádek v datatable
+                        DataRow[] nalezeneRadky = sprUcet.dtVsichniUzivatele.Select(filtr);
+                        if (nalezeneRadky.Length != 1)
+                        {
+                            MessageBox.Show("Chyba - nenalezen pozadovany zaznam !");
+                        }
+                        else
+                        {
+                            // odtut nově .....>>>
+                            DataRow radek = nalezeneRadky[0];
+                            radek.BeginEdit();
+                            radek["Blokace"] = true;
+                            radek.EndEdit();
+
+                            bool blokace = (bool)drv.Row["Blokace"];
+                            bool zmeneno = sprUcet.aktualizujBlokaciUzivatele(db, blokace, login);
+                            if (zmeneno)
+                            {
+                                // vše proběhlo OK
+                                nastavZobrazeniStart();
+                                sprUcet.nactiVsechnyUzivatele(db);
+                                DGevidenceUzivatel.SelectedIndex = puvodniIndex;
+                                SelectRowByIndex(DGevidenceUzivatel, DGevidenceUzivatel.SelectedIndex);
+                            }
+                            else
+                            {
+                                MessageBox.Show("zablokování uživatele se nezdařilo !");
+                            }
 
 
+                         }
+                    }
+                    else
+                        if (result == MessageBoxResult.No)
+                    {
+                        // pokud ne tak:
+                        SelectRowByIndex(DGevidenceUzivatel, DGevidenceUzivatel.SelectedIndex);
 
-        // pomocná metoda pro nastavení ---NOVÝ ---
+                    }
+
+                }
+                // -- ODBLOKOVAT -- jeli zablokován a je potřeba -- ODBLOKOVAT --
+                else
+                {
+                    string zprava = string.Format("Opravdu si přejete Odblokovat uživatele {0} ?", uzivatJmeno);
+                    string nadpis = "Odblokování uživatele";
+                    MessageBoxButton tlacitka = MessageBoxButton.YesNo;
+                    MessageBoxImage ikona = MessageBoxImage.Question;
+                    MessageBoxResult result = MessageBox.Show(zprava, nadpis, tlacitka, ikona);
+
+                    // pokud souhlasím se zablokováním tak:
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        // přečtu si login a uložím
+                        string login = (string)drv.Row["Login"];
+                        // nastavím filtr
+                        string filtr = string.Format("Login LIKE '{0}'", login);
+                        // najdu odpovídající řádek v datatable
+                        DataRow[] nalezeneRadky = sprUcet.dtVsichniUzivatele.Select(filtr);
+                        if (nalezeneRadky.Length != 1)
+                        {
+                            MessageBox.Show("Chyba - nenalezen pozadovany zaznam !");
+                        }
+                        else
+                        {
+                            DataRow radek = nalezeneRadky[0];
+                            radek.BeginEdit();
+                            radek["Blokace"] = false;
+                            radek.EndEdit();
+
+                            bool blokace = (bool)drv.Row["Blokace"];
+                            bool zmeneno = sprUcet.aktualizujBlokaciUzivatele(db, blokace, login);
+                            if (zmeneno)
+                            {
+                                // vše proběhlo OK
+                                nastavZobrazeniStart();
+                                sprUcet.nactiVsechnyUzivatele(db);
+                                DGevidenceUzivatel.SelectedIndex = puvodniIndex;
+                                SelectRowByIndex(DGevidenceUzivatel, DGevidenceUzivatel.SelectedIndex);
+                            }
+                            else
+                            {
+                                MessageBox.Show("Odblokování uživatele se nezdařilo !");
+                            }
+
+
+                        }
+                    }
+                    else
+                        if (result == MessageBoxResult.No)
+                    {
+                        // pokud ne tak:
+
+
+                    }
+                }
+
+                
+                
+
+            }
+            else
+            {
+                MessageBox.Show("Nebyl vybrán žádný uživatel !");
+            }
+        }
+
+        //  -------------------------------------------------------------------------------------------------------------------
+        //  --  nastav zobrazení  NOVÝ  -----------------
+        //  ---------------------------------------------
         private void nastavZobrazeniNovy()
         {
             
@@ -912,21 +1145,19 @@ namespace ManagerPHM
             DGevidenceUzivatel.SelectedIndex = -1; // VYNULUJE texboxi
             DGevidenceUzivatel.IsEnabled = false; // zablokuji DG
 
-
            // Keyboard.ClearFocus();
            // Keyboard.Focus(tclZalozky);
 
-            zapVypTlacitka(false, false, false, false, false, false, true, true);
-            
+            zapVypTlacitka(false, false, false, false, false, false, true, true);            
 
-            btnUzivatelUloz.Visibility = Visibility;
-            btnUzivatelUloz.Content = "Uložit nový";
+            btnUloz.Visibility = Visibility;
+            btnUloz.Content = "Uložit nový";
 
-            btnUzivatelUloz2.Visibility = Visibility;
-            btnUzivatelUloz2.Content = "Uložit nový";
+            btnUloz2.Visibility = Visibility;
+            btnUloz2.Content = "Uložit nový";
 
-            btnUzivatelStorno.Visibility = Visibility;
-            btnUzivatelStorno2.Visibility = Visibility;
+            btnStorno.Visibility = Visibility;
+            btnStorno2.Visibility = Visibility;
 
             tbxJmeno.IsEnabled = true;            
             tbxJmeno.Background = svetleZluta;
@@ -937,7 +1168,6 @@ namespace ManagerPHM
             //tbxJmeno.Focus();          
             //Keyboard.ClearFocus();
             //Keyboard.Focus(tbxJmeno);
-
 
             tbxPrijmeni.IsEnabled = true;
             tbxPrijmeni.Background = svetleZluta;
@@ -951,32 +1181,32 @@ namespace ManagerPHM
             pbxHeslo.Visibility = Visibility;
             pbxHeslo.IsEnabled = true;
             pbxHeslo.Background = svetleZluta;
-            lblHvezda4.Visibility = Visibility;
-            
+            lblHvezda4.Visibility = Visibility;            
 
             cbxBlokace.IsEnabled = true;
-            cbxBlokace.SelectedIndex = 0;
+            //cbxBlokace.SelectedIndex = 0;
             cbxRole.IsEnabled = true;
-            cbxRole.SelectedIndex = 3;
+            //cbxRole.SelectedIndex = 3;
             //zalozkaInfoUzivatel.Focus();
             //tbxJmeno.Focus();
             //zalozkaInfoUzivatel.DataContext = null;
         }
-
-        // pomocná metoda pro nastavení ---UPRAVIT ---
+        //  ---------------------------------------------------------------------------------------------------------------------
+        //  --  nastav zobrazení  UPRAVIT  --------------
+        //  ---------------------------------------------
         private void nastavZobrazeniUpravit()
         {
             zapVypTlacitka(false, false, false, false, false, false, true, true);
             DGevidenceUzivatel.IsEnabled = false;
 
-            btnUzivatelUloz.Visibility = Visibility;
-            btnUzivatelUloz.Content = "Uložit změny";
+            btnUloz.Visibility = Visibility;
+            btnUloz.Content = "Uložit změny";
 
-            btnUzivatelUloz2.Visibility = Visibility;
-            btnUzivatelUloz2.Content = "Uložit změny";
+            btnUloz2.Visibility = Visibility;
+            btnUloz2.Content = "Uložit změny";
 
-            btnUzivatelStorno.Visibility = Visibility;
-            btnUzivatelStorno2.Visibility = Visibility;
+            btnStorno.Visibility = Visibility;
+            btnStorno2.Visibility = Visibility;
 
             if (prihlasenySpravce)
             {
@@ -998,10 +1228,10 @@ namespace ManagerPHM
                 pbxHeslo.Visibility = Visibility;
                 btnZmenitHeslo.Visibility = Visibility;
             }
-            
-
         }
-
+        //  ----------------------------------------------------------------------------------------------------------------------------
+        //  ---  ověř existenci LOGINU  --------------
+        //  ------------------------------------------
         private bool overExistenciLoginu(string login)
         {
             // 1. načtu znovu všechny uživatele
