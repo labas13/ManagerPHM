@@ -415,47 +415,50 @@ namespace ManagerPHM
                     }
                     else
                     {
-                        MessageBox.Show("zablokování uživatele se nezdařilo !");
+                        MessageBox.Show("změna hesla uživatele se nezdařila !");
                     }
                 }
                 
             }
-            // --- jinak pokud ukládám zmeny nebo nový
+            // --- jinak pokud ukládám "nový Uzivatel" nebo "změny Uzivatel"
             else
             {
-                string jmeno = tbxJmeno.Text;
-                string prijmeni = tbxPrijmeni.Text;
-                string login = tbxLogin.Text;
-                int role = cbxRole.SelectedIndex + 1;
-                bool blokace;
+                string noveJmeno = tbxJmeno.Text;
+                string novePrijmeni = tbxPrijmeni.Text;
+                string novyLogin = tbxLogin.Text;
+                int novaRole = cbxRole.SelectedIndex + 1;
+                bool novaBlokace;
                 if (cbxBlokace.SelectedIndex == 0)
-                    blokace = false;
+                    novaBlokace = false;
                 else
-                    blokace = true;
+                    novaBlokace = true;
                 // -- jestli je vše vyplněno spravně tak -->
-                if (tbxJmeno.Text.Length > 2 && tbxPrijmeni.Text.Length > 2 && tbxLogin.Text.Length > 2 
+                if (tbxJmeno.Text.Length > 2 && tbxPrijmeni.Text.Length > 2 && tbxLogin.Text.Length > 2
                     && lblVystrahaJmeno.Content.ToString() == "" && lblVystrahaPrijmeni.Content.ToString() == ""
-                    && overExistenciLoginu(login) == false)
+                    && lblVystrahaLogin.Content.ToString() == "")
                 {
                     // - pokud ukládám nového uživatele tak: -->>
                     if ((string)btnUloz.Content == "Uložit nový")
                     {
+                        
+
                         //přepnu se na první záložku
                         tclZalozky.SelectedIndex = 0;
+                        //vytvořím si novou sůl a hash z hesla 
                         string sul = sprUcet.vytvorSul(10);
                         string hash = sprUcet.vytvorHash(pbxHeslo.Password, sul);
-                        // tet vytvořím nový řádek do tabulky DG .....>
+                        // tet vytvořím nový řádek do tabulky "DataTable" .....>
                         DataRow novyUzivatel = sprUcet.dtVsichniUzivatele.NewRow();
-                        novyUzivatel["Jmeno"] = jmeno;
-                        novyUzivatel["Prijmeni"] = prijmeni;
-                        novyUzivatel["Login"] = login;
-                        novyUzivatel["Role"] = role;
-                        novyUzivatel["Blokace"] = blokace;
+                        novyUzivatel["Jmeno"] = noveJmeno;
+                        novyUzivatel["Prijmeni"] = novePrijmeni;
+                        novyUzivatel["Login"] = novyLogin;
+                        novyUzivatel["Role"] = novaRole;
+                        novyUzivatel["Blokace"] = novaBlokace;
                         novyUzivatel["Heslo"] = hash;
                         novyUzivatel["Sul"] = sul;
                         sprUcet.dtVsichniUzivatele.Rows.Add(novyUzivatel);
                         // tet se pokusím uložit do DB .....>
-                        bool ulozeniSeZdarilo = sprUcet.ulozUzivatele(db, jmeno, prijmeni, login, role, blokace, hash, sul);
+                        bool ulozeniSeZdarilo = sprUcet.ulozUzivatele(db, noveJmeno, novePrijmeni, novyLogin, novaRole, novaBlokace, hash, sul);
                         if (ulozeniSeZdarilo)
                         {
                             // vše proběhlo OK
@@ -463,14 +466,14 @@ namespace ManagerPHM
                             nastavZobrazeniStart();
                             //označím nový ucet
                             foreach (DataRowView drv in DGevidenceUzivatel.Items)
+                            {
+                                if (drv.Row["Login"].ToString() == novyLogin)
                                 {
-                                    if (drv.Row["Login"].ToString() == login)
-                                    {
-                                        DGevidenceUzivatel.SelectedItem = drv;
-                                        SelectRowByIndex(DGevidenceUzivatel, DGevidenceUzivatel.SelectedIndex);
+                                    DGevidenceUzivatel.SelectedItem = drv;
+                                    SelectRowByIndex(DGevidenceUzivatel, DGevidenceUzivatel.SelectedIndex);
 
-                                    }
                                 }
+                            }
                         }
                         else
                         {
@@ -480,31 +483,54 @@ namespace ManagerPHM
 
 
                     }
-                    // -- pokud ukládám jen změny tak toto -->
-                    else
+                    // -- pokud ukládám jen změny Uzivatele tak toto -->
+                    if ((string)btnUloz.Content == "Uložit změny")
                     {
-                        if(tbxJmeno.Foreground == zelena)
+                        //přepnu se na první záložku
+                        tclZalozky.SelectedIndex = 0;
+                        // -- uložím si původní index
+                        int puvodniIndex = DGevidenceUzivatel.SelectedIndex;
+                        // najdu označený řádek a uložím si ho jako "DataRowView"
+                        DataRowView drv = DGevidenceUzivatel.SelectedItem as DataRowView;
+                        // nastavím filtr
+                        string filtr = string.Format("Login LIKE '{0}'", novyLogin);
+                        // najdu odpovídající řádek v datatable
+                        DataRow[] nalezeneRadky = sprUcet.dtVsichniUzivatele.Select(filtr);
+                        if (nalezeneRadky.Length != 1)
                         {
-                            string noveJmeno = tbxJmeno.Text;
-                            //11
+                            MessageBox.Show("Chyba - nenalezen pozadovany zaznam !");
                         }
-
-
-                       // string noveJmeno = tbxJmeno.Text;
-                        string novePrijmeni = tbxPrijmeni.Text;
-                        //string novaSul = sprUcet.vytvorSul(10);
-                        //string noveHeslo = sprUcet.vytvorHash(pbxHeslo.Password, novaSul);
-                        int novaRole = cbxRole.SelectedIndex + 1;
-                        bool novaBlokace;
-                        if (cbxBlokace.SelectedIndex == 0)
-                            novaBlokace = false;
                         else
-                            novaBlokace = true;
+                        {
+                            // odtut nově .....>>>
+                            DataRow radek = nalezeneRadky[0];
+                            radek.BeginEdit();
+                            if ((string)drv.Row["Jmeno"] != noveJmeno)
+                                radek["Jmeno"] = noveJmeno;
+                            if ((string)drv.Row["Prijmeni"] != novePrijmeni)
+                                radek["Prijmeni"] = novePrijmeni;
+                            if ((int)drv.Row["Role"] != novaRole)
+                                radek["Role"] = novaRole;
+                            if ((bool)drv.Row["Blokace"] != novaBlokace)
+                                radek["Blokace"] = novaBlokace;
+                            radek.EndEdit();
 
-
-                        //sprUcet.upravUzivatele(db, noveJmeno, novePrijmeni, puvodniLogin, novaRole, novaBlokace);
+                            bool zmeneno = sprUcet.upravUzivatele(db, noveJmeno, novePrijmeni, novyLogin, novaRole, novaBlokace);
+                            if (zmeneno)
+                            {
+                                // vše proběhlo OK
+                                nastavZobrazeniStart();
+                                sprUcet.nactiVsechnyUzivatele(db);
+                                DGevidenceUzivatel.SelectedIndex = puvodniIndex;
+                                SelectRowByIndex(DGevidenceUzivatel, DGevidenceUzivatel.SelectedIndex);
+                                MessageBox.Show("Uzivatel byl změněn");
+                            }
+                            else
+                            {
+                                MessageBox.Show("změna uživatele se nezdařila !");
+                            }
+                        }
                     }
-
 
                 }
                 // -- jinak musím upozornit na nevyplněné (ZABLIKÁM)
@@ -514,7 +540,7 @@ namespace ManagerPHM
                                                   //zablokuji okno a zablikám(upozorním)
                     btnStorno.IsEnabled = false;
                     btnUloz.IsEnabled = false;
-                    
+
                     if (tbxJmeno.Text == "")
                     {
                         lblVystrahaJmeno.Content = "Zadej své jméno !";

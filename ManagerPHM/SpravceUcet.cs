@@ -50,7 +50,8 @@ namespace ManagerPHM
         // --- UPRAV vybraného uživatele
         public bool upravUzivatele(DB nazevDB, string jmeno, string prijmeni, string login, int role, bool blokace)
         {
-            bool odpoved = true;//nazevDB.upravUzivatele("UPDATE Ucet SET
+
+            bool odpoved = nazevDB.upravUzivatele("UPDATE Ucet SET Jmeno = @jmeno,Prijmeni = @prijmeni,Role = @role,Blokace = @blokace WHERE Login = @login", dtVsichniUzivatele, jmeno, prijmeni, login, role, blokace);
             return odpoved;
         }
 

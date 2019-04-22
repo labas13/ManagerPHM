@@ -94,6 +94,33 @@ namespace ManagerPHM
             }
         }
 
+        public bool upravUzivatele(string sqlDotaz, DataTable dt, string jmeno, string prijmeni, string login, int role, bool blokace)
+        {
+            using (SqlConnection spojeni = new SqlConnection(pripojovaciRetez))
+            {
+                SqlCommand prikaz = new SqlCommand(sqlDotaz, spojeni);
+                prikaz.CommandType = CommandType.Text;
+                prikaz.Parameters.AddWithValue("@jmeno", jmeno);
+                prikaz.Parameters.AddWithValue("@prijmeni", prijmeni);
+                prikaz.Parameters.AddWithValue("@Login", login);
+                prikaz.Parameters.AddWithValue("@role", role);
+                prikaz.Parameters.AddWithValue("@blokace", blokace);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.UpdateCommand = prikaz;
+                // -- pokusím se aktualizovat v DB
+                if (da.Update(dt) > 0)
+                {
+                    // aktualizace se podařila
+                    return true;
+                }
+                else
+                {
+                    // aktualizace se nezdařila
+                    return false;
+                }
+            }
+        }
+
         public bool ulozUzivatele(string sqlDotaz, DataTable dt, string jmeno, string prijmeni, string login, int role, bool blokace,string heslo, string sul)
         {
             using (SqlConnection spojeni = new SqlConnection(pripojovaciRetez))
