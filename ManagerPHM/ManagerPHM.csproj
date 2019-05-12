@@ -87,6 +87,9 @@
     <Compile Include="LokalniSada.cs">
       <DependentUpon>LokalniSada.xsd</DependentUpon>
     </Compile>
+    <Compile Include="oknoPV.xaml.cs">
+      <DependentUpon>oknoPV.xaml</DependentUpon>
+    </Compile>
     <Compile Include="oknoUzivatele.xaml.cs">
       <DependentUpon>oknoUzivatele.xaml</DependentUpon>
     </Compile>
@@ -122,6 +125,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="oknoKomodit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="oknoPV.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -301,6 +308,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icon\vetsi2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\prijem.png" />
+    <Resource Include="Icon\vydej.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

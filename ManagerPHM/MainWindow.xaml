@@ -62,7 +62,21 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Name="menuSkladPohyby" Header="_Pohyby" InputGestureText="Ctrl+P"
+                <MenuItem Name="menuSkladPrijem" Header="_Příjem" InputGestureText="Ctrl+P"
+                          ToolTip="Příjem na sklad" Foreground="Black" Click="menuSkladPrijem_Click">
+                    <MenuItem.Icon>
+                        <Image Source="Icon/prijem.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Name="menuSkladVydej" Header="_Výdej" InputGestureText="Ctrl+V"
+                          ToolTip="Výdej ze skladu" Foreground="Black">
+                    <MenuItem.Icon>
+                        <Image Source="Icon/vydej.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Name="menuSkladPohyby" Header="_Pohyby" InputGestureText="Ctrl+PV"
                           ToolTip="Přehled pohybů" Foreground="Black">
                     <MenuItem.Icon>
                         <Image Source="Icon/PV2.ico"/>

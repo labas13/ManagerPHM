@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using System.Windows.Resources;
 using System.Windows.Shapes;
 
 namespace ManagerPHM
@@ -29,20 +30,23 @@ namespace ManagerPHM
         SpravceUcet sprUcet;
         //SpravceKomoditySklad sprKomSklad;
 
+        // připravím si barvy
+        SolidColorBrush zelena, zluta;
+
         //to to možná NE!!!------------------------------------------------------------------------------------
         // vytvařím dataSet a adaptéry všech tabulek v DB
         //LokalniSada DS = new LokalniSada();
         //LokalniSadaTableAdapters.KomoditySkladTableAdapter DAKomoditySklad = new LokalniSadaTableAdapters.KomoditySkladTableAdapter();
-       // LokalniSadaTableAdapters.AdresaTableAdapter DAadresa = new LokalniSadaTableAdapters.AdresaTableAdapter();
-       // LokalniSadaTableAdapters.celkemTableAdapter DAcelkem = new LokalniSadaTableAdapters.celkemTableAdapter();
-       // LokalniSadaTableAdapters.FirmaTableAdapter DAfirma = new LokalniSadaTableAdapters.FirmaTableAdapter();
-       // LokalniSadaTableAdapters.HodnostTableAdapter DAhodnost = new LokalniSadaTableAdapters.HodnostTableAdapter();
-       // LokalniSadaTableAdapters.JakostakTableAdapter DAjakost = new LokalniSadaTableAdapters.JakostakTableAdapter();
-       // LokalniSadaTableAdapters.KategorieTechnikaTableAdapter DAkategorieTechnika = new LokalniSadaTableAdapters.KategorieTechnikaTableAdapter();
-       // LokalniSadaTableAdapters.KategorieZamestnanecTableAdapter DAkategorieZamestnanec = new LokalniSadaTableAdapters.KategorieZamestnanecTableAdapter();
-       // LokalniSadaTableAdapters.KcmTableAdapter DAkcm = new LokalniSadaTableAdapters.KcmTableAdapter();
-       // LokalniSadaTableAdapters.KomoditaTableAdapter DAkomodita = new LokalniSadaTableAdapters.KomoditaTableAdapter();
-       // LokalniSadaTableAdapters.KvalifikacniListTableAdapter DAkvalifikacniList = new LokalniSadaTableAdapters.KvalifikacniListTableAdapter();
+        // LokalniSadaTableAdapters.AdresaTableAdapter DAadresa = new LokalniSadaTableAdapters.AdresaTableAdapter();
+        // LokalniSadaTableAdapters.celkemTableAdapter DAcelkem = new LokalniSadaTableAdapters.celkemTableAdapter();
+        // LokalniSadaTableAdapters.FirmaTableAdapter DAfirma = new LokalniSadaTableAdapters.FirmaTableAdapter();
+        // LokalniSadaTableAdapters.HodnostTableAdapter DAhodnost = new LokalniSadaTableAdapters.HodnostTableAdapter();
+        // LokalniSadaTableAdapters.JakostakTableAdapter DAjakost = new LokalniSadaTableAdapters.JakostakTableAdapter();
+        // LokalniSadaTableAdapters.KategorieTechnikaTableAdapter DAkategorieTechnika = new LokalniSadaTableAdapters.KategorieTechnikaTableAdapter();
+        // LokalniSadaTableAdapters.KategorieZamestnanecTableAdapter DAkategorieZamestnanec = new LokalniSadaTableAdapters.KategorieZamestnanecTableAdapter();
+        // LokalniSadaTableAdapters.KcmTableAdapter DAkcm = new LokalniSadaTableAdapters.KcmTableAdapter();
+        // LokalniSadaTableAdapters.KomoditaTableAdapter DAkomodita = new LokalniSadaTableAdapters.KomoditaTableAdapter();
+        // LokalniSadaTableAdapters.KvalifikacniListTableAdapter DAkvalifikacniList = new LokalniSadaTableAdapters.KvalifikacniListTableAdapter();
         //.....---------------------------------------------------------------------------------------------------------
         // ještě dodělat adaptéry ...
 
@@ -54,7 +58,9 @@ namespace ManagerPHM
             InitializeComponent();
             //zapíšu si jméno přihlášeného do hlavního okna
             TBlokjmenoPrihlasenehoUzivatele.Text += (string)dtPrihlasenyUzivatel.Rows[0]["Jmeno"] + " " + (string)dtPrihlasenyUzivatel.Rows[0]["Prijmeni"];
-            
+            // připravím si štetce pro pozadí
+            zelena = new SolidColorBrush(Colors.Green);
+            zluta = new SolidColorBrush(Colors.YellowGreen);
 
         }
         
@@ -102,6 +108,22 @@ namespace ManagerPHM
         {
             oknoUzivatele oknoUzivatele = new oknoUzivatele(db, sprUcet);
             oknoUzivatele.ShowDialog();
+        }
+
+        private void menuSkladPrijem_Click(object sender, RoutedEventArgs e)
+        {
+            oknoPV oknoPV = new oknoPV();
+            
+            oknoPV.grid1.Background = new Brushes("#6CB359");
+            oknoPV.Title = "Příjem";
+
+            //vytvořím cestu k ikonkám hledej,filtruj
+            Uri uriHledat = new Uri("Icon/prijem.png", UriKind.Relative);
+            StreamResourceInfo sriHledat = Application.GetResourceStream(uriHledat);
+           
+            oknoPV.Icon = BitmapFrame.Create(sriHledat.Stream);
+            oknoPV.ShowDialog();
+            
         }
     }
 }
