@@ -61,6 +61,7 @@ namespace ManagerPHM
             // připravím si štetce pro pozadí
             zelena = new SolidColorBrush(Colors.Green);
             zluta = new SolidColorBrush(Colors.YellowGreen);
+            
 
         }
         
@@ -113,8 +114,16 @@ namespace ManagerPHM
         private void menuSkladPrijem_Click(object sender, RoutedEventArgs e)
         {
             oknoPV oknoPV = new oknoPV();
-            
-            oknoPV.grid1.Background = new Brushes("#6CB359");
+
+            Color tmaveZelena = Color.FromRgb(158, 215, 143);
+            Brush brSZ = new SolidColorBrush(tmaveZelena);
+            Color svetleZelena = Color.FromRgb(108, 179, 89);
+            Brush brTZ = new SolidColorBrush(svetleZelena);
+
+            oknoPV.oknoPrijVydej.Background = brTZ;
+            oknoPV.grid1.Background = brSZ;
+            oknoPV.grid2.Background = brSZ;
+            oknoPV.grid4.Background = brSZ;
             oknoPV.Title = "Příjem";
 
             //vytvořím cestu k ikonkám hledej,filtruj

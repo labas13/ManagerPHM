@@ -484,7 +484,7 @@ namespace ManagerPHM
 
                     }
                     // -- pokud ukládám jen změny Uzivatele tak toto -->
-                    if ((string)btnUloz.Content == "Uložit změny")
+                    else if ((string)btnUloz.Content == "Uložit změny")
                     {
                         //přepnu se na první záložku
                         tclZalozky.SelectedIndex = 0;
